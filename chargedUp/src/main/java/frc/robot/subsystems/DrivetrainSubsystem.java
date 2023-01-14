@@ -32,14 +32,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DrivetrainSubsystem() {
     leftLead = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[0], MotorType.kBrushless);
     rightLead = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[1], MotorType.kBrushless);
-    leftFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
-    rightFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
+    // leftFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
+    // rightFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
 
     encoderLeftLead = leftLead.getEncoder();
-    leftFollower.follow(leftLead);
+    // leftFollower.follow(leftLead);
 
     encoderRightLead = rightLead.getEncoder();
-    rightFollower.follow(rightLead);
+    // rightFollower.follow(rightLead);
 
     //invert one of the leads :)
 

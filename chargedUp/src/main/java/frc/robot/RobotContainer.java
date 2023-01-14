@@ -33,7 +33,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
-     m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getLeftX())));
+     m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getLeftX()), m_drivetrainSubsystem));
     configureBindings();
   }
 
