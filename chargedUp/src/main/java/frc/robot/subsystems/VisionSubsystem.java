@@ -7,13 +7,19 @@ package frc.robot.subsystems;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionSubsystem extends SubsystemBase {
   /** Creates a new VisionSubsystem. */
-  public VisionSubsystem() {}
+  public VisionSubsystem() {
 
-  PhotonCamera camera = new PhotonCamera("photonvision");
+    PortForwarder.add(5800, "photonvision.local", 5800);
+  }
+  
+  //todo: provide portforwaring to connect without radio
+  PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
   private PhotonPipelineResult results; 
   
   
@@ -21,9 +27,11 @@ public class VisionSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     results = camera.getLatestResult();
+    SmartDashboard.putBoolean("target?", seeTarget());
   }
 
   public boolean seeTarget(){
+
     return results.hasTargets();
   }
 }

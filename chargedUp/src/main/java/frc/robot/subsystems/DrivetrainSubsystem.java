@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -49,9 +50,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void setRaw(double driveValue, double turnValue){
     diffDrive.arcadeDrive(driveValue, turnValue);
   }
+
+  public double getPosition(){
+    return encoderLeftLead.getPosition();
+  }
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Drivetrain Position", this.getPosition());
   }
 }

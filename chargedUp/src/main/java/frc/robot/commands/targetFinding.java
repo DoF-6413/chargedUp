@@ -4,20 +4,46 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class targetFinding extends InstantCommand {
-  public targetFinding() {
+public class targetFinding extends CommandBase {
+  /** Creates a new targetFinding. */
+  private DrivetrainSubsystem m_drivetrainSubsystem;
+  private VisionSubsystem m_visionSubsystem;
+
+  public targetFinding(DrivetrainSubsystem drive, VisionSubsystem vision) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_drivetrainSubsystem = drive;
+    m_visionSubsystem = vision;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_drivetrainSubsystem.setRaw(0, 0);
+  }
 
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    if(m_visionSubsystem.seeTarget() == true){
+      m_drivetrainSubsystem.setRaw(0.5, 0);
+    }
+    System.out.println(m_visionSubsystem.seeTarget());
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_drivetrainSubsystem.setRaw(0, 0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return m_drivetrainSubsystem.getPosition() > 5000;
   }
 }
