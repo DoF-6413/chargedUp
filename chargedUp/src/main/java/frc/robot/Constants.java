@@ -19,4 +19,8 @@ public final class Constants {
   public static class DrivetrainConstants{
     public static final int[] kDrivetrainCANIDs = new int[] {1,2,3,4};
   }
+  
+  public static class FiducialConstants{
+    public static final double[] kArrowValues = new double[] {0, 21};
+  }
 }

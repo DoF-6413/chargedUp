@@ -7,12 +7,14 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.moveArrow;
 import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -56,8 +58,14 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kA.value).
+        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
 
+    new JoystickButton(m_driverController, XboxController.Button.kB.value).
+        onTrue(new moveArrow(m_drivetrainSubsystem, m_visionSubsystem));
+
+    new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
   }
 
   /**
