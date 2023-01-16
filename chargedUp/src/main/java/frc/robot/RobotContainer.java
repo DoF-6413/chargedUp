@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.commands.*;
 import frc.robot.commands.AutoScore2;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.drivetotag;
+import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -55,6 +57,7 @@ public class RobotContainer {
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
     configureBindings();
+
 
   }
 
@@ -107,6 +110,8 @@ public class RobotContainer {
     // m_driverController.start().whileTrue(new RunCommand (() -> SmartDashboard.putString("button pressed", "startButton")) );
 
 
+    new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem, 1.0));
   }
 
   /**
