@@ -29,7 +29,7 @@ public class targetFinding extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_visionSubsystem.seeTarget() == true){
+    if(m_visionSubsystem.isHuge() != true){
       m_drivetrainSubsystem.setRaw(0.5, 0);
     }
     System.out.println(m_visionSubsystem.seeTarget());
