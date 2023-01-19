@@ -13,9 +13,12 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+
+import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
+
+import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -57,9 +60,13 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //Spins Motor if April Tags are Recognized for 20 Ticks
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    new Trigger(m_exampleSubsystem::exampleCondition)
+        .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
