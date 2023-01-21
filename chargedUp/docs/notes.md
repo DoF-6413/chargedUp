@@ -16,5 +16,9 @@ Updates from January 21st 2023
 
 - **The new arducam is named "logi...."**
 
+## Liz
+
+Today I looked into **robot simulation code**. Robot simulation would enable us to test the robot without having to use an actual robot. Then I shifted gears towards **PID Tuning for an arm mechanism.** The PID Tuning would spin the arm to specific positions. However, I need to ramp the speed of the arm, as well as tune PID.
+
 # 1-22-23
 
