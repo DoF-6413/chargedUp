@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -36,6 +37,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // leftFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
     // rightFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
 
+    leftLead.setIdleMode(IdleMode.kBrake);
     encoderLeftLead = leftLead.getEncoder();
     // leftFollower.follow(leftLead);
 
@@ -53,6 +55,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public double getPosition(){
     return encoderLeftLead.getPosition();
+  }
+
+  public void resetPosition(){
+    encoderLeftLead.setPosition(0);
   }
   
   @Override
