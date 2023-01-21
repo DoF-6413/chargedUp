@@ -121,6 +121,8 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 ## Nancy
 -Today I will connect the leds and color sensor for lights to tell us what game piece the sensor senses
 
-Today we worked on 
+- Today I commit the code of the buttons in the smart dashboard to I make with Irae to we made 1/19/2023
+- I create the folder for the notes of the day 
+- I help Nancy to calibrate the camera in photon vision 
 
 -nancy
