@@ -122,3 +122,5 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 -Today I will connect the leds and color sensor for lights to tell us what game piece the sensor senses
 
 Today we worked on 
+
+-nancy
