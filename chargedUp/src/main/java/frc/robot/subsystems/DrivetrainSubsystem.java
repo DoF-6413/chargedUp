@@ -74,10 +74,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightLead.setInverted(DrivetrainConstants.kRightInverted);
 
     rightFollower1.follow(rightLead);
-    rightFollower2.follow(rightLead);
     
-     
-    diffDrive = new DifferentialDrive(leftLead, rightLead);
   }
 
 

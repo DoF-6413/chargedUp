@@ -41,7 +41,14 @@ public final class Constants {
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] {0, 1.5, 3, 4};
     
+  }
 
 
+  public static class ArmConstants{
+    public static final int[] armCANIDs = new int[] {2};
+    public static final double kArmP = 0.5;
+    public static final double kArmI = 0;
+    public static final double kArmD = 0;
+    public static final double kArmTolerance = 3;
   }
 }

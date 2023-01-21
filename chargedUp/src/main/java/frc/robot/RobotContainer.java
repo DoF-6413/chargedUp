@@ -10,10 +10,12 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.drivetotag;
 import frc.robot.commands.locateCube;
-import frc.robot.commands.targetFinding;
+import frc.robot.commands.ArmPID;
+// import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -36,14 +38,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
 
   // list of autos
   private final Command m_autoScore = new AutoScore2();
 
 
-  private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
+  // private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);
@@ -64,7 +67,7 @@ public class RobotContainer {
     configureBindings();
 
 
-    m_chooser.setDefaultOption("Drive to Tag", m_driveToTag);
+    // m_chooser.setDefaultOption("Drive to Tag", m_driveToTag);
   }
 
   /**
@@ -79,46 +82,19 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Spins Motor if April Tags are Recognized for 20 Ticks
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-  
+    // new JoystickButton(m_driverController, XboxController.Button.kA.value).
+    //     onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+        new JoystickButton(m_driverController, XboxController.Button.kB.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
+        onFalse(new InstantCommand(()-> m_armSubsystem.spinMotor(0)));
 
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+        new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        onTrue(new ArmPID(m_armSubsystem, 14)).onTrue(
+        (new InstantCommand(()-> System.out.print("Button X Hit!"))));
 
-    // m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
-    // m_driverController.b().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "b")) );
-
-    // m_driverController.x().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "x")) );
-
-    // m_driverController.y().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "y")) );
-
-    // //D-Pad buttons
-    // m_driverController.povUp().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Up")) );
-
-    // m_driverController.povDown().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Down")) );
-    
-    // m_driverController.povRight().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Right")) );
-
-    // m_driverController.povLeft().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Left")) );
-
-
-    // m_driverController.leftBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftBumper")) );
-
-    // m_driverController.rightBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightBumper")) );
-
-    // m_driverController.leftTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftTrigger")) );
-
-    // m_driverController.rightTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightTrigger")) );
-
-    // m_driverController.start().whileTrue(new RunCommand (() -> SmartDashboard.putString("button pressed", "startButton")) );
-
-
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
+        new JoystickButton(m_driverController, XboxController.Button.kY.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.resetPosition()));
   }
 
   /**
