@@ -1,6 +1,10 @@
+# Programming Notes
+![](./qrcode_github.com.png)
+
 # 1-21-23
 
 Updates from January 21st 2023
+
 
 
 
