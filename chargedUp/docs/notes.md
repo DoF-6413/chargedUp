@@ -1,7 +1,9 @@
 1-21-23
 
--andy
+## Andy
 
-Today we worked on 
+- Today I commit the code of the buttons in the smart dashboard to I make with Irae to we made 1/19/2023
+- I create the folder for the notes of the day 
+- I help Nancy to calibrate the camera in photon vision 
 
 -nancy
