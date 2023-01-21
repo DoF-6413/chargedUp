@@ -6,10 +6,18 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.targetFinding;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.drivetotag;
+import frc.robot.commands.locateCube;
+import frc.robot.commands.ArmPID;
+// import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.colorSensor;
+// import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,8 +50,9 @@ import frc.robot.commands.TrajectoryRunner;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   private final colorSensor m_colorSensorSubsystem = new colorSensor();
@@ -53,13 +62,6 @@ public class RobotContainer {
   
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
-  Trajectory m_Trajectory = 
-  TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-      new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-      new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
-  
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -92,10 +94,19 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
-    m_driverController.a().
-        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+    // new JoystickButton(m_driverController, XboxController.Button.kA.value).
+    //     onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
 
-    m_driverController.b().whileTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+        m_driverController.b().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
+        onFalse(new InstantCommand(()-> m_armSubsystem.spinMotor(0)));
+
+        m_driverController.x().
+        onTrue(new ArmPID(m_armSubsystem, 14)).onTrue(
+        (new InstantCommand(()-> System.out.print("Button X Hit!"))));
+
+        m_driverController.y().
+        onTrue(new InstantCommand(()-> m_armSubsystem.resetPosition()));
   }
 
   /**
