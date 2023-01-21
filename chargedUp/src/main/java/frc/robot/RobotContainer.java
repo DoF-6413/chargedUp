@@ -73,8 +73,6 @@ public class RobotContainer {
     m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
     m_driverController.b().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "b")) );
 
-    m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
-
     m_driverController.x().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "x")) );
 
     m_driverController.y().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "y")) );
