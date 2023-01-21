@@ -18,6 +18,12 @@ public final class Constants {
   }
   public static class DrivetrainConstants{
     public static final int[] kDrivetrainCANIDs = new int[] {1,2,3,4};
+
+    public static final boolean kRightInverted = true;
+    public static final boolean kLeftInverted = false;
+
+    // todo: update equation
+    public static final double kTicksToFeat = 0;
     public static final double kStopMotors = 0;
 
     //PID Controlls for Forawrds and Backwards

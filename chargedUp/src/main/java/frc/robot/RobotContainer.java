@@ -59,18 +59,7 @@ public class RobotContainer {
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
     new JoystickButton(m_driverController, XboxController.Button.kA.value).
-    onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-
-    new JoystickButton(m_driverController, XboxController.Button.kB.value).
-    onTrue(new MovePID(m_drivetrainSubsystem, 10.0));
-
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).
-    onTrue(new MovePID(m_drivetrainSubsystem, 30.0));
-
-    new JoystickButton(m_driverController, XboxController.Button.kX.value).
-    onTrue(new InstantCommand(() ->
-    m_drivetrainSubsystem.resetPosition()));
-
+        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
   }
 
   /**

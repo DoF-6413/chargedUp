@@ -22,7 +22,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
   
   //todo: provide portforwaring to connect without radio
-  PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
+  PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
   private PhotonPipelineResult results; 
   
   
