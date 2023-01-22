@@ -26,3 +26,8 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 
 # 1-22-23
 
+## Mentors
+
+- Today we discussed trapezoidal motion smoothingas a possible solution to help the arm move smoother [Click on this Link to WPIlib docs for Trapezoidal smoothing](https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/trapezoidal-profiles.html)
+
+
