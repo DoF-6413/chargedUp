@@ -6,10 +6,16 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.DrivetrainConstants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
@@ -26,10 +32,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
   public DrivetrainSubsystem() {
-    leftLead = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[2]);
-    rightLead = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[0]);
-    leftFollower = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[1]);
-    rightFollower = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[3]);
+    leftLead = new WPI_VictorSPX(DrivetrainConstants.kDrivetrainCANIDs[2]);
+    rightLead = new WPI_VictorSPX(DrivetrainConstants.kDrivetrainCANIDs[0]);
+    leftFollower = new WPI_VictorSPX(DrivetrainConstants.kDrivetrainCANIDs[1]);
+    rightFollower = new WPI_VictorSPX(DrivetrainConstants.kDrivetrainCANIDs[3]);
 
     leftLead.setInverted(true);
     leftFollower.follow(leftLead);
@@ -42,6 +48,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     diffDrive = new DifferentialDrive(rightLead,leftLead);
   }
 
+
+   
   public void setRaw(double driveValue, double turnValue){
     diffDrive.arcadeDrive(driveValue, turnValue);
   }
@@ -51,4 +59,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+  
 }
