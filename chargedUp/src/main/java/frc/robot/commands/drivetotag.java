@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -15,20 +16,24 @@ public class drivetotag extends CommandBase {
 
   /** Creates a new drivetotag. */
   Double m_setpoint;
+  int m_fiducialId;
 private final DrivetrainSubsystem m_DrivetrainSubsystem;
 private final VisionSubsystem m_VisionSubsystem;
 
 
-public drivetotag( DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem, Double setpoint) {
+public drivetotag( DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
   addRequirements(drivetrainSubsystem, visionSubsystem); 
-  m_setpoint = setpoint;
   m_DrivetrainSubsystem = drivetrainSubsystem;
   m_VisionSubsystem = visionSubsystem;
-  }
+}
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+// Called when the command is initially scheduled.
+@Override
+public void initialize() {
+  m_fiducialId = m_VisionSubsystem.getBestFiducial();
+  m_setpoint = VisionConstants.ksetpoints[m_fiducialId];
+
+}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
