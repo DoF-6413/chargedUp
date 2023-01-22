@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.*;
 import frc.robot.commands.AutoScore2;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.drivetotag;
 import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -40,9 +42,11 @@ public class RobotContainer {
   private final Command m_autoScore = new AutoScore2();
 
 
+  private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem, VisionConstants.ksetpoint ); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -59,6 +63,7 @@ public class RobotContainer {
     configureBindings();
 
 
+    m_chooser.setDefaultOption("Drive to Tag", m_driveToTag);
   }
 
   /**
@@ -111,7 +116,7 @@ public class RobotContainer {
 
 
     new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem, 1.0));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem, 1.5));
   }
 
   /**
@@ -121,7 +126,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
+    
     return m_chooser.getSelected();
-
   }
 }

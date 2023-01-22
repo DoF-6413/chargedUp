@@ -38,4 +38,7 @@ public final class Constants {
     public static final double kTurnD = 0;
     public static final double kTurnTolerance = 0;
   }
+  public static class VisionConstants {
+    public static final double ksetpoint = 1.5; 
+  }
 }
