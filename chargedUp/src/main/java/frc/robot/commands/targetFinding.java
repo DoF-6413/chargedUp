@@ -24,6 +24,7 @@ public class targetFinding extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrainSubsystem.setRaw(0, 0);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

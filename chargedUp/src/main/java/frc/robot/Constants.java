@@ -39,6 +39,9 @@ public final class Constants {
     public static final double kTurnTolerance = 0;
   }
   public static class VisionConstants {
-    public static final double ksetpoint = 1.5; 
+    public static final double[] ksetpoints = new double[] {0, 1.5, 3, 4};
+    
+
+
   }
 }

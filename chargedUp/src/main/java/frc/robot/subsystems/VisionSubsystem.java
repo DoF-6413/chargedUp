@@ -63,7 +63,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public int getBestFiducial(){
-    return (this.seeTarget() == true) ? results.getBestTarget().getFiducialId() : 0;
+    return seeTarget() == true ? results.getBestTarget().getFiducialId() : 0;
   }
 
 
