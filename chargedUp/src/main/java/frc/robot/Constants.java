@@ -46,9 +46,21 @@ public final class Constants {
 
   public static class ArmConstants{
     public static final int[] armCANIDs = new int[] {2};
+
+    //Arm PID Values (Tune PID Before Feedforward)
     public static final double kArmP = 0.5;
     public static final double kArmI = 0;
     public static final double kArmD = 0;
     public static final double kArmTolerance = 3;
+
+    //Arm Feedforward Values 
+    //Static Gain ()
+    public static final double kArmS = 0;
+    //Gravitational Gain (Tune this first, be specific up to 4 decimal places)
+    public static final double kArmG = 0;
+    //Velocity Gain ()
+    public static final double kArmV = 0;
+    //Acceleration Gain ()
+    public static final double kArmA = 0;
   }
 }
