@@ -17,6 +17,9 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
   public static class DrivetrainConstants{
-    public static final int[] kDrivetrainCANIDs = new int[] {1,2,3,4};
+    public static final int[] kDrivetrainCANIDs = new int[] {2,3,4,5};
+  }
+  public static class VisionConstants {
+    public static final double ksetpoint = 1.5; 
   }
 }

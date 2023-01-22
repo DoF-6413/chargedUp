@@ -4,60 +4,51 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxRelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
-  private static CANSparkMax leftLead;
-  private static CANSparkMax rightLead;
-  private static CANSparkMax leftFollower;
-  private static CANSparkMax rightFollower;
+ 
 
-  private static RelativeEncoder encoderLeftLead;
-  private static RelativeEncoder encoderRightLead;
 
   private static DifferentialDrive diffDrive;
  
-
+  private final WPI_VictorSPX leftLead;
+  private final WPI_VictorSPX rightLead; 
+  private final WPI_VictorSPX leftFollower;
+  private final WPI_VictorSPX rightFollower;
 
 
 
   public DrivetrainSubsystem() {
-    leftLead = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[0], MotorType.kBrushless);
-    rightLead = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[1], MotorType.kBrushless);
-    // leftFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
-    // rightFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
+    leftLead = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[2]);
+    rightLead = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[0]);
+    leftFollower = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[1]);
+    rightFollower = new WPI_VictorSPX(Constants.DrivetrainConstants.kDrivetrainCANIDs[3]);
 
-    encoderLeftLead = leftLead.getEncoder();
-    // leftFollower.follow(leftLead);
+    leftLead.setInverted(true);
+    leftFollower.follow(leftLead);
 
-    encoderRightLead = rightLead.getEncoder();
-    // rightFollower.follow(rightLead);
+    
+    rightFollower.follow(rightLead);
 
     //invert one of the leads :)
 
-    diffDrive = new DifferentialDrive(leftLead, rightLead);
+    diffDrive = new DifferentialDrive(rightLead,leftLead);
   }
 
   public void setRaw(double driveValue, double turnValue){
     diffDrive.arcadeDrive(driveValue, turnValue);
   }
 
-  public double getPosition(){
-    return encoderLeftLead.getPosition();
-  }
-  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Drivetrain Position", this.getPosition());
   }
 }

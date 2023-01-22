@@ -20,7 +20,7 @@ private final VisionSubsystem m_VisionSubsystem;
 
 
 public drivetotag( DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem, Double setpoint) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  addRequirements(drivetrainSubsystem, visionSubsystem); 
   m_setpoint = setpoint;
   m_DrivetrainSubsystem = drivetrainSubsystem;
   m_VisionSubsystem = visionSubsystem;
@@ -36,10 +36,12 @@ public drivetotag( DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visi
     SmartDashboard.putNumber("execute X", m_VisionSubsystem.distanceFinder().getX());
     SmartDashboard.putNumber("set point", m_setpoint);
    if (m_VisionSubsystem.distanceFinder().getX() > m_setpoint){
-    m_DrivetrainSubsystem.setRaw(.2, 0);
+    m_DrivetrainSubsystem.setRaw(-.5, 0);
+    SmartDashboard.putNumber("we hit step:", 1);
    }if(m_VisionSubsystem.distanceFinder().getX() < m_setpoint){
     m_DrivetrainSubsystem.setRaw(0, 0);
-   }
+    SmartDashboard.putNumber("we hit step:", 2); 
+  }
   }
 
   // Called once the command ends or is interrupted.
@@ -50,6 +52,6 @@ public drivetotag( DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visi
   @Override
   public boolean isFinished() {
     // Todo return true is getX() is less than 0.3
-    return false;
+    return ( m_VisionSubsystem.distanceFinder().getX() < 1.5 ) ? true : false;
   }
 }
