@@ -22,12 +22,17 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 // import frc.robot.commands.targetFinding;
 // import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.colorSensor;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -52,7 +57,7 @@ public class RobotContainer {
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  // private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
