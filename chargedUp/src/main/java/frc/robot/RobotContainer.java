@@ -14,12 +14,17 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 // import frc.robot.commands.targetFinding;
 // import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.colorSensor;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -54,7 +59,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  // private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   private final colorSensor m_colorSensorSubsystem = new colorSensor();
@@ -96,16 +101,21 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
-    // new JoystickButton(m_driverController, XboxController.Button.kA.value).
-    //     onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+    m_driverController.a().
+        onTrue( Commands.runOnce(
+                () -> {
+                  m_armSubsystem.setGoal(2);
+                  m_armSubsystem.enable();
+                },
+                m_armSubsystem));
 
         m_driverController.b().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
         onFalse(new InstantCommand(()-> m_armSubsystem.spinMotor(0)));
 
-        m_driverController.x().
-        onTrue(new ArmPID(m_armSubsystem, 14)).onTrue(
-        (new InstantCommand(()-> System.out.print("Button X Hit!"))));
+        // new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        // onTrue(new ArmPIDm_armSubsystem, 14)).onTrue(
+        // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
 
         m_driverController.y().
         onTrue(new InstantCommand(()-> m_armSubsystem.resetPosition()));
