@@ -122,7 +122,7 @@ public final class Constants {
     public static final double kArmP = 0.5;
     public static final double kArmI = 0;
     public static final double kArmD = 0;
-    public static final double kArmTolerance = 3;
+    public static final double kArmTolerance = 0.5;
 
     // Arm Feedforward Values
     // Static Gain ()
@@ -133,5 +133,13 @@ public final class Constants {
     public static final double kArmV = 0;
     // Acceleration Gain ()
     public static final double kArmA = 0;
+
+    //Trapazoidal Motion Profiling
+    public static final double kArmMaxVelocity = 0;
+    public static final double kArmMaxAcceleration = 0;
+    //Most Likely from Absolute Encoder when Powered On
+    public static final double kOffsetInitialPosition = 0;
+
+    
   }
 }

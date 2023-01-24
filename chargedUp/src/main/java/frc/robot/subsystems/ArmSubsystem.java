@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.ArmConstants;
 
@@ -28,17 +29,37 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
             ArmConstants.kArmI,
             ArmConstants.kArmD,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(0, 0)));
+            new TrapezoidProfile.Constraints(ArmConstants.kArmMaxVelocity, 
+              ArmConstants.kArmMaxAcceleration)));
+
+        // m_armEncoder.setPositionConversionFactor(ArmConstants.kArmPositionConversion);
+        // setGoal(ArmConstants.kOffsetInitialPosition);
+        System.out.println("Running");
   }
 
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
     // Use the output (and optionally the setpoint) here
+    double feedForward = m_armFeedForward.calculate(setpoint.position, setpoint.velocity);
+    System.out.println("Use Output Running");
+    m_armMotor.set(feedForward + output);
   }
 
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return 0;
+    
+    return m_armEncoder.getPosition() + ArmConstants.kOffsetInitialPosition;
+  }
+
+  public void resetPosition(){
+    System.out.println("Reset Position");
+    m_armEncoder.setPosition(0);
+  }
+
+  @Override
+  public void periodic(){
+    super.periodic();
+    SmartDashboard.putNumber("Arm Position", getMeasurement());
   }
 }
