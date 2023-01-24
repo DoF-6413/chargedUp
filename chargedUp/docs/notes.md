@@ -54,3 +54,8 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
  - tried different code to print the values from the sensor into the smartdashboard 
  - figured there was something wrong with analog input and analog potentiometer imports because we would not get the api that was mentioned in wpilib when both of those were imported
  - did research on code examples for ultrasonic sensors
+
+
+# Andy 
+- i finish the answer electrical questions in slack
+
