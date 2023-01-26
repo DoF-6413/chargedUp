@@ -104,7 +104,7 @@ public class RobotContainer {
     m_driverController.a().
         onTrue( Commands.runOnce(
                 () -> {
-                  m_armSubsystem.setGoal(2);
+                  m_armSubsystem.setGoal(10);
                   m_armSubsystem.enable();
                 },
                 m_armSubsystem));
@@ -126,6 +126,11 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
+   public void disablePIDSubsystems() {
+    m_armSubsystem.disable();
+  }
+
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
