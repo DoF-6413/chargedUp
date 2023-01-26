@@ -118,6 +118,11 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
+   public void disablePIDSubsystems() {
+    m_armSubsystem.disable();
+  }
+
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
