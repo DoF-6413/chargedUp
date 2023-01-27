@@ -7,6 +7,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DrivetrainConstants;
 
 public class locateCube extends CommandBase {
   /** Creates a new locateCube. */
@@ -38,7 +39,7 @@ private final VisionSubsystem m_VisionSubsystem;
       SmartDashboard.putString("running", "execute with target");
 
     }else if ( m_VisionSubsystem.seeTarget() == true ) {
-      m_DrivetrainSubsystem.setRaw(-.5, 0);
+      m_DrivetrainSubsystem.setRaw(DrivetrainConstants.kDriveFwdHalspeed, 0);
     }
     // if not target turn clockwise until you do have a target 
     // if you do have a target center the target if target is right of your center point turn right if left of your center point turn left once hits center point drive straight

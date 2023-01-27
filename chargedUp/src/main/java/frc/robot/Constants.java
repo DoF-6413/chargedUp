@@ -18,6 +18,7 @@ public final class Constants {
   }
   public static class DrivetrainConstants{
     public static final int[] kDrivetrainCANIDs = new int[] {2,3,4,5};
+    public static final double kDriveFwdHalspeed = -0.5;
 
     
   }
@@ -27,4 +28,5 @@ public final class Constants {
 
 
   }
+
 }
