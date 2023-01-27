@@ -50,3 +50,11 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 ### Issues for this week: 
 - Add ultrasonic sensor to subsystem and create code that will print distance onto the smartdashboard
 
+## Nancy 
+ 
+ - put the ultrasonic sensor onto minnie 
+ - put the port the sensor was connected to in constants 
+ - tried different code to print the values from the sensor into the smartdashboard 
+ - figured there was something wrong with analog input and analog potentiometer imports because we would not get the api that was mentioned in wpilib when both of those were imported
+ - did research on code examples for ultrasonic sensors
+
