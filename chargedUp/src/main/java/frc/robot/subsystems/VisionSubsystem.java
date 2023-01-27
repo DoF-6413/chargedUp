@@ -29,13 +29,13 @@ public class VisionSubsystem extends SubsystemBase {
   
   //todo: provide portforwaring to connect without radio
   PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
-  
-  private PhotonPipelineResult results; 
+  private PhotonPipelineResult results = new PhotonPipelineResult(); 
   public PhotonTrackedTarget target;
   public Double yaw;
   public Double pitch;
   public Transform3d camToTarget;
-  
+   
+ 
   
   @Override
   public void periodic() {
@@ -50,7 +50,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public boolean seeTarget(){
-    if( results.hasTargets() == true){
+    if(results .hasTargets() == true){
       target = results.getBestTarget();
       yaw = target.getYaw();
       pitch = target.getPitch();
@@ -78,5 +78,5 @@ return seeTarget() == true ?  results.getBestTarget().getBestCameraToTarget() : 
     boolean huge =  (this.seeTarget() == true) ? grande: false;
     return huge;
   }
-
+  
 }

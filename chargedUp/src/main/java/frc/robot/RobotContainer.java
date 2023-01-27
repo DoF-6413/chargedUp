@@ -9,6 +9,7 @@ import frc.robot.commands.AutoScore2;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.drivetotag;
+import frc.robot.commands.locateCube;
 import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -117,6 +118,7 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
   }
 
   /**

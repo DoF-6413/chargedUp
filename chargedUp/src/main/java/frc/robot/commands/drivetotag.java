@@ -30,7 +30,7 @@ public drivetotag( DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visi
 // Called when the command is initially scheduled.
 @Override
 public void initialize() {
-  m_fiducialId = m_VisionSubsystem.getBestFiducial();
+  m_fiducialId = m_VisionSubsystem.getBestFiducial ();
   m_setpoint = VisionConstants.ksetpoints[m_fiducialId];
 
 }
