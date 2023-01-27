@@ -37,6 +37,9 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 - added the get best fiducial to the initialize in the runToTag and made an array so that it runs a different distance based on the fiducial tag that the camera sees
 - We initially had the get best fiducial in the robot container but since it would be constantly changing it did not accept it so moved it to the command
 
+# Andy 
+- i finish the answer electrical questions in slack
+
 # 1-23-23
 
 ## Nancy
@@ -46,3 +49,4 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 
 ### Issues for this week: 
 - Add ultrasonic sensor to subsystem and create code that will print distance onto the smartdashboard
+
