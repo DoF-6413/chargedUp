@@ -58,9 +58,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     encoderLeftLead = leftLead.getEncoder();
     
+    leftLead.setInverted(DrivetrainConstants.kLeftInverted);
     // todo: uncomment for conversion
     // encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
-    encoderLeftLead.setInverted(DrivetrainConstants.kLeftInverted);
+    // encoderLeftLead.setInverted(DrivetrainConstants.kLeftInverted);
 
     leftFollower1.follow(leftLead);
     leftFollower2.follow(leftLead);
@@ -70,7 +71,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // todo: uncomment for conversion
     // encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
-    encoderRightLead.setInverted(DrivetrainConstants.kRightInverted);
+    rightLead.setInverted(DrivetrainConstants.kRightInverted);
 
     rightFollower1.follow(rightLead);
     rightFollower2.follow(leftLead);
