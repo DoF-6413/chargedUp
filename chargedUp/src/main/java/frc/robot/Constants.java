@@ -17,7 +17,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
   public static class DrivetrainConstants{
-    public static final int[] kDrivetrainCANIDs = new int[] {1,2,3,4};
+    public static final int[] kDrivetrainCANIDs = new int[] {1,2,3,4, 5, 6};
 
     public static final boolean kRightInverted = true;
     public static final boolean kLeftInverted = false;
