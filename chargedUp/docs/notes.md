@@ -58,3 +58,11 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
  - figured there was something wrong with analog input and analog potentiometer imports because we would not get the api that was mentioned in wpilib when both of those were imported
  - did research on code examples for ultrasonic sensors
 
+
+# 1-26-23 
+
+## Nancy 
+- Created a new command called locateCube 
+- Imported the vision and drivetrain systems and the smartdashboard 
+- made an if statement saying to turn at .5  until it sees the target which was set to the cone and once it sees the cone it will go straight towards it at -.5 when Y is pressed on the controller 
+- made public PhotonPipelineResult results = new PhotonPipelineResult() because the program was crashing on run  and we needed to set a default value on results pipeline
