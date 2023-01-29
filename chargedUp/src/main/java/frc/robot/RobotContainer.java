@@ -22,6 +22,9 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 // import frc.robot.commands.targetFinding;
 // import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -110,31 +113,13 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        //This runs Endeffector to Collect Cube
-        m_auxController.b().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+    m_driverController.x().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
+        // new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        // onTrue(new ArmPIDm_armSubsystem, 14)).onTrue(
+        // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
 
-        //This runs Endeffector to Collect Cone
-        m_auxController.a().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
-        
-        
-        // This runs Endeffector to eject game peices
-        m_auxController.rightTrigger().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
-
-        //This runs rotation motors to 77.5 degrees
-        m_auxController.y().
-        onTrue(new RotationPID(m_armSubsystem, 77.5));
-        
-        //This runs rotation motors to -77.5 degrees
-        m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
-
-        //This resets the encoder value of the arm where it is currently located
-        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_driverController.y().
+        onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
   
   /**
