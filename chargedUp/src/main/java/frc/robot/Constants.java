@@ -19,8 +19,8 @@ public final class Constants {
   public static class DrivetrainConstants{
     public static final int[] kDrivetrainCANIDs = new int[] {1,2,3, 10, 11, 12};
 
-    public static final boolean kRightInverted = true;
-    public static final boolean kLeftInverted = false;
+    public static final boolean kRightInverted = false;
+    public static final boolean kLeftInverted = true;
 
     // todo: update equation
     public static final double kTicksToFeat = 0;
