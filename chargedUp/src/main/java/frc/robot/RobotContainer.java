@@ -17,6 +17,9 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 // import frc.robot.commands.targetFinding;
 // import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -111,6 +114,12 @@ public class RobotContainer {
     m_driverController.b().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
 
     m_driverController.x().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
+        // new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        // onTrue(new ArmPIDm_armSubsystem, 14)).onTrue(
+        // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
+
+        m_driverController.y().
+        onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
 
   /**
@@ -120,7 +129,7 @@ public class RobotContainer {
    */
 
    public void disablePIDSubsystems() {
-    m_armSubsystem.disable();
+    // m_armSubsystem.disable();
   }
 
   public Command getAutonomousCommand() {
