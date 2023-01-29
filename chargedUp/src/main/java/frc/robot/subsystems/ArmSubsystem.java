@@ -8,58 +8,42 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
-public class ArmSubsystem extends ProfiledPIDSubsystem {
+public class ArmSubsystem extends SubsystemBase {
+private final CANSparkMax m_leftRotationMotor;
+private final RelativeEncoder m_leftRotationEncoder;
+
+private final CANSparkMax m_rightRotationMotor;
   /** Creates a new ArmSubsystem. */
-  private final CANSparkMax m_armMotor = new CANSparkMax(ArmConstants.armCANIDs[0], MotorType.kBrushless);
-  private final RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
-  private final ArmFeedforward m_armFeedForward = new ArmFeedforward(ArmConstants.kArmS, ArmConstants.kArmG, ArmConstants.kArmV);
-
   public ArmSubsystem() {
-    super(
-        // The ProfiledPIDController used by the subsystem
-        new ProfiledPIDController(
-            ArmConstants.kArmP,
-            ArmConstants.kArmI,
-            ArmConstants.kArmD,
-            // The motion profile constraints
-            new TrapezoidProfile.Constraints(ArmConstants.kArmMaxVelocity, 
-              ArmConstants.kArmMaxAcceleration)));
-
-        // m_armEncoder.setPositionConversionFactor(ArmConstants.kArmPositionConversion);
-        // setGoal(ArmConstants.kOffsetInitialPosition);
-        System.out.println("Running");
-  }
-
-  @Override
-  public void useOutput(double output, TrapezoidProfile.State setpoint) {
-    // Use the output (and optionally the setpoint) here
-    double feedForward = m_armFeedForward.calculate(setpoint.position, setpoint.velocity);
-    System.out.println("Use Output Running");
-    m_armMotor.set(feedForward + output);
-  }
-
-  @Override
-  public double getMeasurement() {
-    // Return the process variable measurement here
+    m_leftRotationMotor = new CANSparkMax(ArmConstants.armCANIDs[0], MotorType.kBrushless);
+    m_rightRotationMotor = new CANSparkMax(ArmConstants.armCANIDs[1], MotorType.kBrushless);
     
-    return m_armEncoder.getPosition() + ArmConstants.kOffsetInitialPosition;
-  }
+    m_leftRotationEncoder = m_leftRotationMotor.getEncoder();
 
-  public void resetPosition(){
-    System.out.println("Reset Position");
-    m_armEncoder.setPosition(0);
+    m_rightRotationMotor.follow(m_leftRotationMotor);
   }
 
   @Override
-  public void periodic(){
-    super.periodic();
-    SmartDashboard.putNumber("Arm Position", getMeasurement());
+  public void periodic() {
+    // This method will be called once per scheduler run
+   SmartDashboard.putNumber("armPosition",m_leftRotationEncoder.getPosition());
+  }
+
+  public double getRotationPosition(){
+    return m_leftRotationEncoder.getPosition();
+  }
+
+  public void spinRotationMotors(double speed){
+    m_leftRotationMotor.set(speed);
+    m_rightRotationMotor.set(speed);
+    SmartDashboard.putNumber("speed", speed);
+  }
+
+  public void resetRotationPosition(){
+    m_leftRotationEncoder.setPosition(0);
   }
 }

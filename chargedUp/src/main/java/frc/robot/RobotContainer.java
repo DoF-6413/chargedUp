@@ -15,6 +15,9 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 // import frc.robot.commands.targetFinding;
 // import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -91,12 +94,7 @@ public class RobotContainer {
 
     //Spins Motor if April Tags are Recognized for 20 Ticks
     new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        onTrue( Commands.runOnce(
-                () -> {
-                  m_armSubsystem.setGoal(10);
-                  m_armSubsystem.enable();
-                },
-                m_armSubsystem));
+        onTrue( new RotationPID(m_armSubsystem, 5));
 
         // new JoystickButton(m_driverController, XboxController.Button.kB.value).
         // onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
@@ -107,7 +105,7 @@ public class RobotContainer {
         // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
 
         new JoystickButton(m_driverController, XboxController.Button.kY.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.resetPosition()));
+        onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
 
   /**
@@ -117,7 +115,7 @@ public class RobotContainer {
    */
 
    public void disablePIDSubsystems() {
-    m_armSubsystem.disable();
+    // m_armSubsystem.disable();
   }
 
   public Command getAutonomousCommand() {
