@@ -135,11 +135,8 @@ public final class Constants {
     public static final double kArmA = 0;
 
     //Trapazoidal Motion Profiling
-    public static final double kArmMaxVelocity = 0.5;
-    public static final double kArmMaxAcceleration = 0.5;
-    //Most Likely from Absolute Encoder when Powered On
-    public static final double kOffsetInitialPosition = 0;
-
+    public static final double kArmMaxVelocity = 100;
+    public static final double kArmMaxAcceleration = 100;
     
   }
 }
