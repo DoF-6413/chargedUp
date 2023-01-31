@@ -20,8 +20,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
   private static CANSparkMax leftLead;
   private static CANSparkMax rightLead;
-  private static CANSparkMax leftFollower;
-  private static CANSparkMax rightFollower;
+  private static CANSparkMax leftFollower1;
+  private static CANSparkMax rightFollower1;
+  private static CANSparkMax leftFollower2;
+  private static CANSparkMax rightFollower2;
 
 
   private static RelativeEncoder encoderLeftLead;
@@ -34,29 +36,45 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public DrivetrainSubsystem() {
 
-    leftLead = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[0], MotorType.kBrushless);
-    rightLead = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[1], MotorType.kBrushless);
-    // leftFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
-    // rightFollower = new CANSparkMax(Constants.DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
+    leftLead = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
+    rightLead = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[0], MotorType.kBrushless);
+
+    leftFollower1 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[4], MotorType.kBrushless);
+    rightFollower1 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[1], MotorType.kBrushless);
+
+    leftFollower2 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[5], MotorType.kBrushless);
+    rightFollower2 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
 
     leftLead.setIdleMode(IdleMode.kBrake);
+    rightLead.setIdleMode(IdleMode.kBrake);
+
+    leftFollower1.setIdleMode(IdleMode.kBrake);
+    rightFollower1.setIdleMode(IdleMode.kBrake);
+
+    leftFollower2.setIdleMode(IdleMode.kBrake);
+    rightFollower2.setIdleMode(IdleMode.kBrake);
+
+
+
     encoderLeftLead = leftLead.getEncoder();
     
+    leftLead.setInverted(DrivetrainConstants.kLeftInverted);
     // todo: uncomment for conversion
     // encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
-    encoderLeftLead.setInverted(DrivetrainConstants.kLeftInverted);
+    // encoderLeftLead.setInverted(DrivetrainConstants.kLeftInverted);
 
-     //Uncomment for follower
-    // leftFollower.follow(leftLead);
+    leftFollower1.follow(leftLead);
+    leftFollower2.follow(leftLead);
+
 
     encoderRightLead = rightLead.getEncoder();
 
     // todo: uncomment for conversion
     // encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
-    encoderRightLead.setInverted(DrivetrainConstants.kRightInverted);
+    rightLead.setInverted(DrivetrainConstants.kRightInverted);
 
-    //Uncomment for follower
-    // rightFollower.follow(rightLead);
+    rightFollower1.follow(rightLead);
+    rightFollower2.follow(rightLead);
     
      
     diffDrive = new DifferentialDrive(leftLead, rightLead);
