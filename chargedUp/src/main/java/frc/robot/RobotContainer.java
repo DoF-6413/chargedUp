@@ -8,24 +8,22 @@ import frc.robot.commands.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoScore;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.targetFinding;
 import frc.robot.commands.DrivetrainPID.MovePID;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
-
-
+import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
-
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -42,17 +40,24 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController =
   new XboxController(OperatorConstants.kDriverControllerPort);
   // list of autos
   private final Command m_autoScore = new AutoScore();
-  
+
+
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final XboxController m_driverController =
+      new XboxController(OperatorConstants.kDriverControllerPort);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
     // Configure the trigger bindings
+
     
     m_chooser.setDefaultOption("Auto Score", m_autoScore);
     m_chooser.addOption("Auto Score", m_autoScore);
@@ -74,6 +79,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    //Spins Motor if April Tags are Recognized for 20 Ticks
+    new JoystickButton(m_driverController, XboxController.Button.kA.value).
+        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
