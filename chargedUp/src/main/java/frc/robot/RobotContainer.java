@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.*;
+import frc.robot.commands.AutoScore2;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;

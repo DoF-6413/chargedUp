@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+import com.pathplanner.lib.server.PathPlannerServerThread;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.RobotBase;
