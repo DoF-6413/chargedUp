@@ -5,29 +5,22 @@
 package frc.robot;
 
 import frc.robot.commands.*;
+import frc.robot.commands.AutoScore2;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AutoScore;
-import frc.robot.commands.Autos;
-import frc.robot.commands.targetFinding;
-import frc.robot.commands.DrivetrainPID.MovePID;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,16 +30,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
-  
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController m_driverController =
-  new XboxController(OperatorConstants.kDriverControllerPort);
+
   // list of autos
-  private final Command m_autoScore = new AutoScore();
+  private final Command m_autoScore = new AutoScore2();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -83,10 +72,7 @@ public class RobotContainer {
     //Spins Motor if April Tags are Recognized for 20 Ticks
     new JoystickButton(m_driverController, XboxController.Button.kA.value).
         onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+  
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
