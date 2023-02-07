@@ -14,10 +14,15 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
+import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -68,8 +73,6 @@ public static Field2d m_field2d = new Field2d();
     leftFollower2.setIdleMode(IdleMode.kBrake);
     rightFollower2.setIdleMode(IdleMode.kBrake);
 
-
-
     encoderLeftLead = leftLead.getEncoder();
     encoderRightLead = rightLead.getEncoder();
     
@@ -82,7 +85,7 @@ public static Field2d m_field2d = new Field2d();
     leftFollower2.follow(leftLead);
 
 
-    // encoderRightLead = rightLead.getEncoder();
+    encoderRightLead = rightLead.getEncoder();
 
     // todo: uncomment for conversion
     // encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
