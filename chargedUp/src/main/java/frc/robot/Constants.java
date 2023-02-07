@@ -69,5 +69,15 @@ public final class Constants {
     public static final double MAX_ACCELERATION_PERCENT_OUTPUT = 0;
 
     public static final double kchargingStationDistance = 5;
+    //Facts about the Drivetrain
+    //Number of motors within 1 gearbox (controlling the drivetrain)
+    public static final int knumMotors = 3;
+    public static final double kgearing =  6.11;
+    //Moment of Inertia (aka force felt by robot when following path?)
+    public static final double kMOI = 0;
+    //Final Mass of Robot including Bumbers and Batteries
+    public static final double kMass = 135;
+    public static final double kwheelRadius = 3;
+    public static final double ktrackWidth = 21.87;
   }
 }
