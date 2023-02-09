@@ -3,6 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -37,6 +40,25 @@ public final class Constants {
     public static final double kTurnI = 0;
     public static final double kTurnD = 0;
     public static final double kTurnTolerance = 0;
+
+    // Kinematics
+      // Distance between centers of right and left wheels on robot
+    public static final double kTrackWidth = Units.inchesToMeters(20.733);
+        
+    // Distance between front and back wheels on robot
+    public static final double WHEEL_BASE = Units.inchesToMeters(20.733);
+
+    public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
+        new Translation2d(WHEEL_BASE / 2, kTrackWidth / 2),
+        new Translation2d(WHEEL_BASE / 2, -kTrackWidth / 2),
+        new Translation2d(-WHEEL_BASE / 2, kTrackWidth / 2),
+        new Translation2d(-WHEEL_BASE / 2, -kTrackWidth / 2));
+  }
+
+  public static class AutoConstants{
+    public static final double MAX_VELOCITY_PERCENT_OUTPUT = 0;
+    public static final double MAX_ACCELERATION_PERCENT_OUTPUT = 0;
+
   }
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] {0, 1.5, 3, 4};
