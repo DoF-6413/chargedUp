@@ -69,3 +69,9 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 - Imported the vision and drivetrain systems and the smartdashboard 
 - made an if statement saying to turn at .5  until it sees the target which was set to the cone and once it sees the cone it will go straight towards it at -.5 when Y is pressed on the controller 
 - made public PhotonPipelineResult results = new PhotonPipelineResult() because the program was crashing on run  and we needed to set a default value on results pipeline
+
+# 1-30-23
+
+## Andy
+- I updated the id of the can sparks max
+- I researched network Table Instance's
