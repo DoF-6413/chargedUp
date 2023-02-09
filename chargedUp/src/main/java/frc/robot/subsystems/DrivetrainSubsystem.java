@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.*;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -48,6 +51,8 @@ private static DifferentialDriveOdometry m_odometry = new DifferentialDriveOdome
 public static Field2d m_field2d = new Field2d();
   public DifferentialDrivetrainSim m_drivetrainSimulator;
 
+  private static EncoderSim m_leftSimEncoder; 
+  private static EncoderSim m_rightSimEncoder; 
 
 
   public DrivetrainSubsystem() {
@@ -61,14 +66,8 @@ public static Field2d m_field2d = new Field2d();
     leftFollower2 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[5], MotorType.kBrushless);
     rightFollower2 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
 
-    leftLead.setIdleMode(IdleMode.kBrake);
-    rightLead.setIdleMode(IdleMode.kBrake);
-
-    leftFollower1.setIdleMode(IdleMode.kBrake);
-    rightFollower1.setIdleMode(IdleMode.kBrake);
-
-    leftFollower2.setIdleMode(IdleMode.kBrake);
-    rightFollower2.setIdleMode(IdleMode.kBrake);
+    Arrays.asList(leftLead, leftFollower1, leftFollower2, rightLead, rightFollower1, rightFollower2)
+                .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
 
     encoderLeftLead = leftLead.getEncoder();
     encoderRightLead = rightLead.getEncoder();
@@ -108,6 +107,7 @@ public static Field2d m_field2d = new Field2d();
 
   public double getPositionLeftLead(){
     return encoderLeftLead.getPosition();
+    
   }
 
   public double getPositionRightLead(){
