@@ -68,6 +68,12 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 - made public PhotonPipelineResult results = new PhotonPipelineResult() because the program was crashing on run  and we needed to set a default value on results pipeline
 
 
+# 1-30-23
+
+## Andy
+- I updated the id of the can sparks max
+- I researched network Table Instance's
+
 # 2-1-23 
 
 ## Nancy 
