@@ -70,8 +70,17 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 - made an if statement saying to turn at .5  until it sees the target which was set to the cone and once it sees the cone it will go straight towards it at -.5 when Y is pressed on the controller 
 - made public PhotonPipelineResult results = new PhotonPipelineResult() because the program was crashing on run  and we needed to set a default value on results pipeline
 
+
 # 1-30-23
 
 ## Andy
 - I updated the id of the can sparks max
 - I researched network Table Instance's
+
+# 2-1-23 
+
+## Nancy 
+- Made a new branch for auto that gets out of community zone and balances on charging station 
+- New command called autoBalance 
+- Command runs robot if position is < 1.3 else turns 
+- Things to do still: correct code because position can be neg, make command run when a button is pressed, finish adding logic for robot to turn and balance
