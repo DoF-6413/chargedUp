@@ -81,3 +81,12 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 - New command called autoBalance 
 - Command runs robot if position is < 1.3 else turns 
 - Things to do still: correct code because position can be neg, make command run when a button is pressed, finish adding logic for robot to turn and balance
+
+# 2-9-23
+
+## Nancy 
+- Added differential drive odoemtry in Drivetrainsubsystem  
+- Added get encoder positions
+- Added get rotation 2d to gyro subsystem 
+- Added differential drive kinematics in constants 
+- Still need to fix ramsetcommand 
