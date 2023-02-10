@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.subsystems.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
@@ -27,10 +31,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
   private static RelativeEncoder encoderLeftLead;
-  // private static RelativeEncoder encoderRightLead;
+  private static RelativeEncoder encoderRightLead;
 
   private static DifferentialDrive diffDrive;
 
+private static GyroSubsystem gyro;
+private final DifferentialDriveOdometry m_odometry;
 
 
 
@@ -57,6 +63,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
     encoderLeftLead = leftLead.getEncoder();
+    encoderRightLead = rightLead.getEncoder();
     
     leftLead.setInverted(DrivetrainConstants.kLeftInverted);
     // todo: uncomment for conversion
@@ -78,6 +85,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
      
     diffDrive = new DifferentialDrive(leftLead, rightLead);
+    
+    m_odometry = new DifferentialDriveOdometry(
+        gyro.getRotation2d(), encoderLeftLead.getPosition(), encoderRightLead.getPosition());
   }
 
 
@@ -86,22 +96,37 @@ public class DrivetrainSubsystem extends SubsystemBase {
     diffDrive.arcadeDrive(driveValue, turnValue);
   }
 
-  public double getPosition(){
+  public double getPositionLeftLead(){
     return encoderLeftLead.getPosition();
+  }
+
+  public double getPositionRightLead(){
+    return encoderRightLead.getPosition();
   }
 
   public void resetPosition(){
     encoderLeftLead.setPosition(0);
   }
+// use this later to set to specific pose by passing in an argument to this void
+//   public void resetPose(){
+// m_odometry.resetPosition(null, getDistance(), getDistance(), null);
+//   }
   
+  public double getDistance(){
+    return encoderLeftLead.getPositionConversionFactor();
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
+  m_pose = m_odometry.update(gyro.getRotation2d(),
+   getPositionLeftLead(),
+    getPositionRightLead());
+}
+  
 
   public void SmartDashboardCalls(){
-    SmartDashboard.putNumber("Drivetrain Position", this.getPosition());
+    SmartDashboard.putNumber("Drivetrain Position", this.getPositionRightLead());
   }
   
 }

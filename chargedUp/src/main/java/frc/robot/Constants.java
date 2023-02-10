@@ -4,7 +4,9 @@
 
 package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -48,11 +50,17 @@ public final class Constants {
     // Distance between front and back wheels on robot
     public static final double WHEEL_BASE = Units.inchesToMeters(20.733);
 
-    public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
-        new Translation2d(WHEEL_BASE / 2, kTrackWidth / 2),
-        new Translation2d(WHEEL_BASE / 2, -kTrackWidth / 2),
-        new Translation2d(-WHEEL_BASE / 2, kTrackWidth / 2),
-        new Translation2d(-WHEEL_BASE / 2, -kTrackWidth / 2));
+    public static final DifferentialDriveKinematics kinematics = 
+    new DifferentialDriveKinematics(kTrackWidth);
+
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(kMoveI, kMoveD, WHEEL_BASE);
+// Convert to wheel speeds
+    DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
+// Left velocity
+    double leftVelocity = wheelSpeeds.leftMetersPerSecond;
+// Right velocity
+    double rightVelocity = wheelSpeeds.rightMetersPerSecond;
+
   }
 
   public static class AutoConstants{

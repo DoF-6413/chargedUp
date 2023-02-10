@@ -45,8 +45,6 @@ public class targetFinding extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    // replace when enabled
-    // return m_drivetrainSubsystem.getPosition() > 5000;
+    return m_drivetrainSubsystem.getPositionRightLead() > 5000;
   }
 }

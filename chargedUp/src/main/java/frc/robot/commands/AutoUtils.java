@@ -10,15 +10,18 @@ import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 // Todo:set autoconstants
 // import frc.robot.Constants.AutoConstants;
 // Todo:set drive constants
 // import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.*;
+
 // todo: import differential drivetrain subsystem
 import frc.robot.subsystems.DrivetrainSubsystem; 
 
@@ -29,20 +32,19 @@ public class AutoUtils {
         AutoConstants.MAX_VELOCITY_PERCENT_OUTPUT, AutoConstants.MAX_ACCELERATION_PERCENT_OUTPUT);
         
 
-    private static final PathPlannerTrajectory m_defaultAutoGen = PathPlanner.loadPath("firstPath", m_defaultConfig);
+    private static PathPlannerTrajectory m_defaultAutoGen = PathPlanner.loadPath("firstPath", m_defaultConfig);
 
 
     //Default getters
     public static Command getDefaultTrajectory(DrivetrainSubsystem drivetrain) {
         return new SequentialCommandGroup(
-            new InstantCommand(() -> drivetrain.resetPose(m_defaultAutoGen.getInitialHolonomicPose())),
-// Todo: change to ramsette controller
+
                 new PPRamseteCommand(
-    traj, 
-    drivetrain.getPose, // Pose supplier
+    m_defaultAutoGen, 
+    drivetrain::getPose, // Pose supplier
     new RamseteController(),
-    new SimpleMotorFeedforward(KS, KV, KA),
-    drivetrain.kinematics, // DifferentialDriveKinematics
+    new SimpleMotorFeedforward(1,1, 1),
+    Constants.DrivetrainConstants.kinematics, // DifferentialDriveKinematics
     drivetrain::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
     new PIDController(0, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
     new PIDController(0, 0, 0), // Right controller (usually the same values as left controller)

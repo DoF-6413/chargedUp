@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +26,9 @@ public class GyroSubsystem extends SubsystemBase {
     m_gyro.zeroYaw();
   }
 
+  public Rotation2d getRotation2d(){
+  return m_gyro.getRotation2d();
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
