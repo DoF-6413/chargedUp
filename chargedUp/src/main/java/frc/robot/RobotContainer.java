@@ -115,6 +115,10 @@ public class RobotContainer {
 
   }
 
+  public DrivetrainSubsystem getDrive(){
+    return m_drivetrainSubsystem;
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

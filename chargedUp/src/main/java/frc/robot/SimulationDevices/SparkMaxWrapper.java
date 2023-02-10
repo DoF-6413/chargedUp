@@ -8,18 +8,22 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.wpilibj.RobotController;
 
-public class SparkMaxSim extends CANSparkMax {
+/*
+ * This extends the CANSparkMax class to implement simulation
+ */
+public class SparkMaxWrapper extends CANSparkMax {
     private SimDouble m_simSpeed;
     private SimDevice m_simSparkMax;
     private static enum direction {none};
 
-    public SparkMaxSim(int deviceID, MotorType type) {
+    public SparkMaxWrapper(int deviceID, MotorType type) {
         super(deviceID,type);
         m_simSparkMax = SimDevice.create("SparkMax",deviceID);
         if (m_simSparkMax != null){
-            m_simSpeed = m_simSparkMax.createDouble("speed", null, 0.0);
+            m_simSpeed = m_simSparkMax.createDouble("speed", Direction.kOutput, 0.0);
         }
     }
 

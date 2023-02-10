@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.Arrays;
 
+import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -13,15 +14,20 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
+import edu.wpi.first.hal.HALValue;
 import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.simulation.NotifyCallback;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.simulation.CallbackStore;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
@@ -35,6 +41,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
+import frc.robot.SimulationDevices.SparkMaxWrapper;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
@@ -47,7 +54,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
   private static RelativeEncoder encoderLeftLead;
-  private static RelativeEncoder encoderRightLead;
   private static RelativeEncoder encoderRightLead;
 
   private static DifferentialDrive diffDrive;
@@ -88,7 +94,6 @@ public static Field2d m_field2d = new Field2d();
 
 
     encoderRightLead = rightLead.getEncoder();
-    encoderRightLead = rightLead.getEncoder();
 
     // todo: uncomment for conversion
     // encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
@@ -97,7 +102,10 @@ public static Field2d m_field2d = new Field2d();
     rightFollower1.follow(rightLead);
     rightFollower2.follow(rightLead);
     
-     
+    
+    // Encoder fakeLeftEncoder = new Encoder(0, 1);
+    // Encoder fakeRightEncoder = new Encoder(2, 3);
+
     diffDrive = new DifferentialDrive(leftLead, rightLead);
     
     m_odometry = new DifferentialDriveOdometry(
@@ -155,4 +163,23 @@ public static Field2d m_field2d = new Field2d();
     SmartDashboard.putNumber("Drivetrain Position", this.getPositionRightLead());
   }
   
+    public double getSimDrawnCurrentAmps() {
+      return m_drivetrainSimulator.getCurrentDrawAmps();
+    }
+
+    public CANSparkMax getLeftMotor(){
+      return leftLead;
+    }
+
+    public CANSparkMax getrightMotor(){
+      return rightLead;
+    }
+
+    public EncoderSim getRightSimEncoder(){
+      return m_rightSimEncoder;
+    }
+
+    public EncoderSim getLeftSimEncoder(){
+      return m_leftSimEncoder;
+    }
 }
