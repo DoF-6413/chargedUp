@@ -127,6 +127,10 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
   }
 
+  public DrivetrainSubsystem getDrive(){
+    return m_drivetrainSubsystem;
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
