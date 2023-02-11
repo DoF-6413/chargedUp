@@ -25,8 +25,6 @@ public class FollowPath extends CommandBase {
   public void execute() {
     PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", null);
 
-  //  FollowPathWithEvents commands = new FollowPathWithEvents(
-  //   firstPath, null, null)
   }
 
   // Called once the command ends or is interrupted.
