@@ -74,10 +74,10 @@ public final class Constants {
     public static final int knumMotors = 3;
     public static final double kgearing =  6.11;
     //Moment of Inertia (aka force felt by robot when following path?)
-    public static final double kMOI = 0;
+    public static final double kMOI = 4;
     //Final Mass of Robot including Bumbers and Batteries
     public static final double kMass = 135;
-    public static final double kwheelRadius = 3;
+    public static final double kwheelRadiusMeters = 3 * 0.0254;
     public static final double ktrackWidth = 21.87;
   }
 }

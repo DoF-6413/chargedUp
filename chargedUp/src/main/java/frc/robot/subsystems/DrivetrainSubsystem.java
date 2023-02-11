@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import java.util.Arrays;
 
-import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -17,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.hal.HALValue;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.simulation.NotifyCallback;
+import edu.wpi.first.hal.simulation.SimValueCallback;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.math.VecBuilder;
@@ -27,9 +27,11 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.CallbackStore;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
@@ -52,9 +54,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static CANSparkMax leftFollower2;
   private static CANSparkMax rightFollower2;
 
-
   private static RelativeEncoder encoderLeftLead;
   private static RelativeEncoder encoderRightLead;
+
+  private static EncoderSim m_rightSimEncoder;
+  private static EncoderSim m_leftSimEncoder;
 
   private static DifferentialDrive diffDrive;
 
@@ -63,8 +67,6 @@ private static DifferentialDriveOdometry m_odometry = new DifferentialDriveOdome
 public static Field2d m_field2d = new Field2d();
   public DifferentialDrivetrainSim m_drivetrainSimulator;
 
-  private static EncoderSim m_leftSimEncoder; 
-  private static EncoderSim m_rightSimEncoder; 
 
 
   public DrivetrainSubsystem() {
@@ -103,9 +105,6 @@ public static Field2d m_field2d = new Field2d();
     rightFollower2.follow(rightLead);
     
     
-    // Encoder fakeLeftEncoder = new Encoder(0, 1);
-    // Encoder fakeRightEncoder = new Encoder(2, 3);
-
     diffDrive = new DifferentialDrive(leftLead, rightLead);
     
     m_odometry = new DifferentialDriveOdometry(
@@ -163,9 +162,9 @@ public static Field2d m_field2d = new Field2d();
     SmartDashboard.putNumber("Drivetrain Position", this.getPositionRightLead());
   }
   
-    public double getSimDrawnCurrentAmps() {
-      return m_drivetrainSimulator.getCurrentDrawAmps();
-    }
+    // public double getSimDrawnCurrentAmps() {
+    //   return m_drivetrainSimulator.getCurrentDrawAmps();
+    // }
 
     public CANSparkMax getLeftMotor(){
       return leftLead;
@@ -175,11 +174,29 @@ public static Field2d m_field2d = new Field2d();
       return rightLead;
     }
 
-    public EncoderSim getRightSimEncoder(){
-      return m_rightSimEncoder;
-    }
 
-    public EncoderSim getLeftSimEncoder(){
-      return m_leftSimEncoder;
-    }
+  //   @Override
+  // public void simulationPeriodic() {
+  //   m_drivetrainSimulator.setInputs(
+  //     (-leftLead.get() * RobotController.getBatteryVoltage()),
+  //       rightLead.get() * RobotController.getBatteryVoltage());
+      
+  // m_drivetrainSimulator.update(0.020);
+
+  //  m_leftSimEncoder.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
+  //   m_leftSimEncoder.setRate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
+  
+  // m_rightSimEncoder.setDistance(m_drivetrainSimulator.getRightPositionMeters());
+  //   m_rightSimEncoder.setRate(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
+      
+  //   System.out.println("Runnin Sim");
+    
+  //   double drawCurrent = getSimDrawnCurrentAmps();
+  //   double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(drawCurrent);
+  //   RoboRioSim.setVInVoltage(loadedVoltage);
+
+    
+  // }
+
+  
 }
