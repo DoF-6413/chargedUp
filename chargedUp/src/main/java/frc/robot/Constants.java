@@ -21,9 +21,10 @@ public final class Constants {
 
     public static final boolean kRightInverted = false;
     public static final boolean kLeftInverted = true;
-
+    
     // todo: update equation
-    public static final double kTicksToFeat = 0;
+    public static final int kWheelDiameter = 6;
+    public static final double kTicksToFeat = 1.0 / 42. * kWheelDiameter * 6.11 * Math.PI / 12.;;
     public static final double kStopMotors = 0;
 
     //PID Controlls for Forawrds and Backwards
@@ -37,6 +38,8 @@ public final class Constants {
     public static final double kTurnI = 0;
     public static final double kTurnD = 0;
     public static final double kTurnTolerance = 0;
+
+    public static final double kchargingStationDistance = 5;
   }
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] {0, 1.5, 3, 4};
