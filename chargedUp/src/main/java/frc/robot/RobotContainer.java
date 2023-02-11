@@ -88,6 +88,8 @@ public class RobotContainer {
         onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
   
 
+    new JoystickButton(m_driverController, XboxController.Button.kB.value).
+        onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
