@@ -117,6 +117,9 @@ public class RobotContainer {
         // new JoystickButton(m_driverController, XboxController.Button.kX.value).
         // onTrue(new ArmPIDm_armSubsystem, 14)).onTrue(
         // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
+        m_driverController.a().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
         m_driverController.y().
         onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
