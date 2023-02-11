@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.commands.AutoScore2;
+import frc.robot.commands.DrivetrainPID.MovePID;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -36,6 +38,8 @@ public class RobotContainer {
 
   // list of autos
   private final Command m_autoScore = new AutoScore2();
+  private final Command m_moveForward = 
+      new MovePID(m_drivetrainSubsystem, DrivetrainConstants.kchargingStationDistance);
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -50,6 +54,7 @@ public class RobotContainer {
     
     m_chooser.setDefaultOption("Auto Score", m_autoScore);
     m_chooser.addOption("Auto Score", m_autoScore);
+    m_chooser.addOption("Move Forward", m_moveForward);
       SmartDashboard.putData(m_chooser);
       
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->

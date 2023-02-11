@@ -64,7 +64,7 @@ private final DifferentialDriveOdometry m_odometry;
     
     leftLead.setInverted(DrivetrainConstants.kLeftInverted);
     // todo: uncomment for conversion
-    // encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
+    encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
     // encoderLeftLead.setInverted(DrivetrainConstants.kLeftInverted);
 
     leftFollower1.follow(leftLead);
