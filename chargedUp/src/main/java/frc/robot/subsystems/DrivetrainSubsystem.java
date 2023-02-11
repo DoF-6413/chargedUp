@@ -33,9 +33,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private static DifferentialDrive diffDrive;
 
-private static GyroSubsystem gyro;
-private static DifferentialDriveOdometry m_odometry;
-public final static Field2d m_field2d = new Field2d();
+private static GyroSubsystem gyro = new GyroSubsystem();
+private static DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), 0, 0);
+public static Field2d m_field2d = new Field2d();
 
 
   public DrivetrainSubsystem() {
@@ -87,8 +87,7 @@ public final static Field2d m_field2d = new Field2d();
     m_odometry = new DifferentialDriveOdometry(
         gyro.getRotation2d(), DrivetrainSubsystem.getDistanceLeaftlead(), DrivetrainSubsystem.getDistanceRigthlead());
 
-  
-        SmartDashboard.putData("Field", m_field2d);
+       
   }
 
 
@@ -114,11 +113,11 @@ public final static Field2d m_field2d = new Field2d();
 //   }
   
   public static double getDistanceLeaftlead(){
-    return encoderLeftLead.getPositionConversionFactor();
+    return (encoderLeftLead != null) ? encoderLeftLead.getPositionConversionFactor() : 00;
 
   }
   public static double getDistanceRigthlead(){
-    return encoderRightLead.getPositionConversionFactor();
+    return  (encoderRightLead != null) ? encoderRightLead.getPositionConversionFactor() : 00;
 
   }
 
@@ -130,6 +129,8 @@ public final static Field2d m_field2d = new Field2d();
   public void periodic() {
     // This method will be called once per scheduler run
     m_field2d.setRobotPose(m_odometry.getPoseMeters());
+  
+    SmartDashboard.putData("Field", m_field2d);
  }
   
 
