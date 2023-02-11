@@ -93,20 +93,28 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Spins Motor if April Tags are Recognized for 20 Ticks
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        onTrue( new RotationPID(m_armSubsystem, 5));
 
         // new JoystickButton(m_driverController, XboxController.Button.kB.value).
         // onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
         // onFalse(new InstantCommand(()-> m_armSubsystem.spinMotor(0)));
 
-        // new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        // new JoystickButton(m_driverController, XboxController.Button.kX.value).\
         // onTrue(new ArmPIDm_armSubsystem, 14)).onTrue(
         // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
+        new JoystickButton(m_driverController, XboxController.Button.kA.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
         new JoystickButton(m_driverController, XboxController.Button.kY.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+
+        new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+  
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
