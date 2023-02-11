@@ -28,8 +28,8 @@ public final class Constants {
     public static final double kStopMotors = 0;
 
     //PID Controlls for Forawrds and Backwards
-    public static final double kMoveP = 25;
-    public static final double kMoveI = 0;
+    public static final double kMoveP = 19.5;
+    public static final double kMoveI = 5;
     public static final double kMoveD = 0;
     public static final double kMoveTolerance = 1;
 

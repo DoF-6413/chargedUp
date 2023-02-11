@@ -135,7 +135,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    
-    return m_chooser.getSelected();
+    return new MovePID(m_drivetrainSubsystem, DrivetrainConstants.kchargingStationDistance);
+
   }
 }
