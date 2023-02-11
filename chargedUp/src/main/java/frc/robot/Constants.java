@@ -109,14 +109,11 @@ public final class Constants {
 
     public static final double kchargingStationDistance = 5;
 
-    public static double kS = 0;
-    public static double kA = 0;
-    public static double kV = 0;
-
   }
 
-  public static class ArmConstants {
-    public static final int[] armCANIDs = new int[] { 2 };
+  public static class ArmConstants { 
+  public static final int[] armCANIDs = new int[] {13, 14, 15, 0, 0};
+  public static final double kArmPositionConversion = 0;
 
     // Arm PID Values (Tune PID Before Feedforward)
     public static final double kArmP = 0.5;
