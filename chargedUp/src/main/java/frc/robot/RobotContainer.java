@@ -8,6 +8,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.AutoScore2;
 import frc.robot.commands.DrivetrainPID.MovePID;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.drivetotag;
@@ -44,7 +45,7 @@ public class RobotContainer {
   // list of autos
   private final Command m_autoScore = new AutoScore2();
   private final Command m_moveForward = 
-      new MovePID(m_drivetrainSubsystem, DrivetrainConstants.kchargingStationDistance);
+      new MovePID(m_drivetrainSubsystem, AutoConstants.kchargingStationDistance);
 
 
   private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 

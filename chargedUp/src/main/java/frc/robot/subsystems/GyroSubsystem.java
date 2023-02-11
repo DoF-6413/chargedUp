@@ -27,7 +27,7 @@ public class GyroSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d(){
-  return m_gyro.getRotation2d();
+  return  m_gyro.getRotation2d() != null ? m_gyro.getRotation2d() : null ;
   }
   @Override
   public void periodic() {

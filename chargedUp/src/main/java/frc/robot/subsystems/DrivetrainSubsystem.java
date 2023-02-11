@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -36,8 +37,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static DifferentialDrive diffDrive;
 
 private static GyroSubsystem gyro;
-private final DifferentialDriveOdometry m_odometry;
-
+private static DifferentialDriveOdometry m_odometry;
+public final static Field2d m_field2d = new Field2d();
 
 
   public DrivetrainSubsystem() {
@@ -87,7 +88,10 @@ private final DifferentialDriveOdometry m_odometry;
     diffDrive = new DifferentialDrive(leftLead, rightLead);
     
     m_odometry = new DifferentialDriveOdometry(
-        gyro.getRotation2d(), encoderLeftLead.getPosition(), encoderRightLead.getPosition());
+        gyro.getRotation2d(), DrivetrainSubsystem.getDistanceLeaftlead(), DrivetrainSubsystem.getDistanceRigthlead());
+
+  
+        SmartDashboard.putData("Field", m_field2d);
   }
 
 
@@ -112,17 +116,24 @@ private final DifferentialDriveOdometry m_odometry;
 // m_odometry.resetPosition(null, getDistance(), getDistance(), null);
 //   }
   
-  public double getDistance(){
+  public static double getDistanceLeaftlead(){
     return encoderLeftLead.getPositionConversionFactor();
+
+  }
+  public static double getDistanceRigthlead(){
+    return encoderRightLead.getPositionConversionFactor();
+
   }
 
+
+  public static void updateOdometry(){
+    m_odometry.update(gyro.getRotation2d(), getDistanceRigthlead(), getDistanceLeaftlead());
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  m_pose = m_odometry.update(gyro.getRotation2d(),
-   getPositionLeftLead(),
-    getPositionRightLead());
-}
+    m_field2d.setRobotPose(m_odometry.getPoseMeters());
+ }
   
 
   public void SmartDashboardCalls(){

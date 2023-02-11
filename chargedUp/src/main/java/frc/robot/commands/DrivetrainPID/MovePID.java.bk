@@ -20,7 +20,7 @@ public class MovePID extends PIDCommand {
         // The controller that the command will use
         new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD),
         // This should return the measurement
-        () -> drive.getPosition(),
+        () -> drive.getPositionLeftLead(),
         // This should return the setpoint (can also be a constant)
         () -> setpoint,
         // This uses the output

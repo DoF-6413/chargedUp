@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class FollowPath extends CommandBase {
@@ -25,6 +26,8 @@ public class FollowPath extends CommandBase {
   public void execute() {
     PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", null);
 
+   FollowPathWithEvents commands = new FollowPathWithEvents(
+    (Command) firstPath, null, null);
   }
 
   // Called once the command ends or is interrupted.
