@@ -187,12 +187,18 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
+    DriveSimSub driveSim = new DriveSimSub();
+    driveSim.configurePID(kDefaultPeriod, kDefaultPeriod, kDefaultPeriod);
   }
   
   @Override
   public void simulationPeriodic() {
     DriveSimSub driveSim = new DriveSimSub();
-    driveSim.updateInputs();
+    driveSim.updateInputs(
+      // RobotContainer.getLeftJoystickY(), RobotContainer.getRightJoystickX()
+      );
+    
+    // driveSim.field();
   }
   /** This function is called periodically whilst in simulation. */
  

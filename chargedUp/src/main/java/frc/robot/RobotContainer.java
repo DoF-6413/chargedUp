@@ -14,6 +14,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.drivetotag;
 import frc.robot.commands.locateCube;
 import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.DriveSimSub;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -40,7 +41,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-
+  private final static DriveSimSub m_driveSimSub = new DriveSimSub();
 
   // list of autos
   private final Command m_autoScore = new AutoScore2();
@@ -50,7 +51,7 @@ public class RobotContainer {
 
   private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController m_driverController =
+  private final static XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);
 
 
@@ -67,6 +68,7 @@ public class RobotContainer {
       
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
+      
     configureBindings();
 
 
@@ -127,10 +129,17 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
   }
 
-  public DrivetrainSubsystem getDrive(){
-    return m_drivetrainSubsystem;
-  }
+public static double getLeftJoystickY(){
+  return m_driverController.getLeftY();
+}
 
+public static double getRightJoystickX(){
+  return m_driverController.getRightX();
+}
+
+public static DriveSimSub getDriveSimSub(){
+  return m_driveSimSub;
+}
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
