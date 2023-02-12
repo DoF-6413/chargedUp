@@ -10,7 +10,6 @@ import frc.robot.commands.DrivetrainPID.MovePID;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.DriveSimSub;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -36,7 +35,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final static DriveSimSub m_driveSimSub = new DriveSimSub();
 
   // list of autos
   private final Command m_autoScore = new AutoScore2();
@@ -125,9 +123,7 @@ public static double getRightJoystickX(){
   return m_driverController.getRightX();
 }
 
-public static DriveSimSub getDriveSimSub(){
-  return m_driveSimSub;
-}
+
 
 public static DrivetrainSubsystem getDrive(){
   return m_drivetrainSubsystem;
