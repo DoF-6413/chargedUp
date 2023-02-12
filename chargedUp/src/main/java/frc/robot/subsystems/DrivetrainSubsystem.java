@@ -65,7 +65,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 private static GyroSubsystem gyro = new GyroSubsystem();
 private static DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), 0, 0);
 public static Field2d m_field2d = new Field2d();
-  public DifferentialDrivetrainSim m_drivetrainSimulator;
+  
+private static DriveSimSub m_SimSub = new DriveSimSub();
 
 
 
@@ -116,12 +117,17 @@ public static Field2d m_field2d = new Field2d();
 
    
   public void setRaw(double driveValue, double turnValue){
+    if(Robot.isReal()){
     diffDrive.arcadeDrive(driveValue, turnValue);
+  }
+    else if(!Robot.isReal()){
+    m_SimSub.setVoltage(driveValue, turnValue);
+  }
     SmartDashboard.putNumber("Drive Value", driveValue);
     SmartDashboard.putNumber("Turn Value", turnValue);
     SmartDashboard.putNumber("Left Lead", leftLead.get());
     SmartDashboard.putNumber("Right Lead", rightLead.get());
-  }
+    }
 
   public double getPositionLeftLead(){
     return encoderLeftLead.getPosition();

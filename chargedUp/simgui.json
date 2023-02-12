@@ -6,11 +6,6 @@
       }
     },
     "Other Devices": {
-      "SPARK MAX [2]": {
-        "header": {
-          "open": true
-        }
-      },
       "SparkMax[2]": {
         "header": {
           "open": true
@@ -43,6 +38,11 @@
     },
     "windows": {
       "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
         "window": {
           "visible": true
         }
