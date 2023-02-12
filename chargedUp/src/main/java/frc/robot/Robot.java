@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.DriveSimSub;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -156,9 +157,12 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationInit() {
   }
-
-  /** This function is called periodically whilst in simulation. */
+  
   @Override
   public void simulationPeriodic() {
+    DriveSimSub driveSim = new DriveSimSub();
+    driveSim.updateInputs();
   }
+  /** This function is called periodically whilst in simulation. */
+ 
 }

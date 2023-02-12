@@ -79,5 +79,7 @@ public final class Constants {
     public static final double kMass = 135;
     public static final double kwheelRadiusMeters = 3 * 0.0254;
     public static final double ktrackWidth = 21.87;
+
+    public static double loopPeriodSecs = 0.020;
   }
 }
