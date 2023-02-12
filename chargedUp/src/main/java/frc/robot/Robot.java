@@ -195,7 +195,7 @@ public class Robot extends TimedRobot {
   public void simulationPeriodic() {
     DriveSimSub driveSim = new DriveSimSub();
     driveSim.updateInputs(
-      // RobotContainer.getLeftJoystickY(), RobotContainer.getRightJoystickX()
+      RobotContainer.getLeftJoystickY(), RobotContainer.getRightJoystickX()
       );
     
     // driveSim.field();

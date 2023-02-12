@@ -179,7 +179,7 @@ public static Field2d m_field2d = new Field2d();
 
 
   //   @Override
-  // public void simulationPeriodic() {
+  public void simulationPeriodic() {
   //   m_drivetrainSimulator.setInputs(
   //     (-leftLead.get() * RobotController.getBatteryVoltage()),
   //       rightLead.get() * RobotController.getBatteryVoltage());
@@ -199,7 +199,7 @@ public static Field2d m_field2d = new Field2d();
   //   RoboRioSim.setVInVoltage(loadedVoltage);
 
     
-  // }
+  }
 
   
 }
