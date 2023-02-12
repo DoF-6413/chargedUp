@@ -10,6 +10,7 @@ import frc.robot.commands.DrivetrainPID.MovePID;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.DriveSimSub;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -35,7 +36,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-
+  private final static DriveSimSub m_driveSimSub = new DriveSimSub();
 
   // list of autos
   private final Command m_autoScore = new AutoScore2();
@@ -44,7 +45,7 @@ public class RobotContainer {
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController m_driverController =
+  private final static XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -60,6 +61,7 @@ public class RobotContainer {
       
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
+      
     configureBindings();
 
   }
@@ -115,10 +117,17 @@ public class RobotContainer {
 
   }
 
-  public DrivetrainSubsystem getDrive(){
-    return m_drivetrainSubsystem;
-  }
+public static double getLeftJoystickY(){
+  return m_driverController.getLeftY();
+}
 
+public static double getRightJoystickX(){
+  return m_driverController.getRightX();
+}
+
+public static DriveSimSub getDriveSimSub(){
+  return m_driveSimSub;
+}
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

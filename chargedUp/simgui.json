@@ -18,6 +18,15 @@
       }
     },
     "RoboRIO": {
+      "3.3V Rail": {
+        "open": true
+      },
+      "5V Rail": {
+        "open": true
+      },
+      "6V Rail": {
+        "open": true
+      },
       "RoboRIO Input": {
         "open": true
       },
@@ -29,6 +38,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },
     "windows": {
@@ -55,6 +65,9 @@
           "open": true
         },
         "open": true
+      },
+      "SmartDashboard": {
+        "open": true
       }
     }
   },
@@ -62,10 +75,10 @@
     "Clients": {
       "open": true
     },
+    "Connections": {
+      "open": true
+    },
     "Server": {
-      "Publishers": {
-        "open": true
-      },
       "Subscribers": {
         "open": true
       },
