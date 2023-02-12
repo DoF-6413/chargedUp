@@ -9,8 +9,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +34,12 @@ public class DriveSimSub extends SubsystemBase {
   private static AnalogGyro m_gyro = new AnalogGyro(1);
   private AnalogGyroSim m_gyroSim = new AnalogGyroSim(m_gyro);
   private static DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), 0, 0);
+
+  private static Encoder encoderLeftLead = new Encoder(4, 5);
+  private static Encoder encoderRightLead = new Encoder(2, 3);
+
+  private static EncoderSim m_rightSimEncoder;
+  private static EncoderSim m_leftSimEncoder;
   
   private PIDController leftPID =
   new PIDController(0.0, 0.0, 0.0, DrivetrainConstants.loopPeriodSecs);
@@ -53,31 +64,58 @@ private PIDController rightPID =
               // l and r position: 0.005 m
               VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
+              
+
+              m_leftSimEncoder = new EncoderSim(encoderLeftLead);
+              m_rightSimEncoder = new EncoderSim(encoderRightLead);
   }
 
   public void updateInputs(
-    // double leftVolts, double rightVolts
+    double leftVolts, double rightVolts
     ) {
-    // if (closedLoop) {
-      double leftVolts = leftPID
-          .calculate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond() / DrivetrainConstants.kwheelRadiusMeters)
-          + leftFFVolts;
-      double rightVolts = rightPID
-          .calculate(m_drivetrainSimulator.getRightVelocityMetersPerSecond() / DrivetrainConstants.kwheelRadiusMeters)
+      m_drivetrainSimulator.setInputs(
+        (-leftVolts * RobotController.getBatteryVoltage()),
+          rightVolts* RobotController.getBatteryVoltage());
+        
+    m_drivetrainSimulator.update(0.020);
+  
+     m_leftSimEncoder.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
+      m_leftSimEncoder.setRate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
+    
+    m_rightSimEncoder.setDistance(m_drivetrainSimulator.getRightPositionMeters());
+      m_rightSimEncoder.setRate(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
+        
+      System.out.println("Runnin Sim");
+      
+      // double drawCurrent = m_drivetrainSimulator.getCurrentDrawAmps();
+      // double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(drawCurrent);
+      // RoboRioSim.setVInVoltage(loadedVoltage);
 
-          + rightFFVolts;
-      appliedVoltsLeft = leftVolts;
-      appliedVoltsRight = rightVolts;
-      m_drivetrainSimulator.setInputs(leftVolts, rightVolts);
+      /*
+       * Under here is the crazy
+       */
+    // if (closedLoop) {
+      // double leftVolts = leftPID
+      //     .calculate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond() / DrivetrainConstants.kwheelRadiusMeters)
+      //     + leftFFVolts;
+      // double rightVolts = rightPID
+      //     .calculate(m_drivetrainSimulator.getRightVelocityMetersPerSecond() / DrivetrainConstants.kwheelRadiusMeters)
+
+      //     + rightFFVolts;
+      // appliedVoltsLeft = leftVolts;
+      // appliedVoltsRight = rightVolts;
+    //   m_drivetrainSimulator.setInputs(leftVolts, rightVolts);
       SmartDashboard.putString("Running Sim", "Running Sim");
       SmartDashboard.putNumber("LeftVolts",  leftVolts);
       SmartDashboard.putNumber("RightVolts",  rightVolts);
       SmartDashboard.putNumber("LeftVelocityMeters",  m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
       SmartDashboard.putNumber("LeftPositionMeters",  m_drivetrainSimulator.getLeftPositionMeters());
-    // }
+    // // }
       
 
-    m_drivetrainSimulator.update(DrivetrainConstants.loopPeriodSecs);
+    // m_drivetrainSimulator.update(DrivetrainConstants.loopPeriodSecs);
+
+  
 
     m_gyroSim.setAngle(-m_drivetrainSimulator.getHeading().getDegrees());
     // double leftPositionRad = m_drivetrainSimulator.getLeftPositionMeters() / DrivetrainConstants.kwheelRadiusMeters;
