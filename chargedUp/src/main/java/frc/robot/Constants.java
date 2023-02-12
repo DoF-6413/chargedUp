@@ -62,13 +62,6 @@ public final class Constants {
 // Right velocity
     double rightVelocity = wheelSpeeds.rightMetersPerSecond;
 
-  }
-
-  public static class AutoConstants{
-    public static final double MAX_VELOCITY_PERCENT_OUTPUT = 0;
-    public static final double MAX_ACCELERATION_PERCENT_OUTPUT = 0;
-
-    public static final double kchargingStationDistance = 5;
     //Facts about the Drivetrain
     //Number of motors within 1 gearbox (controlling the drivetrain)
     public static final int knumMotors = 3;
@@ -79,13 +72,19 @@ public final class Constants {
     public static final double kMass = 135;
     public static final double kwheelRadiusMeters = 3 * 0.0254;
     public static final double ktrackWidth = 21.87;
-
+  
     public static double loopPeriodSecs = 0.020;
   }
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] {0, 1.5, 3, 4};
-    
+  }
 
 
+
+  public static class AutoConstants{
+    public static final double MAX_VELOCITY_PERCENT_OUTPUT = 0;
+    public static final double MAX_ACCELERATION_PERCENT_OUTPUT = 0;
+
+    public static final double kchargingStationDistance = 5;
   }
 }
