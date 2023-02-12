@@ -1,32 +1,20 @@
 {
   "HALProvider": {
     "Encoders": {
+      "0": {
+        "header": {
+          "open": true
+        }
+      },
       "window": {
         "visible": true
       }
     },
     "Other Devices": {
-      "SparkMax[2]": {
+      "SparkMax[1]": {
         "header": {
           "open": true
         }
-      }
-    },
-    "RoboRIO": {
-      "3.3V Rail": {
-        "open": true
-      },
-      "5V Rail": {
-        "open": true
-      },
-      "6V Rail": {
-        "open": true
-      },
-      "RoboRIO Input": {
-        "open": true
-      },
-      "window": {
-        "visible": true
       }
     }
   },
@@ -37,51 +25,29 @@
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },
     "windows": {
-      "/FMSInfo": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
+        "Robot": {
+          "arrowColor": [
+            0.026491481810808182,
+            0.10986427217721939,
+            0.39240509271621704,
+            255.0
+          ],
+          "arrowSize": 79,
+          "color": [
+            0.3139275908470154,
+            0.9662446975708008,
+            0.36347052454948425,
+            255.0
+          ],
+          "style": "Box/Image"
+        },
+        "units": "meters",
         "window": {
           "visible": true
         }
       }
     }
-  },
-  "NetworkTables": {
-    "transitory": {
-      "FMSInfo": {
-        "open": true
-      },
-      "LiveWindow": {
-        ".status": {
-          "open": true
-        },
-        "open": true
-      },
-      "Shuffleboard": {
-        ".recording": {
-          "open": true
-        },
-        "open": true
-      },
-      "SmartDashboard": {
-        "open": true
-      }
-    }
-  },
-  "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    },
-    "Connections": {
-      "open": true
-    },
-    "Server": {
-      "open": true
-    },
-    "visible": true
   },
   "Plot": {
     "Plot <0>": {
@@ -89,10 +55,7 @@
         {
           "height": 332
         }
-      ],
-      "window": {
-        "visible": false
-      }
+      ]
     }
   }
 }

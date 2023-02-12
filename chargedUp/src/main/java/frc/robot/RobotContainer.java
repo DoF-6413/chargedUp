@@ -41,7 +41,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final static DriveSimSub m_driveSimSub = new DriveSimSub();
 
   // list of autos
   private final Command m_autoScore = new AutoScore2();
@@ -137,9 +136,7 @@ public static double getRightJoystickX(){
   return m_driverController.getRightX();
 }
 
-public static DriveSimSub getDriveSimSub(){
-  return m_driveSimSub;
-}
+
 
 public static DrivetrainSubsystem getDrive(){
   return m_drivetrainSubsystem;

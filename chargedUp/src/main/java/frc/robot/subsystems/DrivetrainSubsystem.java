@@ -14,12 +14,16 @@ import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 import edu.wpi.first.hal.HALValue;
 import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.NotifyCallback;
 import edu.wpi.first.hal.simulation.SimValueCallback;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.math.VecBuilder;
@@ -29,6 +33,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.CallbackStore;
@@ -44,8 +49,9 @@ import frc.robot.Robot;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.*;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.SimulationDevices.SparkMaxWrapper;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -64,29 +70,39 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static EncoderSim m_leftSimEncoder;
 
   private static DifferentialDrive diffDrive;
+  
+  public DifferentialDrivetrainSim m_drivetrainSimulator;
 
 private static GyroSubsystem gyro = new GyroSubsystem();
 private static DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), 0, 0);
 public static Field2d m_field2d = new Field2d();
   
-private static DriveSimSub m_SimSub = new DriveSimSub();
+private static Encoder simEncoderRightLead;
+private static Encoder simEncoderLeftLead;
 
+private static EncoderSim simEncoderRight;
+private static EncoderSim simEncoderLeft;
 
+SimDouble gyroAngleSim;
 
   public DrivetrainSubsystem() {
 
-    leftLead = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
-    rightLead = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[0], MotorType.kBrushless);
+    leftLead = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
+    rightLead = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[0], MotorType.kBrushless);
 
-    leftFollower1 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[4], MotorType.kBrushless);
-    rightFollower1 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[1], MotorType.kBrushless);
+    leftFollower1 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[4], MotorType.kBrushless);
+    rightFollower1 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[1], MotorType.kBrushless);
 
-    leftFollower2 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[5], MotorType.kBrushless);
-    rightFollower2 = new CANSparkMax(DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
+    leftFollower2 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[5], MotorType.kBrushless);
+    rightFollower2 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
 
     Arrays.asList(leftLead, leftFollower1, leftFollower2, rightLead, rightFollower1, rightFollower2)
                 .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
+    
+    simEncoderLeftLead = new Encoder(4, 5);
+    simEncoderRightLead = new Encoder(2, 3);
 
+    
     encoderLeftLead = leftLead.getEncoder();
     encoderRightLead = rightLead.getEncoder();
     
@@ -104,7 +120,7 @@ private static DriveSimSub m_SimSub = new DriveSimSub();
     // todo: uncomment for conversion
     // encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
     rightLead.setInverted(DrivetrainConstants.kRightInverted);
-
+    
     rightFollower1.follow(rightLead);
     rightFollower2.follow(rightLead);
     
@@ -112,20 +128,66 @@ private static DriveSimSub m_SimSub = new DriveSimSub();
     diffDrive = new DifferentialDrive(leftLead, rightLead);
     
     m_odometry = new DifferentialDriveOdometry(
-        gyro.getRotation2d(), DrivetrainSubsystem.getDistanceLeaftlead(), DrivetrainSubsystem.getDistanceRigthlead());
+      gyro.getRotation2d(), DrivetrainSubsystem.getDistanceLeaftlead(), DrivetrainSubsystem.getDistanceRigthlead());
+      
+       if(RobotBase.isSimulation()){
+        m_drivetrainSimulator =
+          new DifferentialDrivetrainSim(
+            // todo: will fix :)
+              DCMotor.getNEO(3),
+              DrivetrainConstants.kgearing,
+              DrivetrainConstants.kMOI,
+              DrivetrainConstants.kMass,
+              DrivetrainConstants.kwheelRadiusMeters,
+              DrivetrainConstants.ktrackWidth,
+              // The standard deviations for measurement noise:
+              // x and y:          0.001 m
+              // heading:          0.001 rad
+              // l and r velocity: 0.1   m/s
+              // l and r position: 0.005 m
+              VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
-       
+              m_leftSimEncoder = new EncoderSim(simEncoderLeftLead);
+              m_rightSimEncoder = new EncoderSim(simEncoderRightLead);
+
+              gyroAngleSim = new SimDeviceSim("AHRS[" + SPI.Port.kMXP.value +"]").getDouble("Angle");
+
+              m_field2d = new Field2d();
+       }
   }
 
+  public Pose2d getPose () {
+    return m_odometry.getPoseMeters();
+}
 
-   
+public void setPose(Pose2d pose) {
+    if (RobotBase.isSimulation()) {
+        // This is a bit hokey, but if the Robot jumps on the field, we need
+        //   to reset the internal state of the DriveTrainSimulator.
+        //   No method to do it, but we can reset the state variables.
+        //   NOTE: this assumes the robot is not moving, since we are not resetting
+        //   the rate variables.
+        m_drivetrainSimulator.setState(new Matrix<>(Nat.N7(), Nat.N1()));
+
+        // reset the GyroSim to match the driveTrainSim
+        // do it early so that "real" odometry matches this value
+        gyroAngleSim.set(-m_drivetrainSimulator.getHeading().getDegrees());
+        m_field2d.setRobotPose(pose);
+    }
+
+    simEncoderLeftLead.reset();
+    simEncoderRightLead.reset();
+    m_odometry.resetPosition( Rotation2d.fromDegrees(gyro.getAngle()), simEncoderLeftLead.getDistance(), simEncoderRightLead.getDistance(), pose);
+    }
+  
+
   public void setRaw(double driveValue, double turnValue){
-    if(Robot.isReal()){
+  //   if(Robot.isReal()){
     diffDrive.arcadeDrive(driveValue, turnValue);
-  }
-    else if(!Robot.isReal()){
-    m_SimSub.setVoltage(driveValue, turnValue);
-  }
+  // }
+  //   else if(Robot.isSimulation()){
+  //   m_SimSub.setVoltage(driveValue, turnValue);
+  // }
     SmartDashboard.putNumber("Drive Value", driveValue);
     SmartDashboard.putNumber("Turn Value", turnValue);
     SmartDashboard.putNumber("Left Lead", leftLead.get());
@@ -162,12 +224,19 @@ private static DriveSimSub m_SimSub = new DriveSimSub();
   public static void updateOdometry(){
     m_odometry.update(gyro.getRotation2d(), getDistanceRigthlead(), getDistanceLeaftlead());
   }
+
+  public static double getHeading(){
+    return m_odometry.getPoseMeters().getRotation().getDegrees();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     m_field2d.setRobotPose(m_odometry.getPoseMeters());
-  
+    m_odometry.update(Rotation2d.fromDegrees(gyro.getGyroAngle()), simEncoderLeftLead.getDistance(), simEncoderRightLead.getDistance());
     SmartDashboard.putData("Field", m_field2d);
+    SmartDashboard.putNumber("Heading", getHeading());
+    SmartDashboard.putString("Pose", getPose().toString());
  }
   
 
@@ -176,9 +245,9 @@ private static DriveSimSub m_SimSub = new DriveSimSub();
 
   }
   
-    // public double getSimDrawnCurrentAmps() {
-    //   return m_drivetrainSimulator.getCurrentDrawAmps();
-    // }
+ public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+  return new DifferentialDriveWheelSpeeds(simEncoderLeftLead.getRate(), simEncoderRightLead.getRate());
+ }
 
     public CANSparkMax getLeftMotor(){
       return leftLead;
@@ -189,28 +258,32 @@ private static DriveSimSub m_SimSub = new DriveSimSub();
     }
 
 
-  //   @Override
+ 
+
   public void simulationPeriodic() {
-    // m_drivetrainSimulator.setInputs(
-    //   (-leftLead.get() * RobotController.getBatteryVoltage()),
-    //     rightLead.get() * RobotController.getBatteryVoltage());
+    m_drivetrainSimulator.setInputs(
+      (-leftLead.get() * RobotController.getBatteryVoltage()),
+        rightLead.get() * RobotController.getBatteryVoltage());
       
-  // m_drivetrainSimulator.update(0.020);
+        System.out.println("is running sim");
+  m_drivetrainSimulator.update(0.020);
 
-  //  m_leftSimEncoder.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
-  //   m_leftSimEncoder.setRate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
+   m_leftSimEncoder.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
+    m_leftSimEncoder.setRate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
   
-  // m_rightSimEncoder.setDistance(m_drivetrainSimulator.getRightPositionMeters());
-  //   m_rightSimEncoder.setRate(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
+  m_rightSimEncoder.setDistance(m_drivetrainSimulator.getRightPositionMeters());
+    m_rightSimEncoder.setRate(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
       
-  //   System.out.println("Runnin Sim");
+    gyroAngleSim.set(-m_drivetrainSimulator.getHeading().getDegrees());
     
-  //   double drawCurrent = getSimDrawnCurrentAmps();
-  //   double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(drawCurrent);
-  //   RoboRioSim.setVInVoltage(loadedVoltage);
-
-    
+    m_field2d.setRobotPose(getPose());
   }
 
-  
+  public void setRobotFromFieldPose(){
+    if(RobotBase.isSimulation()){
+      setPose(m_field2d.getRobotPose());
+    }
+  }
+
+ 
 }

@@ -10,12 +10,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SimulationDevices.NavXWrapper;
 
 public class GyroSubsystem extends SubsystemBase {
   /** Creates a new GyroSubsystem. */
   AHRS m_gyro;
   public GyroSubsystem() {
-    m_gyro = new AHRS(SPI.Port.kMXP) ;
+    m_gyro = new NavXWrapper(SPI.Port.kMXP, (byte) 200) ;
   }
 
   public double getAngle(){
@@ -32,5 +33,9 @@ public class GyroSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public double getGyroAngle(){
+    return Math.IEEEremainder(m_gyro.getAngle(), 360)*(-1);
   }
 }
