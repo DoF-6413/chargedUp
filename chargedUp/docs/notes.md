@@ -84,3 +84,20 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 - New command called autoBalance 
 - Command runs robot if position is < 1.3 else turns 
 - Things to do still: correct code because position can be neg, make command run when a button is pressed, finish adding logic for robot to turn and balance
+
+# 2-10-23
+
+## Nancy
+- Created an update odometry in drivetrain and called it in robot.java 
+- Started looking at widget 2d 
+- Put the field onto the smartdashboard
+- Made a trajectory that would be seen on the smartdashboard 
+
+# 2-11-23
+
+## Nancy 
+
+- Opened up glass and added client to be able to see our robot’s data
+- Downloaded the field image and put it into glass 
+- Deployed the code that would put the trajectory onto the field 
+- Got 2d simulation running now we need to figure out how to put “firstpath” onto the field correctly  
