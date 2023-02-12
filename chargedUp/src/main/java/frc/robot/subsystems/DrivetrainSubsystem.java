@@ -117,6 +117,10 @@ public static Field2d m_field2d = new Field2d();
    
   public void setRaw(double driveValue, double turnValue){
     diffDrive.arcadeDrive(driveValue, turnValue);
+    SmartDashboard.putNumber("Drive Value", driveValue);
+    SmartDashboard.putNumber("Turn Value", turnValue);
+    SmartDashboard.putNumber("Left Lead", leftLead.get());
+    SmartDashboard.putNumber("Right Lead", rightLead.get());
   }
 
   public double getPositionLeftLead(){
@@ -160,6 +164,7 @@ public static Field2d m_field2d = new Field2d();
 
   public void SmartDashboardCalls(){
     SmartDashboard.putNumber("Drivetrain Position", this.getPositionRightLead());
+
   }
   
     // public double getSimDrawnCurrentAmps() {
@@ -170,16 +175,16 @@ public static Field2d m_field2d = new Field2d();
       return leftLead;
     }
 
-    public CANSparkMax getrightMotor(){
+    public CANSparkMax getRightMotor(){
       return rightLead;
     }
 
 
   //   @Override
   public void simulationPeriodic() {
-  //   m_drivetrainSimulator.setInputs(
-  //     (-leftLead.get() * RobotController.getBatteryVoltage()),
-  //       rightLead.get() * RobotController.getBatteryVoltage());
+    // m_drivetrainSimulator.setInputs(
+    //   (-leftLead.get() * RobotController.getBatteryVoltage()),
+    //     rightLead.get() * RobotController.getBatteryVoltage());
       
   // m_drivetrainSimulator.update(0.020);
 

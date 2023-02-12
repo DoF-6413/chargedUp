@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final static DriveSimSub m_driveSimSub = new DriveSimSub();
 
@@ -127,6 +127,10 @@ public static double getRightJoystickX(){
 
 public static DriveSimSub getDriveSimSub(){
   return m_driveSimSub;
+}
+
+public static DrivetrainSubsystem getDrive(){
+  return m_drivetrainSubsystem;
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

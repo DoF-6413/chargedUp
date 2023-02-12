@@ -163,10 +163,11 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {
     DriveSimSub driveSim = new DriveSimSub();
-    driveSim.updateInputs(
+    driveSim.setVoltage(
       RobotContainer.getLeftJoystickY(), RobotContainer.getRightJoystickX()
       );
-    
+      
+      driveSim.updateDashboard();
     // driveSim.field();
   }
   /** This function is called periodically whilst in simulation. */
