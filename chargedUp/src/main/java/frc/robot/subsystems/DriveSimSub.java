@@ -136,8 +136,12 @@ private PIDController rightPID =
     m_drivetrainSimulator.setInputs(leftVolts, rightVolts);
     updateInputs();
     // m_drivetrainSimulator.update(DrivetrainConstants.loopPeriodSecs);
+    updateDashboard();
   }
   
+
+  //currently not working
+  //todo: get this to worl
   public void setVelocity(double leftVelocityRadPerSec,
   double rightVelocityRadPerSec, double leftFFVolts, double rightFFVolts) {
     closedLoop = true;
