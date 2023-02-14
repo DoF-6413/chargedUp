@@ -70,16 +70,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   public DifferentialDrivetrainSim m_drivetrainSimulator;
 
-private static GyroSubsystem gyro = new GyroSubsystem();
-private static DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), 0, 0);
-public static Field2d m_field2d = new Field2d();
+
+private static DifferentialDriveOdometry m_odometry;
+public static Field2d m_field2d;
   
 private static Encoder simEncoderRightLead;
 private static Encoder simEncoderLeftLead;
 
 private static EncoderSim simEncoderRight;
 private static EncoderSim simEncoderLeft;
-
+private static GyroSubsystem gyro = new GyroSubsystem();
 SimDouble gyroAngleSim;
 
   public DrivetrainSubsystem() {
@@ -98,8 +98,8 @@ SimDouble gyroAngleSim;
     
     simEncoderLeftLead = new Encoder(4, 5);
     simEncoderRightLead = new Encoder(2, 3);
-
-    
+simEncoderLeftLead.setDistancePerPulse(0.00155852448);
+simEncoderRightLead.setDistancePerPulse(0.00155852448);
     encoderLeftLead = leftLead.getEncoder();
     encoderRightLead = rightLead.getEncoder();
     
@@ -133,7 +133,7 @@ SimDouble gyroAngleSim;
             // todo: will fix :)
               DCMotor.getNEO(3),
               DrivetrainConstants.kgearing,
-              DrivetrainConstants.kMOI,
+              3,
               DrivetrainConstants.kMass,
               DrivetrainConstants.kwheelRadiusMeters,
               DrivetrainConstants.ktrackWidth,
@@ -172,9 +172,9 @@ public void setPose(Pose2d pose) {
         m_field2d.setRobotPose(pose);
     }
 
-    simEncoderLeftLead.reset();
-    simEncoderRightLead.reset();
-    m_odometry.resetPosition( Rotation2d.fromDegrees(gyro.getAngle()), simEncoderLeftLead.getDistance(), simEncoderRightLead.getDistance(), pose);
+    // simEncoderLeftLead.reset();
+    // simEncoderRightLead.reset();
+    // m_odometry.resetPosition( Rotation2d.fromDegrees(gyro.getAngle()), simEncoderLeftLead.getDistance(), simEncoderRightLead.getDistance(), pose);
     }
   
 
@@ -209,11 +209,11 @@ public void setPose(Pose2d pose) {
 //   }
   
   public static double getDistanceLeaftlead(){
-    return (encoderLeftLead != null) ? encoderLeftLead.getPositionConversionFactor() : 00;
+    return encoderLeftLead.getPositionConversionFactor();
 
   }
   public static double getDistanceRigthlead(){
-    return  (encoderRightLead != null) ? encoderRightLead.getPositionConversionFactor() : 00;
+    return  encoderRightLead.getPositionConversionFactor();
 
   }
 
@@ -229,9 +229,9 @@ public void setPose(Pose2d pose) {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println("is running periodic");
+    updateOdometry();
     m_field2d.setRobotPose(m_odometry.getPoseMeters());
-    m_odometry.update(Rotation2d.fromDegrees(gyro.getGyroAngle()), simEncoderLeftLead.getDistance(), simEncoderRightLead.getDistance());
-    SmartDashboard.putData("Field", m_field2d);
     SmartDashboard.putNumber("Heading", getHeading());
     SmartDashboard.putString("Pose", getPose().toString());
  }
