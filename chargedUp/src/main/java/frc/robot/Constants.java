@@ -86,5 +86,10 @@ public final class Constants {
     public static final double MAX_ACCELERATION_PERCENT_OUTPUT = 0;
 
     public static final double kchargingStationDistance = 5;
+
+
+    public static double kS = 0;
+    public static double kA = 0;
+    public static double kV = 0;
   }
 }
