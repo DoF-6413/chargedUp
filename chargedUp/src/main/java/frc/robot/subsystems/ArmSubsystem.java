@@ -36,10 +36,10 @@ private final TalonFX m_telescopingMotor;
     // m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_rightRotationMotor.follow(m_leftRotationMotor);
     
-    m_endEffectorMotor = new TalonFX(ArmConstants.armCANIDs[2]);
+    m_endEffectorMotor = new TalonFX(ArmConstants.armCANIDs[3]);
     m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
     
-    m_telescopingMotor = new TalonFX(ArmConstants.armCANIDs[3]);
+    m_telescopingMotor = new TalonFX(ArmConstants.armCANIDs[2]);
 
   }
 
@@ -77,5 +77,13 @@ private final TalonFX m_telescopingMotor;
   public void resetRotationPosition(){
     m_leftRotationMotor.setSelectedSensorPosition(0);
     m_rightRotationMotor.setSelectedSensorPosition(0);
+  }
+
+  public void spinTelescopingMotor(double speed){
+    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, speed);
+  }
+
+  public void stopTelescopingMotor(){
+    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, 0);
   }
 }
