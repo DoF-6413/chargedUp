@@ -87,4 +87,12 @@ private final AnalogPotentiometer m_pot;
   public Boolean isInFramePerimeter(){
     return ((this.getRotationPosition() < 35) && (this.getRotationPosition() > -35 )) ?  true :  false;
   }
+
+  public void spinTelescopingMotor(double speed){
+    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, speed);
+  }
+
+  public void stopTelescopingMotor(){
+    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, 0);
+  }
 }
