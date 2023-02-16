@@ -98,20 +98,28 @@ public class RobotContainer {
         // onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
         // onFalse(new InstantCommand(()-> m_armSubsystem.spinMotor(0)));
 
-        // new JoystickButton(m_driverController, XboxController.Button.kX.value).\
-        // onTrue(new ArmPIDm_armSubsystem, 14)).onTrue(
-        // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
         new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
-
-        new JoystickButton(m_driverController, XboxController.Button.kY.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.3)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
 
-        new JoystickButton(m_driverController, XboxController.Button.kX.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        new JoystickButton(m_driverController, XboxController.Button.kB.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.3)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+
+        // //This runs Endeffector to Collect Cube
+        // new JoystickButton(m_driverController, XboxController.Button.kA.value).
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+
+        // //This runs Endeffector to Collect Cone
+        // new JoystickButton(m_driverController, XboxController.Button.kY.value).
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+
+        // //This runs Endeffector to eject game peices
+        // new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
   }
 
