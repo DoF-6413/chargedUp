@@ -117,7 +117,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFollower2.follow(rightLead);
 
     diffDrive = new DifferentialDrive(leftLead, rightLead);
-    diffDrive.setSafetyEnabled(true);
+    diffDrive.setSafetyEnabled(false);
 
     m_odometry = new DifferentialDriveOdometry(
         gyro.getRotation2d(), DrivetrainSubsystem.getDistanceLeaftlead(), DrivetrainSubsystem.getDistanceRigthlead());
@@ -229,7 +229,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println("is running periodic");
     updateOdometry();
     if (m_field2d != null
     // && m_odometry.getPoseMeters() != null
