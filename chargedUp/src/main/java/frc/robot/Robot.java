@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
     //     new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
 
         // DrivetrainSubsystem.m_field2d.getObject("firstPath").setTrajectory(m_Trajectory);
-        SmartDashboard.putData("Field",DrivetrainSubsystem.m_field2d);
+//  ? SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d): null;
         // SmartDashboard.putString("FieldSTUFFF","HOLAAAA MUNDO");
     // Push the trajectory to Field2d.
 

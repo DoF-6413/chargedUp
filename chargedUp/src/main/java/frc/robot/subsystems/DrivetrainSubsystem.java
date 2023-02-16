@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -19,35 +18,19 @@ import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
-import edu.wpi.first.hal.HALValue;
-import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.hal.simulation.NotifyCallback;
-import edu.wpi.first.hal.simulation.SimValueCallback;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.hal.SimDevice;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.simulation.BatterySim;
-import edu.wpi.first.wpilibj.simulation.CallbackStore;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
-import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,16 +38,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.subsystems.*;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.SimulationDevices.SparkMaxWrapper;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
@@ -141,10 +120,11 @@ simEncoderRightLead.setDistancePerPulse(0.00155852448);
     
     
     diffDrive = new DifferentialDrive(leftLead, rightLead);
-    
     m_odometry = new DifferentialDriveOdometry(
       gyro.getRotation2d(), DrivetrainSubsystem.getDistanceLeaftlead(), DrivetrainSubsystem.getDistanceRigthlead());
       
+m_Kinematics = new DifferentialDriveKinematics(DrivetrainConstants.ktrackWidth);
+
        if(RobotBase.isSimulation()){
         m_drivetrainSimulator =
           new DifferentialDrivetrainSim(
@@ -251,7 +231,12 @@ public void setPose(Pose2d pose) {
     // This method will be called once per scheduler run
     System.out.println("is running periodic");
     updateOdometry();
+    if(m_field2d != null 
+    // && m_odometry.getPoseMeters() != null
+     ){
     m_field2d.setRobotPose(m_odometry.getPoseMeters());
+    System.out.println("Pose set");
+    }
     SmartDashboard.putNumber("Heading", getHeading());
     SmartDashboard.putString("Pose", getPose().toString());
  }
