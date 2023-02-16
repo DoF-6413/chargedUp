@@ -87,9 +87,12 @@
       "plots": [
         {
           "crosshairs": true,
-          "height": 319
+          "height": 332
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     },
     "Plot <1>": {
       "plots": [

@@ -19,6 +19,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,6 +41,9 @@ public class RobotContainer {
   private final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
+  
+  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
+  
   // list of autos
   private final Command m_autoScore = new AutoScore2();
   private final Command m_moveForward = 
@@ -135,7 +143,7 @@ public static DrivetrainSubsystem getDrive(){
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return m_chooser.getSelected();
+    return m_drivetrainSubsystem.RamseteController(firstPath, true);
 
   }
 }
