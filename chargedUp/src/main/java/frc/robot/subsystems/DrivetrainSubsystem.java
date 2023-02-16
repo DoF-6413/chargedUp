@@ -99,6 +99,7 @@ private static EncoderSim simEncoderLeft;
 private static GyroSubsystem gyro = new GyroSubsystem();
 SimDouble gyroAngleSim;
 
+
   public DrivetrainSubsystem() {
 
     leftLead = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
@@ -327,8 +328,9 @@ return () -> getPose();
 
 
 private BiConsumer<Double, Double> getVoltage() {
-return (leftLead.get(), rightLead.get()) ->
-
+  //This is taking two inputs and printing the combination of the two in a particulat method
+  BiConsumer<Double, Double> voltage = (a, b) -> System.out.println((a + b)/2);
+ return voltage;
 }
 
 //  
