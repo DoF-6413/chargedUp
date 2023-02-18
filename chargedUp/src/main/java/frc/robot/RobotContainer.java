@@ -43,7 +43,7 @@ public class RobotContainer {
   private final Command m_autoScore = new AutoScore2();
 
 
-  private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem, VisionConstants.ksetpoint ); 
+  private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);

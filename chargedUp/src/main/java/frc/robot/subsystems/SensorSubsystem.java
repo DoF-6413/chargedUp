@@ -27,9 +27,9 @@ public class SensorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Drivetrain Position", input.get);
-    SmartDashboard.putString("Drivetrain Position 0", input.toString());
-    SmartDashboard.putNumber("Drivetrain Position 1", input.set);
-    SmartDashboard.putNumber("Drivetrain Position 2", input.get());
+    // SmartDashboard.putNumber("Drivetrain Position", input.get);
+    // SmartDashboard.putString("Drivetrain Position 0", input.toString());
+    // SmartDashboard.putNumber("Drivetrain Position 1", input.set);
+    // SmartDashboard.putNumber("Drivetrain Position 2", input.get());
   }
 }
