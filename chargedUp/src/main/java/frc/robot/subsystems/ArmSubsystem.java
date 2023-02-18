@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.apache.commons.io.filefilter.CanExecuteFileFilter;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -12,15 +14,16 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
-private final TalonFX m_leftRotationMotor;
-private final TalonFX m_rightRotationMotor;
-// private final RelativeEncoder m_RotationEncoder;
+private final CANSparkMax m_leftRotationMotor;
+private final CANSparkMax m_rightRotationMotor;
+private final RelativeEncoder m_RotationEncoder;
 
 private final TalonFX m_endEffectorMotor;
 // private final RelativeEncoder m_endEffectorEncoder;
@@ -31,9 +34,10 @@ private final TalonFX m_telescopingMotor;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
-    m_leftRotationMotor = new TalonFX(ArmConstants.armCANIDs[0]);
-    m_rightRotationMotor = new TalonFX(ArmConstants.armCANIDs[1]);
-    
+    m_leftRotationMotor = new CANSparkMax(ArmConstants.armCANIDs[0], MotorType.kBrushless);
+    m_rightRotationMotor = new CANSparkMax(ArmConstants.armCANIDs[1], MotorType.kBrushless);
+    m_rightRotationMotor.follow(m_leftRotationMotor);
+    m_RotationEncoder = m_leftRotationMotor.getEncoder();
     
     // m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_rightRotationMotor.follow(m_leftRotationMotor);
@@ -42,6 +46,9 @@ private final TalonFX m_telescopingMotor;
     m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
     
     m_telescopingMotor = new TalonFX(ArmConstants.armCANIDs[2]);
+
+    DigitalInput toplimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[0]);
+    DigitalInput bottomlimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[1]);
 
   }
 
@@ -52,34 +59,38 @@ private final TalonFX m_telescopingMotor;
   }
 
   public void SmartDashboardCalls(){
-    SmartDashboard.putNumber("RotationPosition", m_leftRotationMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("RotationPosition",m_RotationEncoder.getPosition());
     SmartDashboard.putNumber("EndEffectorPosition", m_endEffectorMotor.getSelectedSensorPosition());
     
   }
 
   public double getRotationPosition(){
-    return m_leftRotationMotor.getSelectedSensorPosition();
+    return m_RotationEncoder.getPosition();
+  }
+  
+  public void resetRotationPosition(){
+    m_RotationEncoder.setPosition(0);
   }
 
   public void spinRotationMotors(double speed){
-    m_leftRotationMotor.set(TalonFXControlMode.PercentOutput,speed);
-    SmartDashboard.putNumber("speed", speed);
+    m_leftRotationMotor.set(speed);
+    SmartDashboard.putNumber("Rotation speed", speed);
   }
+
+  public void stopRotationMotors(double speed){
+    m_leftRotationMotor.set(0);
+  }
+
 
   public void spinEndEffector(double speed){
     m_endEffectorMotor.set(TalonFXControlMode.PercentOutput, speed);
   }
 
 
-
   public void stopEndEffector(){
     m_endEffectorMotor.set(TalonFXControlMode.PercentOutput, 0);
   }
 
-  public void resetRotationPosition(){
-    m_leftRotationMotor.setSelectedSensorPosition(0);
-    m_rightRotationMotor.setSelectedSensorPosition(0);
-  }
 
   public void spinTelescopingMotor(double speed){
     m_telescopingMotor.set(TalonFXControlMode.PercentOutput, speed);
