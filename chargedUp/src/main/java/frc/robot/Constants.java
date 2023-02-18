@@ -135,5 +135,6 @@ public final class Constants {
     public static final double kArmMaxVelocity = 100;
     public static final double kArmMaxAcceleration = 100;
     
+    public static final int[] kLimitSwitches = new int[] {0, 1};
   }
 }
