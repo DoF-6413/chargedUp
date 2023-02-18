@@ -59,10 +59,13 @@ public class RobotContainer {
 
   // private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController m_driverController =
+  public final static XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);
+      public Trigger driverLeftTrigger = new Trigger(() -> ArmSubsystem.getLeftTriggerActive());
+      public Trigger driverRightTrigger = new Trigger(() -> ArmSubsystem.getRightTriggerActive());
 
-
+      public final static CommandXboxController m_auxController =
+      new CommandXboxController(3);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
@@ -98,28 +101,35 @@ public class RobotContainer {
         // onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
         // onFalse(new InstantCommand(()-> m_armSubsystem.spinMotor(0)));
 
-        new JoystickButton(m_driverController, XboxController.Button.kA.value).
+        new JoystickButton(m_driverController, XboxController.Button.kStart.value).
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.3)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        new JoystickButton(m_driverController, XboxController.Button.kB.value).
+        new JoystickButton(m_driverController, XboxController.Button.kBack.value).
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.3)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+
+        //This runs Endeffector to Collect Cube
+        new JoystickButton(m_driverController, XboxController.Button.kA.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+
+        //This runs Endeffector to Collect Cone
+        new JoystickButton(m_driverController, XboxController.Button.kB.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
 
-        // //This runs Endeffector to Collect Cube
-        // new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+        new JoystickButton(m_driverController, XboxController.Button.kX.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
 
-        // //This runs Endeffector to Collect Cone
-        // new JoystickButton(m_driverController, XboxController.Button.kY.value).
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
-
-        // //This runs Endeffector to eject game peices
-        // new JoystickButton(m_driverController, XboxController.Button.kX.value).
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        new JoystickButton(m_driverController, XboxController.Button.kY.value).
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
+        //This runs Endeffector to eject game peices
+        driverRightTrigger.
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
   }
 
