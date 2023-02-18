@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -77,10 +78,18 @@ private final TalonFX m_telescopingMotor;
     SmartDashboard.putNumber("Rotation speed", speed);
   }
 
-  public void stopRotationMotors(double speed){
+  public void stopRotationMotors(){
     m_leftRotationMotor.set(0);
   }
 
+
+  public double getEndEffectorPosition(){
+    return m_endEffectorMotor.getSelectedSensorPosition();
+  }
+
+  public void resetEndEffectorPosition(){ 
+    m_endEffectorMotor.setSelectedSensorPosition(0);
+  }
 
   public void spinEndEffector(double speed){
     m_endEffectorMotor.set(TalonFXControlMode.PercentOutput, speed);
@@ -91,6 +100,13 @@ private final TalonFX m_telescopingMotor;
     m_endEffectorMotor.set(TalonFXControlMode.PercentOutput, 0);
   }
 
+  public double getTelescoperPosition(){
+    return m_telescopingMotor.getSelectedSensorPosition();
+  }
+
+  public void resetTelescoperPosition(){
+    m_telescopingMotor.setSelectedSensorPosition(0);
+  }
 
   public void spinTelescopingMotor(double speed){
     m_telescopingMotor.set(TalonFXControlMode.PercentOutput, speed);

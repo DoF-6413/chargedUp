@@ -113,16 +113,36 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-    m_driverController.x().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
-        // new JoystickButton(m_driverController, XboxController.Button.kX.value).
-        // onTrue(new ArmPIDm_armSubsystem, 14)).onTrue(
-        // (new InstantCommand(()-> System.out.print("Button X Hit!"))));
+        m_driverController.start().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.3)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+
+        m_driverController.back().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.3)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+
+        //This runs Endeffector to Collect Cube
         m_driverController.a().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
+        //This runs Endeffector to Collect Cone
+        m_driverController.b().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+
+        m_driverController.x().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
+
         m_driverController.y().
-        onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
+        //This runs Endeffector to eject game peices
+        m_driverController.rightTrigger().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+  
   }
   
   /**
