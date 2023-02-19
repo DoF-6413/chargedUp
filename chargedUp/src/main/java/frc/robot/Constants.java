@@ -119,4 +119,10 @@ public final class Constants {
     public static double kA = 0;
     public static double kV = 0;
   }
+  public static class VisionConstants {
+    public static final double[] ksetpoints = new double[] {0, 1.5, 3, 4};
+    
+
+
+  }
 }
