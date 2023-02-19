@@ -11,6 +11,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.server.PathPlannerServer;
 import com.pathplanner.lib.server.PathPlannerServerThread;
 
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -42,8 +44,10 @@ import frc.robot.subsystems.DrivetrainSubsystem;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  private Timer m_timer;
   private RobotContainer m_robotContainer;
+  
+  private final RamseteController m_ramseteController = new RamseteController();
   private Trajectory m_Trajectory;
 
   /**
@@ -57,18 +61,27 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    m_Trajectory =
+    TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+        new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+
+// Create and push Field2d to SmartDashboard.
+ SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
+
+// Push the trajectory to Field2d.
+// DrivetrainSubsystem.m_field2d.getObject("traj").setTrajectory(m_Trajectory);
+
     // PathPlannerServer.startServer(5811);
     // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", null);
     // Create the trajectory to follow in autonomous. It is best to initialize
     // trajectories here to avoid wasting time in autonomous.
-    // m_Trajectory = TrajectoryGenerator.generateTrajectory(
-    //     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-    //     List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-    //     new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-    //     new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+  
 
         // DrivetrainSubsystem.m_field2d.getObject("firstPath").setTrajectory(m_Trajectory);
-//  ? SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d): null;
         // SmartDashboard.putString("FieldSTUFFF","HOLAAAA MUNDO");
     // Push the trajectory to Field2d.
 
@@ -112,21 +125,42 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if(RobotBase.isSimulation()){
-      RobotContainer.getDrive().setRobotFromFieldPose();
-    }
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // if(RobotBase.isSimulation()){
+    //   RobotContainer.getDrive().setRobotFromFieldPose();
+    // }
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // // schedule the autonomous command (example)
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
     
+    m_timer = new Timer();
+    m_timer.start();
+
+    // Reset the drivetrain's odometry to the starting pose of the trajectory.
+    RobotContainer.m_drivetrainSubsystem.resetOdometry(m_Trajectory.getInitialPose());
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    DrivetrainSubsystem.updateOdometry();
+    RobotContainer.m_drivetrainSubsystem.updateOdometry();
+
+    // // Update robot position on Field2d.
+    // m_field.setRobotPose(m_drive.getPose());
+
+    if (m_timer.get() < m_Trajectory.getTotalTimeSeconds()) {
+      // Get the desired pose from the trajectory.
+      var desiredPose = m_Trajectory.sample(m_timer.get());
+
+      // Get the reference chassis speeds from the Ramsete controller.
+      var refChassisSpeeds = m_ramseteController.calculate(RobotContainer.m_drivetrainSubsystem.getPose(), desiredPose);
+
+      // Set the linear and angular speeds.
+      RobotContainer.m_drivetrainSubsystem.setRaw(refChassisSpeeds.vxMetersPerSecond, refChassisSpeeds.omegaRadiansPerSecond);
+    } else {
+      RobotContainer.m_drivetrainSubsystem.setRaw(0, 0);
+    }
   }
   
   @Override

@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
   
@@ -143,7 +143,7 @@ public static DrivetrainSubsystem getDrive(){
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return m_drivetrainSubsystem.RamseteController(firstPath, true);
+    return null;
 
   }
 }
