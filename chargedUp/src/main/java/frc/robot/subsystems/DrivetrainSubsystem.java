@@ -96,6 +96,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     simEncoderRightLead = new Encoder(2, 3);
     simEncoderLeftLead.setDistancePerPulse(0.00155852448);
     simEncoderRightLead.setDistancePerPulse(0.00155852448);
+
     encoderLeftLead = leftLead.getEncoder();
     encoderRightLead = rightLead.getEncoder();
 
@@ -120,7 +121,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     diffDrive.setSafetyEnabled(false);
 
     m_odometry = new DifferentialDriveOdometry(
-        gyro.getRotation2d(), DrivetrainSubsystem.getDistanceLeaftlead(), DrivetrainSubsystem.getDistanceRigthlead());
+        gyro.getRotation2d(), getPositionLeftLead(), getPositionRightLead());
 
     m_Kinematics = new DifferentialDriveKinematics(DrivetrainConstants.ktrackWidth);
 
@@ -148,8 +149,66 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_field2d = new Field2d();
     }
   }
+  
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    updateOdometry();
+    if (m_field2d != null
+    // && m_odometry.getPoseMeters() != null
+    ) {
+      m_field2d.setRobotPose(m_odometry.getPoseMeters());
+    }
+    SmartDashboard.putNumber("Heading", getHeading());
+    SmartDashboard.putString("Pose", getPose().toString());
+  }
 
-  public static Pose2d getPose() {
+  public void SmartDashboardCalls() {
+    SmartDashboard.putNumber("Drivetrain Position", this.getPositionRightLead());
+
+  }
+
+  public void setRaw(double driveValue, double turnValue) {
+    // if(Robot.isReal()){
+    diffDrive.arcadeDrive(driveValue, turnValue);
+    // }
+    // else if(Robot.isSimulation()){
+    // m_SimSub.setVoltage(driveValue, turnValue);
+    // }
+    SmartDashboard.putNumber("Drive Value", driveValue);
+    SmartDashboard.putNumber("Turn Value", turnValue);
+    SmartDashboard.putNumber("Left Lead", leftLead.get());
+    SmartDashboard.putNumber("Right Lead", rightLead.get());
+  }
+
+  public CANSparkMax getLeftMotor() {
+    return leftLead;
+  }
+
+  public CANSparkMax getRightMotor() {
+    return rightLead;
+  }
+
+  public double getPositionLeftLead() {
+    return encoderLeftLead.getPosition();
+
+  }
+
+  public double getPositionRightLead() {
+    return encoderRightLead.getPosition();
+  }
+
+  public void resetPosition() {
+    encoderLeftLead.setPosition(0);
+  }
+
+  public void setRobotFromFieldPose() {
+    if (RobotBase.isSimulation()) {
+      setPose(m_field2d.getRobotPose());
+    }
+  }
+   
+  public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
 
@@ -174,95 +233,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // simEncoderLeftLead.getDistance(), simEncoderRightLead.getDistance(), pose);
   }
 
-  public void setRaw(double driveValue, double turnValue) {
-    // if(Robot.isReal()){
-    diffDrive.arcadeDrive(driveValue, turnValue);
-    // }
-    // else if(Robot.isSimulation()){
-    // m_SimSub.setVoltage(driveValue, turnValue);
-    // }
-    SmartDashboard.putNumber("Drive Value", driveValue);
-    SmartDashboard.putNumber("Turn Value", turnValue);
-    SmartDashboard.putNumber("Left Lead", leftLead.get());
-    SmartDashboard.putNumber("Right Lead", rightLead.get());
+  public void updateOdometry() {
+    m_odometry.update(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead());
   }
 
-  public double getPositionLeftLead() {
-    return encoderLeftLead.getPosition();
-
+  public void resetOdometry(Pose2d currentPose2d) {
+    m_odometry.resetPosition(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead(), currentPose2d);
   }
 
-  public double getPositionRightLead() {
-    return encoderRightLead.getPosition();
-  }
-
-  public void resetPosition() {
-    encoderLeftLead.setPosition(0);
-  }
-  // use this later to set to specific pose by passing in an argument to this void
-  // public void resetPose(){
-  // m_odometry.resetPosition(null, getDistance(), getDistance(), null);
-  // }
-
-  public static double getDistanceLeaftlead() {
-    return encoderLeftLead.getPositionConversionFactor();
-
-  }
-
-  public static double getDistanceRigthlead() {
-    return encoderRightLead.getPositionConversionFactor();
-
-  }
-
-  public static void updateOdometry() {
-    m_odometry.update(gyro.getRotation2d(), getDistanceRigthlead(), getDistanceLeaftlead());
-  }
-
-  public static void resetOdometry(Pose2d currentPose2d) {
-    m_odometry.resetPosition(gyro.getRotation2d(), getDistanceRigthlead(), getDistanceLeaftlead(), currentPose2d);
-  }
-
-  public static double getHeading() {
+  public double getHeading() {
     return m_odometry.getPoseMeters().getRotation().getDegrees();
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    updateOdometry();
-    if (m_field2d != null
-    // && m_odometry.getPoseMeters() != null
-    ) {
-      m_field2d.setRobotPose(m_odometry.getPoseMeters());
-      System.out.println("Pose set");
-    }
-    SmartDashboard.putNumber("Heading", getHeading());
-    SmartDashboard.putString("Pose", getPose().toString());
-  }
-
-  public void SmartDashboardCalls() {
-    SmartDashboard.putNumber("Drivetrain Position", this.getPositionRightLead());
-
-  }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(simEncoderLeftLead.getRate(), simEncoderRightLead.getRate());
   }
 
-  public CANSparkMax getLeftMotor() {
-    return leftLead;
-  }
-
-  public CANSparkMax getRightMotor() {
-    return rightLead;
-  }
 
   public void simulationPeriodic() {
     m_drivetrainSimulator.setInputs(
         (-leftLead.get() * RobotController.getBatteryVoltage()),
         rightLead.get() * RobotController.getBatteryVoltage());
 
-    System.out.println("is running sim");
     m_drivetrainSimulator.update(0.020);
 
     m_leftSimEncoder.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
@@ -276,41 +269,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_field2d.setRobotPose(getPose());
   }
 
-  public void setRobotFromFieldPose() {
-    if (RobotBase.isSimulation()) {
-      setPose(m_field2d.getRobotPose());
-    }
-  }
 
-  public Command RamseteController(PathPlannerTrajectory Traj, boolean firstPath) {
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> {
-          if (firstPath == true) {
-            DrivetrainSubsystem.resetOdometry(Traj.getInitialPose());
-          }
-        }),
-        new PPRamseteCommand(
-            Traj,
-            poseSupplier(),
-            new RamseteController(),
-            // new SimpleMotorFeedforward(DrivetrainConstants.kS, DrivetrainConstants.kV,
-            // DrivetrainConstants.kA),
-            DrivetrainSubsystem.m_Kinematics,
-            getVoltage(),
-            // DrivetrainSubsystem.m_WheelSpeeds,
-            this));
-  }
-
-  private Supplier<Pose2d> poseSupplier() {
-    return () -> getPose();
-  }
-
-  private BiConsumer<Double, Double> getVoltage() {
-    // This is taking two inputs and printing the combination of the two in a
-    // particulat method
-    BiConsumer<Double, Double> voltage = (a, b) -> System.out.println((a + b) / 2);
-    return voltage;
-  }
-
-  //
+  
 }
