@@ -24,12 +24,13 @@ public class targetFinding extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrainSubsystem.setRaw(0, 0);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_visionSubsystem.seeTarget() == true){
+    if(m_visionSubsystem.isHuge() != true){
       m_drivetrainSubsystem.setRaw(0.5, 0);
     }
     System.out.println(m_visionSubsystem.seeTarget());
@@ -44,6 +45,8 @@ public class targetFinding extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrainSubsystem.getPosition() > 5000;
+    return false;
+    // replace when enabled
+    // return m_drivetrainSubsystem.getPosition() > 5000;
   }
 }
