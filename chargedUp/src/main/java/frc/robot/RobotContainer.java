@@ -6,9 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.drivetotag;
 import frc.robot.commands.locateCube;
 import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -35,8 +33,6 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
-  private final Command m_driveToTag = 
-  new drivetotag(m_drivetrainSubsystem, m_visionSubsystem ); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);
@@ -52,8 +48,6 @@ public class RobotContainer {
      m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getLeftX()), m_drivetrainSubsystem));
     configureBindings();
 
-
-    m_chooser.setDefaultOption("Drive to Tag", m_driveToTag);
   }
 
   /**
@@ -68,7 +62,7 @@ public class RobotContainer {
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
     new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
+   
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
   }
 
