@@ -179,7 +179,7 @@ public class Robot extends TimedRobot {
     RobotContainer.m_drivetrainSubsystem.updateOdometry();
 
     // // Update robot position on Field2d.
-    // m_field.setRobotPose(m_drive.getPose());
+    RobotContainer.m_drivetrainSubsystem.setRobotFromFieldPose();
 
     if (m_timer.get() < m_Trajectory.getTotalTimeSeconds()) {
       // Get the desired pose from the trajectory.
@@ -212,7 +212,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
+    RobotContainer.m_drivetrainSubsystem.updateOdometry();
+    RobotContainer.m_drivetrainSubsystem.setRobotFromFieldPose();
   }
 
   @Override

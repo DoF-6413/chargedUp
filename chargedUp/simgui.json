@@ -62,8 +62,10 @@
           ],
           "style": "Box/Image"
         },
+        "image": "C:\\Users\\SSPFstudent STEM18\\Pictures\\2023-field.png",
         "units": "meters",
         "window": {
+          "name": "ChargedUp",
           "visible": true
         }
       }
