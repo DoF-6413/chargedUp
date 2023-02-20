@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -67,11 +68,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static DifferentialDriveOdometry m_odometry;
   public static Field2d m_field2d;
 
-  private static Encoder simEncoderRightLead;
-  private static Encoder simEncoderLeftLead;
+  private static Encoder realEncoderRightRep;
+  private static Encoder realEncoderLeftRep;
 
-  private static EncoderSim simEncoderRight;
-  private static EncoderSim simEncoderLeft;
   private static GyroSubsystem gyro = new GyroSubsystem();
   SimDouble gyroAngleSim;
 
@@ -89,10 +88,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Arrays.asList(leftLead, leftFollower1, leftFollower2, rightLead, rightFollower1, rightFollower2)
         .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
 
-    simEncoderLeftLead = new Encoder(4, 5);
-    simEncoderRightLead = new Encoder(2, 3);
-    simEncoderLeftLead.setDistancePerPulse(0.00155852448);
-    simEncoderRightLead.setDistancePerPulse(0.00155852448);
+    realEncoderLeftRep = new Encoder(4, 5);
+    realEncoderRightRep = new Encoder(2, 3);
+    realEncoderLeftRep.setDistancePerPulse(0.00155852448);
+    realEncoderRightRep.setDistancePerPulse(0.00155852448);
 
     encoderLeftLead = leftLead.getEncoder();
     encoderRightLead = rightLead.getEncoder();
@@ -138,8 +137,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
           // l and r position: 0.005 m
           VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
-      m_leftSimEncoder = new EncoderSim(simEncoderLeftLead);
-      m_rightSimEncoder = new EncoderSim(simEncoderRightLead);
+      m_leftSimEncoder = new EncoderSim(realEncoderLeftRep);
+      m_rightSimEncoder = new EncoderSim(realEncoderRightRep);
 
       gyroAngleSim = new SimDeviceSim("AHRS[" + SPI.Port.kMXP.value + "]").getDouble("Angle");
 
@@ -187,13 +186,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getPositionLeftLead() {
+    if(RobotBase.isSimulation()){
+      return realEncoderLeftRep.getDistance();
+    } else{
     return encoderLeftLead.getPosition();
-
+    }
   }
 
   public double getPositionRightLead() {
+    if(RobotBase.isSimulation()){
+      return realEncoderRightRep.getDistance();
+    } else{
     return encoderRightLead.getPosition();
+    }
   }
+
+  
 
   public void resetPosition() {
     encoderLeftLead.setPosition(0);
@@ -201,7 +209,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void setRobotFromFieldPose() {
     if (RobotBase.isSimulation()) {
-      setPose(m_field2d.getRobotPose());
+      setPose(m_odometry.getPoseMeters());
     }
   }
    
@@ -224,15 +232,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_field2d.setRobotPose(pose);
     }
 
-    // simEncoderLeftLead.reset();
-    // simEncoderRightLead.reset();
+    // realEncoderLeftRep.reset();
+    // realEncoderRightRep.reset();
     // m_odometry.resetPosition( Rotation2d.fromDegrees(gyro.getAngle()),
-    // simEncoderLeftLead.getDistance(), simEncoderRightLead.getDistance(), pose);
+    // realEncoderLeftRep.getDistance(), realEncoderRightRep.getDistance(), pose);
   }
 
   public void updateOdometry() {
+    if(RobotBase.isSimulation()){
+      m_odometry.update(gyro.getRotation2d() , getPositionRightLead(), -getPositionLeftLead());
+      SmartDashboard.putNumber("Left position", -getPositionLeftLead());
+      SmartDashboard.putNumber("Right position", getPositionRightLead());
+    } else {
     m_odometry.update(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead());
+    }
   }
+
+
 
   public void resetOdometry(Pose2d currentPose2d) {
     m_odometry.resetPosition(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead(), currentPose2d);
@@ -244,10 +260,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(simEncoderLeftLead.getRate(), simEncoderRightLead.getRate());
+    return new DifferentialDriveWheelSpeeds(realEncoderLeftRep.getRate(), realEncoderRightRep.getRate());
   }
 
-
+@Override
   public void simulationPeriodic() {
     m_drivetrainSimulator.setInputs(
         (-leftLead.get() * RobotController.getBatteryVoltage()),
@@ -263,7 +279,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     gyroAngleSim.set(-m_drivetrainSimulator.getHeading().getDegrees());
 
-    m_field2d.setRobotPose(getPose());
+    // m_field2d.setRobotPose(getPose());
   }
 
 
