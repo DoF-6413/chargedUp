@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.server.PathPlannerServer;
@@ -61,19 +62,20 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    m_Trajectory =
-    TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-        new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+    PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
+  
+    m_Trajectory =firstPath;
+    //TrajectoryGenerator.generateTrajectory(firstPath);
+        // new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+        // List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        // new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+        // new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
 
 // Create and push Field2d to SmartDashboard.
  SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
 
 // Push the trajectory to Field2d.
-// DrivetrainSubsystem.m_field2d.getObject("traj").setTrajectory(m_Trajectory);
+DrivetrainSubsystem.m_field2d.getObject("traj").setTrajectory(firstPath);
 
     // PathPlannerServer.startServer(5811);
     // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", null);
