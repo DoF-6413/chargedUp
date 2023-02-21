@@ -46,7 +46,7 @@ public final class Constants {
 
     // Kinematics
       // Distance between centers of right and left wheels on robot
-    public static final double kTrackWidth = Units.inchesToMeters(20.733);
+    public static final double kTrackWidth = Units.inchesToMeters(21.87);
         
     // Distance between front and back wheels on robot
     public static final double WHEEL_BASE = Units.inchesToMeters(20.733);
@@ -71,7 +71,7 @@ public final class Constants {
     //Final Mass of Robot including Bumbers and Batteries
     public static final double kMass = 135;
     public static final double kwheelRadiusMeters = 3 * 0.0254;
-    public static final double ktrackWidth = 21.87;
+    // public static final double ktrackWidth = 21.87;
   
     public static double loopPeriodSecs = 0.020;
   }

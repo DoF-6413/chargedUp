@@ -122,7 +122,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_odometry = new DifferentialDriveOdometry(
         gyro.getRotation2d(), getPositionLeftLead(), getPositionRightLead());
 
-    m_Kinematics = new DifferentialDriveKinematics(DrivetrainConstants.ktrackWidth);
+    m_Kinematics = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
 
     if (RobotBase.isSimulation()) {
       m_drivetrainSimulator = new DifferentialDrivetrainSim(
@@ -132,7 +132,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
           3,
           DrivetrainConstants.kMass,
           DrivetrainConstants.kwheelRadiusMeters,
-          DrivetrainConstants.ktrackWidth,
+          DrivetrainConstants.kTrackWidth,
           // The standard deviations for measurement noise:
           // x and y: 0.001 m
           // heading: 0.001 rad
@@ -227,7 +227,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       // No method to do it, but we can reset the state variables.
       // NOTE: this assumes the robot is not moving, since we are not resetting
       // the rate variables.
-      m_drivetrainSimulator.setState(new Matrix<>(Nat.N7(), Nat.N1()));
+      // m_drivetrainSimulator.setState(new Matrix<>(Nat.N7(), Nat.N1()));
 
       // reset the GyroSim to match the driveTrainSim
       // do it early so that "real" odometry matches this value
@@ -243,11 +243,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void updateOdometry() {
     if(RobotBase.isSimulation()){
-      m_odometry.update(gyro.getRotation2d() , getPositionRightLead(), -getPositionLeftLead());
+      m_odometry.update(gyro.getRotation2d() , getPositionRightLead() , -getPositionLeftLead()* 5);
       SmartDashboard.putNumber("Left position", -getPositionLeftLead());
       SmartDashboard.putNumber("Right position", getPositionRightLead());
     } else {
-    m_odometry.update(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead());
+    m_odometry.update(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead() );
     }
   }
 
@@ -269,8 +269,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 @Override
   public void simulationPeriodic() {
     m_drivetrainSimulator.setInputs(
-        (-leftLead.get() * RobotController.getBatteryVoltage()),
-        rightLead.get() * RobotController.getBatteryVoltage());
+        (rightLead.get() * RobotController.getBatteryVoltage()),
+        leftLead.get() * RobotController.getBatteryVoltage());
 
     m_drivetrainSimulator.update(0.020);
 
