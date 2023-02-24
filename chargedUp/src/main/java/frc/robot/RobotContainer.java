@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
   

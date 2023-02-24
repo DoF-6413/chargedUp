@@ -160,11 +160,11 @@ public class Robot extends TimedRobot {
     // if(RobotBase.isSimulation()){
     //   RobotContainer.getDrive().setRobotFromFieldPose();
     // }
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // schedule the autonomous command (example)
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
     
     m_timer = new Timer();
     m_timer.start();
