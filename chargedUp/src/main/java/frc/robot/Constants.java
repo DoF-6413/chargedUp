@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.WPIMathJNI;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -23,8 +25,13 @@ public final class Constants {
     public static final boolean kLeftInverted = true;
 
     // todo: update equation
-    public static final double kTicksToFeat = 0;
+    public static final double kWheelDiameter = 6;
+    public static final double kGearRatio = 6.11;
+    public static final double kMotorTicks = 42.;
+    public static final double kTicksToFeat = 1.0 / kMotorTicks * kWheelDiameter * kGearRatio * Math.PI /12.;
     public static final double kStopMotors = 0;
+
+    
 
     //PID Controlls for Forawrds and Backwards
     public static final double kMoveP = 25;

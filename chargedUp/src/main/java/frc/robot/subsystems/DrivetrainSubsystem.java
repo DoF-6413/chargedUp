@@ -27,7 +27,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
   private static RelativeEncoder encoderLeftLead;
-  // private static RelativeEncoder encoderRightLead;
+  private static RelativeEncoder encoderRightLead;
 
   private static DifferentialDrive diffDrive;
 
@@ -60,17 +60,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     leftLead.setInverted(DrivetrainConstants.kLeftInverted);
     // todo: uncomment for conversion
-    // encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
+    encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
     // encoderLeftLead.setInverted(DrivetrainConstants.kLeftInverted);
 
     leftFollower1.follow(leftLead);
     leftFollower2.follow(leftLead);
 
 
-    // encoderRightLead = rightLead.getEncoder();
+    encoderRightLead = rightLead.getEncoder();
 
     // todo: uncomment for conversion
-    // encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
+    encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
     rightLead.setInverted(DrivetrainConstants.kRightInverted);
 
     rightFollower1.follow(rightLead);
@@ -85,7 +85,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getPosition(){
+    return (getRightPosition() + getLeftPosition()/2);
+  }
+
+  public double getLeftPosition(){
     return encoderLeftLead.getPosition();
+  }
+
+  public double getRightPosition(){
+    return encoderRightLead.getPosition();
   }
 
   public void resetPosition(){
