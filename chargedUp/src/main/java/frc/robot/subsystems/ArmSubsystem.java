@@ -114,10 +114,10 @@ private final TalonFX m_telescopingMotor;
   }
 
   public static boolean getLeftTriggerActive() {
-    return (RobotContainer.m_driverController.getLeftTriggerAxis() > 0);
+    return (RobotContainer.m_auxController.getLeftTriggerAxis() > 0);
   }
 
   public static boolean getRightTriggerActive() {
-    return (RobotContainer.m_driverController.getRightTriggerAxis() > 0);
+    return (RobotContainer.m_auxController.getRightTriggerAxis() > 0);
   }
 }

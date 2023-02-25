@@ -17,6 +17,7 @@ import edu.wpi.first.math.WPIMathJNI;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kAuxControllerPort = 1;
   }
   public static class DrivetrainConstants{
     public static final int[] kDrivetrainCANIDs = new int[] {1,2,3, 10, 11, 12};
@@ -31,7 +32,7 @@ public final class Constants {
     public static final double kTicksToFeat = 1.0 / kMotorTicks * kWheelDiameter * kGearRatio * Math.PI /12.;
     public static final double kStopMotors = 0;
 
-    
+
 
     //PID Controlls for Forawrds and Backwards
     public static final double kMoveP = 25;
