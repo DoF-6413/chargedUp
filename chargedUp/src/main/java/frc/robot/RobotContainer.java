@@ -111,33 +111,33 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        m_driverController.start().
+        m_auxController.start().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.3)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        m_driverController.back().
+        m_auxController.back().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.3)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
         //This runs Endeffector to Collect Cube
-        m_driverController.a().
+        m_auxController.a().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
         //This runs Endeffector to Collect Cone
-        m_driverController.b().
+        m_auxController.b().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
 
-        m_driverController.x().
+        m_auxController.x().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.2)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
 
-        m_driverController.y().
+        m_auxController.y().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.5)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
         //This runs Endeffector to eject game peices
-        m_driverController.rightTrigger().
+        m_auxController.rightTrigger().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
@@ -152,6 +152,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return new MoveCommand(m_drivetrainSubsystem, 0, 0);
+    return new MoveCommand(m_drivetrainSubsystem, 5, 0.65);
   }
 }
