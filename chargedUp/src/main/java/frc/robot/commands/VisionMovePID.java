@@ -32,6 +32,7 @@ public class VisionMovePID extends PIDCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrainSubsystem = drive;
     m_visionSubsystem = vision;
+    addRequirements(m_drivetrainSubsystem, m_visionSubsystem);
     // Configure additional PID options by calling `getController` here.
     getController().setTolerance(DrivetrainConstants.kMoveTolerance);
   }
