@@ -10,8 +10,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.drivetotag;
-import frc.robot.commands.locateCube;
 // import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
@@ -160,6 +158,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return m_chooser.getSelected();
+    return new MoveCommand(m_drivetrainSubsystem, 0, 0);
   }
 }
