@@ -22,6 +22,7 @@ private final CANSparkMax m_leftRotationMotor;
 private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
 
+
 private final TalonFX m_endEffectorMotor;
 // private final RelativeEncoder m_endEffectorEncoder;
 
