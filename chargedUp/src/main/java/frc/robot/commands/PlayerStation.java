@@ -4,29 +4,38 @@
 
 package frc.robot.commands;
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
-public class FollowPath extends CommandBase {
-  /** Creates a new FollowPath. */
-  public FollowPath() {
+public class PlayerStation extends CommandBase {
+  /** Creates a new PlayerStation. */
+  VisionSubsystem m_visionSubsystem;
+  ArmSubsystem m_armSubsysystem;
+
+  public PlayerStation(ArmSubsystem arm, VisionSubsystem vision) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_armSubsysystem = arm;
+    m_visionSubsystem = vision;
+
   }
-  
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-  
+  public void initialize() {
+
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", null);
+    return atStation() ? m_armSubsysystem
+  }
 
-  //  FollowPathWithEvents commands = new FollowPathWithEvents(
-  //   firstPath, null, null)
+  public boolean atStation(){
+    return m_visionSubsystem.getBestFiducial() == 4 || m_visionSubsystem.getBestFiducial() == 5 ? true: false;
   }
 
   // Called once the command ends or is interrupted.
