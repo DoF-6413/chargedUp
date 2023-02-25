@@ -50,8 +50,6 @@ public class RobotContainer {
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
 
-  // list of autos
-  private final Command m_autoScore = new AutoScore2();
 
 
   // private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
@@ -69,8 +67,8 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     
-    m_chooser.setDefaultOption("Auto Score", m_autoScore);
-    m_chooser.addOption("Auto Score", m_autoScore);
+    m_chooser.setDefaultOption("Auto Score", new MoveCommand(m_drivetrainSubsystem, 6, 0.3));
+    // m_chooser.addOption("Auto Score", m_autoScore);
       SmartDashboard.putData(m_chooser);
       
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
@@ -109,7 +107,7 @@ public class RobotContainer {
         //This runs Endeffector to Collect Cube
         new JoystickButton(m_driverController, XboxController.Button.kA.value).
         onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.3)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0)));
+        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
         //This runs Endeffector to Collect Cone
         new JoystickButton(m_driverController, XboxController.Button.kB.value).
