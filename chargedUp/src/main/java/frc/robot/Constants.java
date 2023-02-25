@@ -45,7 +45,7 @@ public final class Constants {
 
 
   public static class ArmConstants{
-    public static final int[] armCANIDs = new int[] {13, 14, 15, 0, 0};
+    public static final int[] armCANIDs = new int[] {8, 9, 15, 16};
     public static final double kArmPositionConversion = 0;
 
     //Arm PID Values (Tune PID Before Feedforward)

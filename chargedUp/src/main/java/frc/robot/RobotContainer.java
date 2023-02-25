@@ -111,12 +111,16 @@ public class RobotContainer {
 
         //This runs Endeffector to Collect Cube
         new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.3)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0)));
 
         //This runs Endeffector to Collect Cone
         new JoystickButton(m_driverController, XboxController.Button.kB.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.3)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        
+        driverRightTrigger.
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
 
         new JoystickButton(m_driverController, XboxController.Button.kX.value).
@@ -124,12 +128,9 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
 
         new JoystickButton(m_driverController, XboxController.Button.kY.value).
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.5)))
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(-0.3)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
         //This runs Endeffector to eject game peices
-        driverRightTrigger.
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
   }
 

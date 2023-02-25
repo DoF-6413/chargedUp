@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.apache.commons.io.filefilter.CanExecuteFileFilter;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -33,21 +31,21 @@ private final TalonFX m_telescopingMotor;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
-    m_leftRotationMotor = new CANSparkMax(ArmConstants.armCANIDs[0], MotorType.kBrushless);
-    m_rightRotationMotor = new CANSparkMax(ArmConstants.armCANIDs[1], MotorType.kBrushless);
+    m_leftRotationMotor = new CANSparkMax(8, MotorType.kBrushless);
+    m_rightRotationMotor = new CANSparkMax(9, MotorType.kBrushless);
     m_rightRotationMotor.follow(m_leftRotationMotor);
     m_RotationEncoder = m_leftRotationMotor.getEncoder();
     
     // m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_rightRotationMotor.follow(m_leftRotationMotor);
     
-    m_endEffectorMotor = new TalonFX(ArmConstants.armCANIDs[3]);
+    m_endEffectorMotor = new TalonFX(16);
     m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
     
-    m_telescopingMotor = new TalonFX(ArmConstants.armCANIDs[2]);
+    m_telescopingMotor = new TalonFX(15);
 
-    DigitalInput toplimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[0]);
-    DigitalInput bottomlimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[1]);
+    // DigitalInput toplimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[0]);
+    // DigitalInput bottomlimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[1]);
 
   }
 
