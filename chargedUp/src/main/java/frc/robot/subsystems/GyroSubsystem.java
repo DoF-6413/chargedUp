@@ -17,6 +17,9 @@ public class GyroSubsystem extends SubsystemBase {
   AHRS m_gyro;
   public GyroSubsystem() {
     m_gyro = new NavXWrapper(SPI.Port.kMXP, (byte) 200) ;
+    System.out.println(m_gyro.getAngleAdjustment());
+    m_gyro.setAngleAdjustment(90);
+    System.out.println(m_gyro.getAngleAdjustment());
   }
 
   public double getAngle(){

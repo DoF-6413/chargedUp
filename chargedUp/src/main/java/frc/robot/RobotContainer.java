@@ -18,7 +18,7 @@ import frc.robot.subsystems.DriveSimSub;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,11 +29,7 @@ import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-
-import edu.wpi.first.wpilibj.XboxController.Button;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -58,8 +54,8 @@ public class RobotContainer {
 
   private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final static XboxController m_driverController =
-      new XboxController(OperatorConstants.kDriverControllerPort);
+  private final static CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,13 +64,13 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     
-    m_chooser.setDefaultOption("Auto Score", m_autoScore);
+    m_chooser.setDefaultOption("Auto Score", new AutoScore2());
     m_chooser.addOption("Auto Score", m_autoScore);
     m_chooser.addOption("Move Forward", m_moveForward);
       SmartDashboard.putData(m_chooser);
       
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
-     m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
+     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
       
     configureBindings();
 
@@ -94,7 +90,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Spins Motor if April Tags are Recognized for 20 Ticks
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).
+    m_driverController.a().
         onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
   
 

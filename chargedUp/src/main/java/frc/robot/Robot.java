@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.server.PathPlannerServer;
@@ -169,8 +170,8 @@ public class Robot extends TimedRobot {
     m_timer = new Timer();
     m_timer.start();
 
-    // Reset the drivetrain's odometry to the starting pose of the trajectory.
-    RobotContainer.m_drivetrainSubsystem.resetOdometry(m_Trajectory.getInitialPose());
+    // Reset the drivetrain's odometry to the starting pose of the trajectory. thisd should only happen if it is the first autonomus routine ran
+    // RobotContainer.m_drivetrainSubsystem.resetOdometry(m_Trajectory.getInitialPose());
   }
 
   /** This function is called periodically during autonomous. */
@@ -212,8 +213,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.m_drivetrainSubsystem.updateOdometry();
-    RobotContainer.m_drivetrainSubsystem.setRobotFromFieldPose();
   }
 
   @Override

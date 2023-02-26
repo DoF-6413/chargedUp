@@ -52,22 +52,22 @@
       "/SmartDashboard/Field": {
         "Robot": {
           "arrowColor": [
-            0.026491481810808182,
-            0.10986427217721939,
-            0.39240509271621704,
+            0.15474817156791687,
+            0.32499948143959045,
+            0.9019607901573181,
             255.0
           ],
-          "arrowSize": 79,
+          "arrowSize": 64,
           "color": [
             0.3139275908470154,
             0.9662446975708008,
             0.36347052454948425,
             255.0
           ],
-          "style": "Box/Image"
+          "style": "Line"
         },
-        "image": "C:\\Users\\SSPFstudent STEM18\\Pictures\\2023-field.png",
-        "units": "meters",
+        "image": "C:\\Users\\SSPFstudent\\Downloads\\2023-field.png",
+        "units": "feet",
         "window": {
           "name": "ChargedUp",
           "visible": true
@@ -87,6 +87,9 @@
         "open": true
       }
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   },
   "Plot": {
     "Plot <0>": {

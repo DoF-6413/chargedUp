@@ -24,8 +24,8 @@ public final class Constants {
   public static class DrivetrainConstants{
     public static final int[] kDrivetrainCANIDs = new int[] {1,2,3, 10, 11, 12};
 
-    public static final boolean kRightInverted = false;
-    public static final boolean kLeftInverted = true;
+    public static final boolean kRightInverted = true;
+    public static final boolean kLeftInverted = false;
     
     // todo: update equation
     public static final int kWheelDiameter = 6;
@@ -46,10 +46,10 @@ public final class Constants {
 
     // Kinematics
       // Distance between centers of right and left wheels on robot
-    public static final double kTrackWidth = Units.inchesToMeters(21.87);
+    public static final double kTrackWidth = Units.inchesToMeters(21.5);
         
     // Distance between front and back wheels on robot
-    public static final double WHEEL_BASE = Units.inchesToMeters(20.733);
+    public static final double WHEEL_BASE = Units.inchesToMeters(25);
 
     public static final DifferentialDriveKinematics kinematics = 
     new DifferentialDriveKinematics(kTrackWidth);
