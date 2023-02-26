@@ -230,7 +230,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       // reset the GyroSim to match the driveTrainSim
       // do it early so that "real" odometry matches this value
-      gyroAngleSim.set(-m_drivetrainSimulator.getHeading().getDegrees());
+      gyroAngleSim.set(m_drivetrainSimulator.getHeading().getDegrees());
       m_field2d.setRobotPose(pose);
     }
 
@@ -276,7 +276,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_rightSimEncoder.setDistance(m_drivetrainSimulator.getRightPositionMeters());
     m_rightSimEncoder.setRate(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
 
-    gyroAngleSim.set(-m_drivetrainSimulator.getHeading().getDegrees());
+    gyroAngleSim.set(m_drivetrainSimulator.getHeading().getDegrees());
 
     // m_field2d.setRobotPose(getPose());
   }

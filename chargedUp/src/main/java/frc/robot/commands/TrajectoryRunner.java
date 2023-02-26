@@ -62,6 +62,8 @@ public class TrajectoryRunner extends CommandBase {
     } else {
       m_drivetrainSubsystem.setRaw(0, 0);
     }
+
+    System.out.println("running auto");
   }
 
   // Called once the command ends or is interrupted.

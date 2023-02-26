@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.commands.*;
-import frc.robot.commands.AutoScore2;
 import frc.robot.commands.DrivetrainPID.MovePID;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.AutoConstants;
@@ -26,9 +25,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 
+import java.util.List;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -44,7 +53,16 @@ public class RobotContainer {
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
   
-  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
+  // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
+  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(2, 2));
+
+  Trajectory m_Trajectory = 
+  // firstPath.relativeTo(firstPath.getInitialPose());
+  TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+      new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+      new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
   
   // list of autos
   private final Command m_autoScore = new AutoScore2();
@@ -70,7 +88,7 @@ public class RobotContainer {
       SmartDashboard.putData(m_chooser);
       
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
-     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
+     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
       
     configureBindings();
 

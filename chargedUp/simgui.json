@@ -72,6 +72,11 @@
           "name": "ChargedUp",
           "visible": true
         }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },

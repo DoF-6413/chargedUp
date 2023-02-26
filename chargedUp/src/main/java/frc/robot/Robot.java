@@ -53,7 +53,7 @@ import edu.wpi.first.wpilibj.I2C;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private Timer m_timer;
-  private RobotContainer m_robotContainer;
+  private RobotContainer m_robotContainer = new RobotContainer();
   
   private final RamseteController m_ramseteController = new RamseteController();
   private Trajectory m_Trajectory;
@@ -74,20 +74,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-    PathPlannerServer.startServer(5811);
-    // PathPlannerServer.startServer(5811);
-    // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", null);
-    // Create the trajectory to follow in autonomous. It is best to initialize
-    // trajectories here to avoid wasting time in autonomous.
-  
+   
+if (RobotBase.isSimulation()){
+ SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
+}
 
-        // DrivetrainSubsystem.m_field2d.getObject("firstPath").setTrajectory(m_Trajectory);
-        // SmartDashboard.putString("FieldSTUFFF","HOLAAAA MUNDO");
-    // Push the trajectory to Field2d.
 
     m_colorMatcher.addColorMatch(kpurple);
     m_colorMatcher.addColorMatch(kyellow);
@@ -105,13 +96,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
-    // block in order for anything in the Command-based framework to work.
+   
     CommandScheduler.getInstance().run();
     
     Color detectedColor = m_colorSensorV3.getColor();
@@ -158,18 +143,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // if(RobotBase.isSimulation()){
-    //   RobotContainer.getDrive().setRobotFromFieldPose();
-    // }
+  
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
     
-    m_timer = new Timer();
-    m_timer.start();
-
     // Reset the drivetrain's odometry to the starting pose of the trajectory. thisd should only happen if it is the first autonomus routine ran
     // RobotContainer.m_drivetrainSubsystem.resetOdometry(m_Trajectory.getInitialPose());
   }
@@ -177,23 +157,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    RobotContainer.m_drivetrainSubsystem.updateOdometry();
-
-    // // Update robot position on Field2d.
-    RobotContainer.m_drivetrainSubsystem.setRobotFromFieldPose();
-
-    if (m_timer.get() < m_Trajectory.getTotalTimeSeconds()) {
-      // Get the desired pose from the trajectory.
-      var desiredPose = m_Trajectory.sample(m_timer.get());
-
-      // Get the reference chassis speeds from the Ramsete controller.
-      var refChassisSpeeds = m_ramseteController.calculate(RobotContainer.m_drivetrainSubsystem.getPose(), desiredPose);
-
-      // Set the linear and angular speeds.
-      RobotContainer.m_drivetrainSubsystem.setRaw(refChassisSpeeds.vxMetersPerSecond, refChassisSpeeds.omegaRadiansPerSecond);
-    } else {
-      RobotContainer.m_drivetrainSubsystem.setRaw(0, 0);
-    }
+    
   }
   
   @Override
