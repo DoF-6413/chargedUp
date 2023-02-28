@@ -86,13 +86,10 @@ public class RobotContainer {
 
     
     m_chooser.setDefaultOption("Example Trajectory", new TrajectoryRunner(m_drivetrainSubsystem,  m_Trajectory));
-    m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(firstPath.getInitialPose())));
-    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(newishPath.getInitialPose())));
+    m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose())));
+    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose())));
     // m_chooser.addOption("Move Forward", m_moveForward);
       SmartDashboard.putData(m_chooser);
-      
-    
-      
     configureBindings();
       
   }

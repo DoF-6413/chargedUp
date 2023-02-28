@@ -278,8 +278,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_rightSimEncoder.setRate(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
 
     gyroAngleSim.set(m_drivetrainSimulator.getHeading().getDegrees());
-
-    // m_field2d.setRobotPose(getPose());
   }
 
 }

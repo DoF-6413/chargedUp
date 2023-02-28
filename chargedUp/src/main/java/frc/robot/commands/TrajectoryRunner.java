@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -26,7 +27,7 @@ public class TrajectoryRunner extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
+    m_drivetrainSubsystem.resetOdometry( m_drivetrainSubsystem.getPose());
      // if(RobotBase.isSimulation()){
     //   RobotContainer.getDrive().setRobotFromFieldPose();
     // }
