@@ -48,16 +48,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    
    
 if (RobotBase.isSimulation()){
  SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
+
 }
 
 
     m_colorMatcher.addColorMatch(kpurple);
     m_colorMatcher.addColorMatch(kyellow);
   }
-
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items
    * like diagnostics
