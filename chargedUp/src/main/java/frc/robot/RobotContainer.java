@@ -56,7 +56,7 @@ public class RobotContainer {
 
   
   // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
-  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(2, 2));
+  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(0.8, 0.2));
 
   Trajectory m_Trajectory = 
   // firstPath.relativeTo(firstPath.getInitialPose());
@@ -84,9 +84,9 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     
-    m_chooser.setDefaultOption("Auto Score", new AutoScore2());
-    m_chooser.addOption("Auto Score", m_autoScore);
-    m_chooser.addOption("Move Forward", m_moveForward);
+    m_chooser.setDefaultOption("Example Trajectory", new TrajectoryRunner(m_drivetrainSubsystem,  m_Trajectory));
+    m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(firstPath.getInitialPose())));
+    // m_chooser.addOption("Move Forward", m_moveForward);
       SmartDashboard.putData(m_chooser);
       
     
