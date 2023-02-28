@@ -93,8 +93,10 @@
       }
     }
   },
-  "NetworkTables View": {
-    "visible": false
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    }
   },
   "Plot": {
     "Plot <0>": {

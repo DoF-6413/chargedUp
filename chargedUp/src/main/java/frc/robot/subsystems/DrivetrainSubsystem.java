@@ -178,6 +178,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Turn Value", turnValue);
     SmartDashboard.putNumber("Left Lead", leftLead.get());
     SmartDashboard.putNumber("Right Lead", rightLead.get());
+
   }
 
   public CANSparkMax getLeftMotor() {

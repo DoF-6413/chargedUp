@@ -12,9 +12,9 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class TrajectoryRunner extends CommandBase {
   /** Creates a new TrajectoryRunner. */
-  DrivetrainSubsystem m_drivetrainSubsystem;
-  Timer m_timer;
-  Trajectory m_trajectory;
+  private DrivetrainSubsystem m_drivetrainSubsystem;
+  private Timer m_timer;
+  private Trajectory m_trajectory;
   private final RamseteController m_ramseteController = new RamseteController();
   
   public TrajectoryRunner(DrivetrainSubsystem drive, Trajectory traj) {
@@ -50,26 +50,23 @@ public class TrajectoryRunner extends CommandBase {
     // // Update robot position on Field2d.
     m_drivetrainSubsystem.setRobotFromFieldPose();
 
-    if (m_timer.get() < m_trajectory.getTotalTimeSeconds()) {
       // Get the desired pose from the trajectory.
       var desiredPose = m_trajectory.sample(m_timer.get());
 
       // Get the reference chassis speeds from the Ramsete controller.
       var refChassisSpeeds = m_ramseteController.calculate(m_drivetrainSubsystem.getPose(), desiredPose);
-
       // Set the linear and angular speeds.
-      m_drivetrainSubsystem.setRaw(refChassisSpeeds.vxMetersPerSecond, refChassisSpeeds.omegaRadiansPerSecond);
-    } else {
-      m_drivetrainSubsystem.setRaw(0, 0);
-    }
 
-    System.out.println("running auto");
+      // m_drivetrainSubsystem.setRaw(5, 0);
+      // System.out.println("red chassis speed " + refChassisSpeeds);
+      m_drivetrainSubsystem.setRaw(refChassisSpeeds.vxMetersPerSecond, refChassisSpeeds.omegaRadiansPerSecond);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrainSubsystem.setRaw(0, 0);
+    // m_drivetrainSubsystem.setRaw(0, 0);
   }
 
   // Returns true when the command should end.

@@ -4,32 +4,9 @@
 
 package frc.robot;
 
-import java.util.List;
-
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.server.PathPlannerServer;
-import com.pathplanner.lib.server.PathPlannerServerThread;
-
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.simulation.BatterySim;
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -52,11 +29,8 @@ import edu.wpi.first.wpilibj.I2C;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private Timer m_timer;
   private RobotContainer m_robotContainer = new RobotContainer();
   
-  private final RamseteController m_ramseteController = new RamseteController();
-  private Trajectory m_Trajectory;
 
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -159,19 +133,19 @@ if (RobotBase.isSimulation()){
   public void autonomousPeriodic() {
     
   }
-  
+
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // if (RobotBase.isSimulation()) {
-    //   DrivetrainSubsystem.setRobotFromFieldPose()
-    // }
+   
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.drivetrainDefaultCommand();
   }
 
   /** This function is called periodically during operator control. */
