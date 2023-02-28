@@ -145,7 +145,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       m_field2d = new Field2d();
 
-      
     }
   }
 
@@ -253,6 +252,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void resetOdometry(Pose2d currentPose2d) {
     m_odometry.resetPosition(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead(), currentPose2d);
+    
   }
 
   public double getHeading() {

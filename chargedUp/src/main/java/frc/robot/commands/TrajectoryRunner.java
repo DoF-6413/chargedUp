@@ -26,6 +26,7 @@ public class TrajectoryRunner extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
      // if(RobotBase.isSimulation()){
     //   RobotContainer.getDrive().setRobotFromFieldPose();
     // }
