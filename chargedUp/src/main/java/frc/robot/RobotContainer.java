@@ -5,14 +5,10 @@
 package frc.robot;
 
 import frc.robot.commands.*;
-import frc.robot.commands.AutoScore2;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.drivetotag;
-import frc.robot.commands.locateCube;
-import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ledsSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
@@ -20,10 +16,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -37,6 +33,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final ledsSubsystem m_LedsSubsystem = new ledsSubsystem();
 
 
   // list of autos
@@ -117,8 +114,10 @@ public class RobotContainer {
 
 
     new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
+    // new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kX.value).onTrue(new ledSetter(m_LedsSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new InstantCommand( () -> m_LedsSubsystem.setLedsOff()));
   }
 
   /**
