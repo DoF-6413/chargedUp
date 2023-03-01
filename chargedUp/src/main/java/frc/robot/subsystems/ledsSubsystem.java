@@ -15,7 +15,7 @@ public class ledsSubsystem extends SubsystemBase {
   }
 
   public void setLeds(double somevalue){
-    pwm.setSpeed(somevalue);    
+    pwm.setSpeed(somevalue);   
   }
 
 

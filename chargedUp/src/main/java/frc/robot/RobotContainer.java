@@ -56,9 +56,7 @@ public class RobotContainer {
     m_chooser.addOption("Auto Score", m_autoScore);
       SmartDashboard.putData(m_chooser);
       
-    m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
-     m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
-    configureBindings();
+   configureBindings();
 
 
     m_chooser.setDefaultOption("Drive to Tag", m_driveToTag);
@@ -75,48 +73,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    //Spins Motor if April Tags are Recognized for 20 Ticks
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).
-        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-  
+    new JoystickButton(m_driverController, XboxController.Button.kX.value).onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
-    // m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
-    // m_driverController.b().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "b")) );
-
-    // m_driverController.x().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "x")) );
-
-    // m_driverController.y().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "y")) );
-
-    // //D-Pad buttons
-    // m_driverController.povUp().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Up")) );
-
-    // m_driverController.povDown().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Down")) );
-    
-    // m_driverController.povRight().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Right")) );
-
-    // m_driverController.povLeft().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Left")) );
-
-
-    // m_driverController.leftBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftBumper")) );
-
-    // m_driverController.rightBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightBumper")) );
-
-    // m_driverController.leftTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftTrigger")) );
-
-    // m_driverController.rightTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightTrigger")) );
-
-    // m_driverController.start().whileTrue(new RunCommand (() -> SmartDashboard.putString("button pressed", "startButton")) );
-
-
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-    // new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kX.value).onTrue(new ledSetter(m_LedsSubsystem));
     new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new InstantCommand( () -> m_LedsSubsystem.setLedsOff()));
   }
 
