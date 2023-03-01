@@ -101,3 +101,22 @@ Today I looked into **robot simulation code**. Robot simulation would enable us 
 - Downloaded the field image and put it into glass 
 - Deployed the code that would put the trajectory onto the field 
 - Got 2d simulation running now we need to figure out how to put “firstpath” onto the field correctly  
+
+# 2-22-23
+
+## Andy 
+- Read Binkin LED Driver and looked for examples 
+- Created a branch for LED lights code 
+- Connected LEDs to test board 
+
+## Nancy 
+- Researched about Rev colorsensor 
+- Created a colorsensor subsystem 
+- Wrote code for color sensor to tell RGB values and used that combination to create a color 
+- Connected that color to a string that says cube or cone 
+- Printed out cone and cube when the sensor sees either one 
+
+# 2-23-23
+
+## Nancy
+-Today I will connect the leds and color sensor for lights to tell us what game piece the sensor senses
