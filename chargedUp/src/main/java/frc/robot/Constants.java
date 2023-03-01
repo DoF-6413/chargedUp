@@ -16,4 +16,32 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static class DrivetrainConstants{
+    public static final int[] kDrivetrainCANIDs = new int[] {1,2,3, 10, 11, 12};
+
+    public static final boolean kRightInverted = false;
+    public static final boolean kLeftInverted = true;
+
+    // todo: update equation
+    public static final double kTicksToFeat = 0;
+    public static final double kStopMotors = 0;
+
+    //PID Controlls for Forawrds and Backwards
+    public static final double kMoveP = 25;
+    public static final double kMoveI = 0;
+    public static final double kMoveD = 0;
+    public static final double kMoveTolerance = 1;
+
+    //PID Controlls for Turning
+    public static final double kTurnP = 0;
+    public static final double kTurnI = 0;
+    public static final double kTurnD = 0;
+    public static final double kTurnTolerance = 0;
+  }
+  public static class VisionConstants {
+    public static final double[] ksetpoints = new double[] {0, 1.5, 3, 4};
+    
+
+
+  }
 }

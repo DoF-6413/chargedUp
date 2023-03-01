@@ -4,19 +4,28 @@
 
 package frc.robot;
 
+import frc.robot.commands.*;
+import frc.robot.commands.AutoScore2;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.drivetotag;
+import frc.robot.commands.locateCube;
+import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
-
 import edu.wpi.first.wpilibj.XboxController.Button;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,16 +35,36 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
+
+  // list of autos
+  private final Command m_autoScore = new AutoScore2();
+
+
+  private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final XboxController m_driverController =
+      new XboxController(OperatorConstants.kDriverControllerPort);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
     // Configure the trigger bindings
+
+    
+    m_chooser.setDefaultOption("Auto Score", m_autoScore);
+    m_chooser.addOption("Auto Score", m_autoScore);
+      SmartDashboard.putData(m_chooser);
+      
+    m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
+     m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getRightX()), m_drivetrainSubsystem));
     configureBindings();
+
+
+    m_chooser.setDefaultOption("Drive to Tag", m_driveToTag);
   }
 
   /**
@@ -48,41 +77,48 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    //Spins Motor if April Tags are Recognized for 20 Ticks
+    new JoystickButton(m_driverController, XboxController.Button.kA.value).
+        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+  
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
-    m_driverController.b().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "b")) );
+    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    m_driverController.x().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "x")) );
+    // m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
+    // m_driverController.b().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "b")) );
 
-    m_driverController.y().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "y")) );
+    // m_driverController.x().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "x")) );
 
-    //D-Pad buttons
-    m_driverController.povUp().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Up")) );
+    // m_driverController.y().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "y")) );
 
-    m_driverController.povDown().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Down")) );
+    // //D-Pad buttons
+    // m_driverController.povUp().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Up")) );
+
+    // m_driverController.povDown().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Down")) );
     
-    m_driverController.povRight().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Right")) );
+    // m_driverController.povRight().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Right")) );
 
-    m_driverController.povLeft().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Left")) );
+    // m_driverController.povLeft().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Left")) );
 
 
-    m_driverController.leftBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftBumper")) );
+    // m_driverController.leftBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftBumper")) );
 
-    m_driverController.rightBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightBumper")) );
+    // m_driverController.rightBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightBumper")) );
 
-    m_driverController.leftTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftTrigger")) );
+    // m_driverController.leftTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftTrigger")) );
 
-    m_driverController.rightTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightTrigger")) );
+    // m_driverController.rightTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightTrigger")) );
 
-    m_driverController.start().whileTrue(new RunCommand (() -> SmartDashboard.putString("button pressed", "startButton")) );
+    // m_driverController.start().whileTrue(new RunCommand (() -> SmartDashboard.putString("button pressed", "startButton")) );
 
+
+    new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
+    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
   }
 
   /**
@@ -92,6 +128,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    
+    return m_chooser.getSelected();
   }
 }
