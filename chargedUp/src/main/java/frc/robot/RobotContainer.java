@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.commands.*;
-import frc.robot.commands.DrivetrainPID.MovePID;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -13,7 +12,6 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.drivetotag;
 import frc.robot.commands.locateCube;
 import frc.robot.commands.targetFinding;
-import frc.robot.subsystems.DriveSimSub;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -69,13 +67,6 @@ public class RobotContainer {
       new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
       new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
   
-  // list of autos
-  private final Command m_autoScore = new AutoScore2();
-  private final Command m_moveForward = 
-      new MovePID(m_drivetrainSubsystem, AutoConstants.kchargingStationDistance);
-
-
-  private final Command m_driveToTag = new drivetotag(m_drivetrainSubsystem, m_visionSubsystem); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -150,9 +141,9 @@ public class RobotContainer {
     // m_driverController.start().whileTrue(new RunCommand (() -> SmartDashboard.putString("button pressed", "startButton")) );
 
 
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
+    // new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+    // new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
+    // new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
   }
 
 public static double getLeftJoystickY(){
