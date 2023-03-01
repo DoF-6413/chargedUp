@@ -30,6 +30,7 @@ public class TrajectoryRunner extends CommandBase {
     // DrivetrainSubsystem.m_field2d.setRobotPose(m_trajectory.getInitialPose());
     m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
     
+    
      // if(RobotBase.isSimulation()){
     //   RobotContainer.getDrive().setRobotFromFieldPose();
     // }

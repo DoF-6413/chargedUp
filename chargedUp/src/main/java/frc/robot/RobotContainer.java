@@ -56,8 +56,10 @@ public class RobotContainer {
 
   
   // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
-  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(0.8, 0.2));
-  PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(0.8, 0.2));
+  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
+  
+  PathPlannerTrajectory newerishPath = PathPlanner.loadPath("NewerishPath", new PathConstraints(2, 0.8));
 
   Trajectory m_Trajectory = 
   // firstPath.relativeTo(firstPath.getInitialPose());
@@ -88,6 +90,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Example Trajectory", new TrajectoryRunner(m_drivetrainSubsystem,  m_Trajectory));
     m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose())));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose())));
+    m_chooser.addOption("Newerish Path", new TrajectoryRunner(m_drivetrainSubsystem, newerishPath.relativeTo(m_drivetrainSubsystem.getPose())));
     // m_chooser.addOption("Move Forward", m_moveForward);
       SmartDashboard.putData(m_chooser);
     configureBindings();
@@ -117,7 +120,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.b().whileTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
 
     // m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
     // m_driverController.b().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "b")) );

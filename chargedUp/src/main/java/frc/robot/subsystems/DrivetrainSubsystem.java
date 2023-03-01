@@ -25,6 +25,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -108,8 +109,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFollower1.follow(leftLead);
     leftFollower2.follow(leftLead);
 
-    encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
-    encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToFeat);
+    encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToMeters);
+    encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToMeters);
 
     rightFollower1.follow(rightLead);
     rightFollower2.follow(rightLead);
@@ -159,10 +160,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber("Heading", getHeading());
     SmartDashboard.putString("Pose", getPose().toString());
+    
+   SmartDashboard.putNumber("Drivetrain Position", getPosition());
   }
 
   public void SmartDashboardCalls() {
-    SmartDashboard.putNumber("Drivetrain Position", this.getPositionRightLead());
+    SmartDashboard.putNumber("Drivetrain Right", this.getPositionRightLead());
 
   }
 
@@ -186,6 +189,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public CANSparkMax getRightMotor() {
     return rightLead;
+  }
+
+  public double getPosition(){
+   return (getPositionLeftLead() + getPositionRightLead()) / 2;
   }
 
   public double getPositionLeftLead() {
@@ -216,6 +223,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Pose2d getPose() {
+    SmartDashboard.putNumber("Pose X", m_odometry.getPoseMeters().getX() );
+    SmartDashboard.putNumber("Pose Y", m_odometry.getPoseMeters().getY() );
+    
     return m_odometry.getPoseMeters();
   }
 
@@ -239,6 +249,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // m_odometry.resetPosition( Rotation2d.fromDegrees(gyro.getAngle()),
     // realEncoderLeftRep.getDistance(), realEncoderRightRep.getDistance(), pose);
   }
+
+  // public void setScale(){
+  //   m_odometry.getPoseMeters().times(2);
+  // }
 
   public void updateOdometry() {
     if (RobotBase.isSimulation()) {

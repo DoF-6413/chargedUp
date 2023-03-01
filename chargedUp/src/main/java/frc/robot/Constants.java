@@ -29,7 +29,9 @@ public final class Constants {
     
     // todo: update equation
     public static final int kWheelDiameter = 6;
-    public static final double kTicksToFeat = 1.0 / 42. * kWheelDiameter * 6.11 * Math.PI / 12.;;
+    public static final double kTicksToMeters = 1.0 / 42. * kWheelDiameter * 6.11 * Math.PI / 39.3701;
+    public static final double kTicksToFeet = 1.0 / 42. * kWheelDiameter * 6.11 * Math.PI / 12;
+    // public static final double kFeatToMeters = kTicksToFeat * 3;
     public static final double kStopMotors = 0;
 
     //PID Controlls for Forawrds and Backwards
