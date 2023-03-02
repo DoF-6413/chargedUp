@@ -12,9 +12,10 @@ import frc.robot.subsystems.VisionSubsystem;
 
 
 public class drivetotag extends CommandBase {
+  /** Creates a new drivetotag.
+   * This command moves to various set points depending on which fiducial it sees
+   */
 
-
-  /** Creates a new drivetotag. */
   Double m_setpoint;
   int m_fiducialId;
 private final DrivetrainSubsystem m_DrivetrainSubsystem;
@@ -38,14 +39,11 @@ public void initialize() {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("execute X", m_VisionSubsystem.distanceFinder().getX());
-    SmartDashboard.putNumber("set point", m_setpoint);
+    SmartDashboard.putNumber("drive to tag setpoint", m_setpoint);
    if (m_VisionSubsystem.distanceFinder().getX() > m_setpoint){
     m_DrivetrainSubsystem.setRaw(-.5, 0);
-    SmartDashboard.putNumber("we hit step:", 1);
    }if(m_VisionSubsystem.distanceFinder().getX() < m_setpoint){
     m_DrivetrainSubsystem.setRaw(0, 0);
-    SmartDashboard.putNumber("we hit step:", 2); 
   }
   }
 
