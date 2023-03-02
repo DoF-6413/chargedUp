@@ -15,13 +15,16 @@ public class ledsSubsystem extends SubsystemBase {
   }
 
   public void setLeds(double somevalue){
-    pwm.setSpeed(somevalue);   
+    pwm.setSpeed(somevalue);  
   }
-
-
+  public void NeedACone(){
+    pwm.setSpeed(0.69);   
+  }
+  public void NeedACube(){
+    pwm.setSpeed(0.91);
+  }
   public void setLedsOff(){
-    System.out.println("setLedsoff runnning");
-    pwm.setSpeed(00);    
+    pwm.setSpeed(1);    
   }
 
   @Override

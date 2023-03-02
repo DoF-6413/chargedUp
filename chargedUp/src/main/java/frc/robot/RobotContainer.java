@@ -105,9 +105,14 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
+   // m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
 
     m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLedsOff()));
+
+    m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));
+    
+   m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACone()));
+
   }
 
 public static double getLeftJoystickY(){
