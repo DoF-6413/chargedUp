@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.DrivetrainConstants.DriveMotor;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -62,18 +63,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public DrivetrainSubsystem() {
 
-    leftLead = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[3], MotorType.kBrushless);
-    rightLead = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[0], MotorType.kBrushless);
+    leftLead = new SparkMaxWrapper(DriveMotor.leftLead.CAN_ID, MotorType.kBrushless);
+    rightLead = new SparkMaxWrapper(DriveMotor.rightLead.CAN_ID, MotorType.kBrushless);
 
     leftLead.setInverted(DrivetrainConstants.kLeftInverted);
     rightLead.setInverted(DrivetrainConstants.kRightInverted);
 
-    leftFollower1 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[4], MotorType.kBrushless);
-    rightFollower1 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[1], MotorType.kBrushless);
+    leftFollower1 = new SparkMaxWrapper(DriveMotor.leftFollower1.CAN_ID, MotorType.kBrushless);
+    rightFollower1 = new SparkMaxWrapper(DriveMotor.rightFollower1.CAN_ID, MotorType.kBrushless);
 
     // Todo: Remove when moving to four motors
-    leftFollower2 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[5], MotorType.kBrushless);
-    rightFollower2 = new SparkMaxWrapper(DrivetrainConstants.kDrivetrainCANIDs[2], MotorType.kBrushless);
+    leftFollower2 = new SparkMaxWrapper(DriveMotor.leftFollower2.CAN_ID, MotorType.kBrushless);
+    rightFollower2 = new SparkMaxWrapper(DriveMotor.rightFollower2.CAN_ID, MotorType.kBrushless);
 
     // Todo: Remove rightFollower2 and leftFollower2 when moving to four motors
     Arrays.asList(leftLead, leftFollower1, leftFollower2, rightLead, rightFollower1, rightFollower2)
