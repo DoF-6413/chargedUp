@@ -31,13 +31,9 @@ public class colorSensor extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
-    // This method will be called once per scheduler run
-    
-    
     Color detectedColor = m_colorSensorV3.getColor();
 
-    String colorString; 
+    String colorString; //DO NOT DELETE, this is used in lines 40 and 43
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kpurple){
