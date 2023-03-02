@@ -15,6 +15,7 @@ import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -51,6 +52,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   
   // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
