@@ -16,35 +16,28 @@ public class TrajectoryRunner extends CommandBase {
   private DrivetrainSubsystem m_drivetrainSubsystem;
   private Timer m_timer;
   private Trajectory m_trajectory;
+  private Boolean m_isFirstPath;
   private final RamseteController m_ramseteController = new RamseteController();
   
-  public TrajectoryRunner(DrivetrainSubsystem drive, Trajectory traj) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public TrajectoryRunner(DrivetrainSubsystem drive, Trajectory traj, Boolean isfirstPath) {
+    /*Trajectory runner takes a drive subsystem and a trajectory, and a boolean to make the robot follow a certain path. 
+    If the boolean is set to true, we reset odometry*/
     m_drivetrainSubsystem = drive;
     m_trajectory = traj;
+    m_isFirstPath = isfirstPath;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // DrivetrainSubsystem.m_field2d.setRobotPose(m_trajectory.getInitialPose());
+
+    if(m_isFirstPath == true){
     m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
-    
-    
-     // if(RobotBase.isSimulation()){
-    //   RobotContainer.getDrive().setRobotFromFieldPose();
-    // }
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
+    }
     
     m_timer = new Timer();
     m_timer.start();
 
-    // Reset the drivetrain's odometry to the starting pose of the trajectory. thisd should only happen if it is the first autonomus routine ran
-    // RobotContainer.m_drivetrainSubsystem.resetOdometry(m_Trajectory.getInitialPose());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,8 +55,6 @@ public class TrajectoryRunner extends CommandBase {
       var refChassisSpeeds = m_ramseteController.calculate(m_drivetrainSubsystem.getPose(), desiredPose);
       // Set the linear and angular speeds.
 
-      // m_drivetrainSubsystem.setRaw(5, 0);
-      // System.out.println("red chassis speed " + refChassisSpeeds);
       m_drivetrainSubsystem.setRaw(refChassisSpeeds.vxMetersPerSecond, refChassisSpeeds.omegaRadiansPerSecond);
     
   }
@@ -71,7 +62,7 @@ public class TrajectoryRunner extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // m_drivetrainSubsystem.setRaw(0, 0);
+    m_drivetrainSubsystem.setRaw(0, 0);
   }
 
   // Returns true when the command should end.
