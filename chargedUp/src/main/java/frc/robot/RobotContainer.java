@@ -105,9 +105,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value).onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
+    m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
 
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value).onTrue(new InstantCommand( () -> m_LedsSubsystem.setLedsOff()));
+    m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLedsOff()));
   }
 
 public static double getLeftJoystickY(){
