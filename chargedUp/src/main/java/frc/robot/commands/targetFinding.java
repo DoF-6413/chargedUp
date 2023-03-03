@@ -14,6 +14,7 @@ public class targetFinding extends CommandBase {
   private VisionSubsystem m_visionSubsystem;
 
   public targetFinding(DrivetrainSubsystem drive, VisionSubsystem vision) {
+    /* Robot stops moving when it moves 5 meters or when the fidutial tag is Huge. */
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrainSubsystem = drive;
     m_visionSubsystem = vision;
@@ -45,8 +46,6 @@ public class targetFinding extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    // replace when enabled
-    // return m_drivetrainSubsystem.getPosition() > 5000;
+    return m_drivetrainSubsystem.getPosition() > 5 ||(m_visionSubsystem.isHuge() == true) ;
   }
 }
