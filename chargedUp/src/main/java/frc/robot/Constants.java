@@ -43,14 +43,11 @@ public final class Constants {
           CAN_ID = value;
         }
       }
-    
-    public static final int[] kDrivetrainCANIDs = new int[] { 1, 2, 3, 10, 11, 12 };
 
     public static final boolean kRightInverted = true;
     public static final boolean kLeftInverted = false;
 
-    public static final double kStopMotors = 0;
-
+    
     // PID Controlls for Forawrds and Backwards
     public static final double kMoveP = 25;
     public static final double kMoveI = 0;
@@ -66,12 +63,12 @@ public final class Constants {
     // Kinematics
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(21.5);
-
+    
     // Distance between front and back wheels on robot
     public static final double WHEEL_BASE = Units.inchesToMeters(25);
 
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
-
+    
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(kMoveI, kMoveD, WHEEL_BASE);
     // Convert to wheel speeds
     DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
@@ -88,25 +85,26 @@ public final class Constants {
     public static final double kMOI = 4;
     // Final Mass of Robot including Bumbers and Batteries
     public static final double kMass = 135;
-
+    
     public static final double kwheelRadiusMeters = 3 * 0.0254;
     public static final int kWheelDiameter = 6;
-
+    
     public static final int neoEncoderTicks = 42;
     public static final double kTicksToMetersConversionFactor = 39.3701;
     public static final double kTicksToFeetConversionFactor = 12;
     public static final double kTicksToMeters = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-        / kTicksToMetersConversionFactor;
+    / kTicksToMetersConversionFactor;
     public static final double kTicksToFeet = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-        / kTicksToFeetConversionFactor;
-
-
-
+    / kTicksToFeetConversionFactor;
+    
+    
+    
     public static double loopPeriodSecs = 0.020;
-
-
+    
+    
+    public static final double kStopMotors = 0;
   }
-
+  
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] { 0, 1.5, 3, 4 };
   }
