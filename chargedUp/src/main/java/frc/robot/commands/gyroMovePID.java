@@ -5,17 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
 
-public class gyroBalanceChargeStation extends CommandBase {
-  private DrivetrainSubsystem Drive;
-  private GyroSubsystem Gyro;
-  /** Creates a new balanceChargeStation. */
-  public gyroBalanceChargeStation(GyroSubsystem gyroSubsystem, DrivetrainSubsystem drivetrainSubsystem) {
+public class gyroMovePID extends CommandBase {
+  /** Creates a new gyroMovePID. */
+  public gyroMovePID() {
     // Use addRequirements() here to declare subsystem dependencies.
-    Drive = drivetrainSubsystem;
-    Gyro = gyroSubsystem;
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +18,7 @@ public class gyroBalanceChargeStation extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    if(Gyro.getPitch() > 0){
-      Drive.setRaw(-0.1, 0);
-    } else if (Gyro.getPitch() < 0){
-      Drive.setRaw(0.1, 0);
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

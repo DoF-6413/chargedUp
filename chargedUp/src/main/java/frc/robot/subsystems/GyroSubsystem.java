@@ -29,6 +29,14 @@ public class GyroSubsystem extends SubsystemBase {
     m_gyro.zeroYaw();
   }
 
+  public double getPitch(){
+    return m_gyro.getPitch();
+  }
+
+  public double getRoll(){
+    return m_gyro.getRoll();
+  }
+
   public Rotation2d getRotation2d(){
   return  m_gyro.getRotation2d() != null ? m_gyro.getRotation2d() : null ;
   }
