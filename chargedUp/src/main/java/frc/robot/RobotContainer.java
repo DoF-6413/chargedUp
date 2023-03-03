@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 
+
 import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
@@ -76,6 +77,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
+  
   public RobotContainer() {
     // Configure the trigger bindings
 
@@ -84,10 +86,12 @@ public class RobotContainer {
     m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    // m_chooser.addOption("Move Forward", m_moveForward);
-      SmartDashboard.putData(m_chooser);
+    // m_chooser.addOption("Move Forward", m_moveForward);`
     configureBindings();
-      
+    
+    
+ 
+    
   }
 
   public void drivetrainDefaultCommand(){
@@ -107,14 +111,15 @@ public class RobotContainer {
 
    // m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
 
-    m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLedsOff()));
+    m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.SetLedsOff()));//off LED's
 
-    m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));
+    m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));//violet
     
-   m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACone()));
+   m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACone()));//yellow
+
+      
 
   }
-
 public static double getLeftJoystickY(){
   return m_driverController.getLeftY();
 }
@@ -127,6 +132,7 @@ public static double getRightJoystickX(){
 
 public static DrivetrainSubsystem getDrive(){
   return m_drivetrainSubsystem;
+  
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -134,8 +140,26 @@ public static DrivetrainSubsystem getDrive(){
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    
+    // An example command will be run in autonomous 
+
+
+
+    if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
+      m_LedsSubsystem.LEDPrimerPatron();//red
+    }
+      else if ( m_chooser.getSelected() == newishPath){
+      m_LedsSubsystem.LEDNewishPath();
+    }
+    else if ( m_chooser.getSelected() == getOntoChargingStation){
+    m_LedsSubsystem.LEDGetOntoChargingStation();
+    }
+    else if ( m_chooser.getSelected() == m_Trajectory){
+      m_LedsSubsystem.LEDGetOntoChargingStation();
+    } 
+
+
+
+
     return m_chooser.getSelected();
   }
 }

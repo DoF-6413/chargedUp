@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.PWM;
 
 public class ledsSubsystem extends SubsystemBase {
@@ -18,20 +21,33 @@ public class ledsSubsystem extends SubsystemBase {
     pwm.setSpeed(somevalue);  
   }
   public void NeedACone(){
-    pwm.setSpeed(0.69);   
+    
+    pwm.setSpeed(0.69); //yellow  
   }
+
   public void NeedACube(){
-    pwm.setSpeed(0.91);
+    pwm.setSpeed(0.91); //violet
   }
-  public void setLedsOff(){
-    pwm.setSpeed(1);    
+  public void SetLedsOff(){
+    pwm.setSpeed(1);    //off leds
   }
+  public void LEDPrimerPatron(){
+    pwm.setSpeed(0.61); //red
+  }
+  public void LEDNewishPath(){
+    pwm.setSpeed(0.87);
+  }
+  public void LEDGetOntoChargingStation(){
+    pwm.setSpeed(0.73);
+  }
+
 
   @Override
   public void periodic() {
 
     }
-   
+
+
     // This method will be called once per scheduler run
   }
 
