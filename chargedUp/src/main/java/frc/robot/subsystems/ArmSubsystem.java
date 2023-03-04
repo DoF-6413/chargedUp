@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
 private final CANSparkMax m_leftRotationMotor;
@@ -113,5 +111,19 @@ private final TalonFX m_telescopingMotor;
 
   public void stopTelescopingMotor(){
     m_telescopingMotor.set(TalonFXControlMode.PercentOutput, 0);
+  }
+
+  public void telescoperCurrentLimit(double continuousCurrent, double maxCurrent){
+        StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
+          true, //Is enabled?
+          continuousCurrent, //Continuous Current Limit
+          maxCurrent, //Peak Current Limit
+          5.0); //Time Allowed to be at Peak Current Limit
+
+          m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
+  }
+
+  public double telecoperCurrent(){
+    return m_telescopingMotor.getStatorCurrent();
   }
 }
