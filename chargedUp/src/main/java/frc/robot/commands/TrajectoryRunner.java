@@ -18,6 +18,8 @@ public class TrajectoryRunner extends CommandBase {
   private Trajectory m_trajectory;
   private Boolean m_isFirstPath;
   private final RamseteController m_ramseteController = new RamseteController();
+
+
   
   public TrajectoryRunner(DrivetrainSubsystem drive, Trajectory traj, Boolean isfirstPath) {
     /*Trajectory runner takes a drive subsystem and a trajectory, and a boolean to make the robot follow a certain path. 

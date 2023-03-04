@@ -87,6 +87,7 @@ public class RobotContainer {
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
     // m_chooser.addOption("Move Forward", m_moveForward);`
+    SmartDashboard.putData(m_chooser);
     configureBindings();
     
     
@@ -144,18 +145,34 @@ public static DrivetrainSubsystem getDrive(){
 
 
 
-    if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-      m_LedsSubsystem.LEDPrimerPatron();//red
-    }
-      else if ( m_chooser.getSelected() == newishPath){
-      m_LedsSubsystem.LEDNewishPath();
-    }
-    else if ( m_chooser.getSelected() == getOntoChargingStation){
-    m_LedsSubsystem.LEDGetOntoChargingStation();
-    }
-    else if ( m_chooser.getSelected() == m_Trajectory){
-      m_LedsSubsystem.LEDGetOntoChargingStation();
-    } 
+    // if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
+    //   m_LedsSubsystem.LEDPrimerPatron();//red
+    // }
+    //   else if ( m_chooser.getSelected() == newishPath){
+    //   m_LedsSubsystem.LEDNewishPath();
+    // }
+    // else if ( m_chooser.getSelected() == getOntoChargingStation){
+    // m_LedsSubsystem.LEDGetOntoChargingStation();
+    // }
+    // else if ( m_chooser.getSelected() == m_Trajectory){
+    //   m_LedsSubsystem.LEDGetOntoChargingStation();
+    // } 
+    
+    System.out.println(firstPath);
+  if ( m_chooser.getSelected() == firstPath){
+    m_LedsSubsystem.LEDPrimerPatron();//red
+  }
+    else if ( m_chooser.getSelected() == newishPath){
+    m_LedsSubsystem.LEDNewishPath();
+  }
+  else if ( m_chooser.getSelected() == getAutonomousCommand()){
+  m_LedsSubsystem.LEDGetOntoChargingStation();
+  }
+  else if ( m_chooser.getSelected() == m_Trajectory){
+    m_LedsSubsystem.LEDPatronNormal();
+  } 
+
+
 
 
 

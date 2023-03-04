@@ -16,31 +16,48 @@ public class ledsSubsystem extends SubsystemBase {
   public ledsSubsystem() {
     pwm = new PWM(1);
   }
+  
+  public void setmode(double mode){
+    pwm.setSpeed(mode);  
+  }
 
-  public void setLeds(double somevalue){
-    pwm.setSpeed(somevalue);  
+  public static enum BlinkLEDMode{
+    SOLID_RED(0.61),
+    SOLID_YELLOW(0.69),
+    SOLID_LIME(0.73),
+    SOLID_BLUE(0.87),
+    SOLID_VIOLET(0.91),
+    SOLID_WHITE(0.93),
+    SOLID_BLACK(0.99);
+    private final double value;
+
+    BlinkLEDMode (double value){
+    this.value=value;
+    }
   }
   public void NeedACone(){
     
-    pwm.setSpeed(0.69); //yellow  
+    setmode(BlinkLEDMode.SOLID_YELLOW.value); //yellow  
   }
 
   public void NeedACube(){
-    pwm.setSpeed(0.91); //violet
+    setmode(BlinkLEDMode.SOLID_VIOLET.value);//violet
   }
   public void SetLedsOff(){
-    pwm.setSpeed(1);    //off leds
+    setmode(BlinkLEDMode.SOLID_BLACK.value);    //off leds
   }
   public void LEDPrimerPatron(){
-    pwm.setSpeed(0.61); //red
+    setmode(BlinkLEDMode.SOLID_RED.value); //red
   }
   public void LEDNewishPath(){
-    pwm.setSpeed(0.87);
+    setmode(BlinkLEDMode.SOLID_BLUE.value);//blue
   }
   public void LEDGetOntoChargingStation(){
-    pwm.setSpeed(0.73);
+    setmode(BlinkLEDMode.SOLID_LIME.value);//green
   }
-
+  public void LEDPatronNormal(){
+    setmode(BlinkLEDMode.SOLID_WHITE.value);//white
+  }
 
   @Override
   public void periodic() {
