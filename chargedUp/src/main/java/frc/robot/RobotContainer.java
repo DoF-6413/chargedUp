@@ -71,15 +71,16 @@ public class RobotContainer {
   
   public RobotContainer() {
     // Configure the trigger bindings
-
     
     m_chooser.setDefaultOption("Example_Trajectory", (new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, m_Trajectory, true)).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPatronNormal())));
     m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPrimerPatron())));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDNewishPath())));
     m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDGetOntoChargingStation())));
-   
+    
+    
+    SmartDashboard.putData("m_chooser", m_chooser);
+  
     // m_chooser.addOption("Move Forward", m_moveForward);`
-    SmartDashboard.putData(m_chooser);
     configureBindings();
 
     
@@ -100,7 +101,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     
-    SmartDashboard.putString("SelectedChooser", m_chooser.getSelected().getName());
+    // SmartDashboard.putString("SelectedChooser", m_chooser.getSelected().getName());
    // m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
 
    m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.SetLedsOff()));//off LED's
@@ -108,21 +109,6 @@ public class RobotContainer {
    m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));//violet
    
    m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACone()));//yellow
-   
-  //  if (m_chooser.getSelected().getName() == "TrajectoryRunner"){
-  //      m_LedsSubsystem.LEDPatronNormal();//white
-  //    }
-  //    else if (m_chooser.getSelected().getName() == "First Path"){
-  //     m_LedsSubsystem.LEDPrimerPatron();//red
-  //    }
-  //   else if ( m_chooser.getSelected().getName() == "Newish Path"){
-  //      m_LedsSubsystem.LEDNewishPath();//blue
-  //   }
-  //   else if (m_chooser.getSelected().getName() == "Get Onto Charging Station"){
-  //     m_LedsSubsystem.LEDGetOntoChargingStation(); //green
-  //   }
-
-
     
   }
 public static double getLeftJoystickY(){
@@ -145,45 +131,7 @@ public static DrivetrainSubsystem getDrive(){
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous 
-
-
-
-    // if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-    //   m_LedsSubsystem.LEDPrimerPatron();//red
-    // }
-    //   else if ( m_chooser.getSelected() == newishPath){
-    //   m_LedsSubsystem.LEDNewishPath();
-    // }
-    // else if ( m_chooser.getSelected() == getOntoChargingStation){
-    // m_LedsSubsystem.LEDGetOntoChargingStation();
-    // }
-    // else if ( m_chooser.getSelected() == m_Trajectory){
-    //   m_LedsSubsystem.LEDGetOntoChargingStation();
-    // } 
- 
-  
-
-
-
-    
-  // if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-  //   m_LedsSubsystem.LEDPrimerPatron();//red
-  // }
-  // else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-  //   m_LedsSubsystem.LEDNewishPath();//blue
-  // }
-  // else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-  // m_LedsSubsystem.LEDGetOntoChargingStation();//green
-  // }
-  // else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem,  m_Trajectory.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-  //   m_LedsSubsystem.LEDPatronNormal();//white
-  // } 
-  //  }
-  //else{m_LedsSubsystem.LEDPatronNormal();
-      
-
-  
+    // An example command will be run in autonomous
 
       return m_chooser.getSelected();
   }
