@@ -113,7 +113,19 @@ public final class Constants {
   }
 
   public static class ArmConstants { 
-  public static final int[] armCANIDs = new int[] {13, 14, 15, 0, 0};
+    public enum ArmMotor {
+      leftRotationMotor(8),
+      rightRotationMotor(9),
+      telescopingMotor(15),
+      endEffectorMotor(16);
+
+      public final int CAN_ID;
+
+      ArmMotor(int value) {
+        CAN_ID = value;
+      }
+    }
+
   public static final double kArmPositionConversion = 0;
 
     // Arm PID Values (Tune PID Before Feedforward)

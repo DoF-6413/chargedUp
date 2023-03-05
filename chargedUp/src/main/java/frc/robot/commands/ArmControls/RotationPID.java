@@ -34,7 +34,7 @@ public class RotationPID extends ProfiledPIDCommand {
         () -> targetPosition,
         // This uses the output
         (output, setpoint) -> {
-          arm.spinRotationMotors(output/18);
+          arm.spinRotationMotors(output);
           // Use the output (and setpoint, if desired) here
         });
     // Use addRequirements() here to declare subsystem dependencies.

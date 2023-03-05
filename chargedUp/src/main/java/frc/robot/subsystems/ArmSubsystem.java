@@ -14,6 +14,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ArmConstants.ArmMotor;
 
 public class ArmSubsystem extends SubsystemBase {
 private final CANSparkMax m_leftRotationMotor;
@@ -30,18 +31,19 @@ private final TalonFX m_telescopingMotor;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
-    m_leftRotationMotor = new CANSparkMax(8, MotorType.kBrushless);
-    m_rightRotationMotor = new CANSparkMax(9, MotorType.kBrushless);
+    m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
+    m_rightRotationMotor = new CANSparkMax(ArmMotor.rightRotationMotor.CAN_ID, MotorType.kBrushless);
     m_rightRotationMotor.follow(m_leftRotationMotor);
     m_RotationEncoder = m_leftRotationMotor.getEncoder();
+    m_RotationEncoder.setPositionConversionFactor(getEndEffectorPosition());
     
     // m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_rightRotationMotor.follow(m_leftRotationMotor);
     
-    m_endEffectorMotor = new TalonFX(16);
+    m_endEffectorMotor = new TalonFX(ArmMotor.endEffectorMotor.CAN_ID);
     m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
     
-    m_telescopingMotor = new TalonFX(15);
+    m_telescopingMotor = new TalonFX(ArmMotor.telescopingMotor.CAN_ID);
 
     // DigitalInput toplimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[0]);
     // DigitalInput bottomlimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[1]);
