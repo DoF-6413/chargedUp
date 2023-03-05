@@ -4,25 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.commands.*;
-import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ledsSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.colorSensor;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
-
-import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
-
-
 import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
@@ -36,9 +17,19 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.TrajectoryRunner;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.colorSensor;
+import frc.robot.subsystems.ledsSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,7 +48,7 @@ public class RobotContainer {
 
   
   // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
-  PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(2, 0.8));
+  public static PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
   
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
@@ -82,14 +73,16 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     
-    m_chooser.setDefaultOption("Example Trajectory", new TrajectoryRunner(m_drivetrainSubsystem,  m_Trajectory, true));
-    m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.setDefaultOption("Example_Trajectory", (new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, m_Trajectory, true)).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPatronNormal())));
+    m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPrimerPatron())));
+    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDNewishPath())));
+    m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDGetOntoChargingStation())));
    
     // m_chooser.addOption("Move Forward", m_moveForward);`
     SmartDashboard.putData(m_chooser);
     configureBindings();
+
+    
   }
 
   public void drivetrainDefaultCommand(){
@@ -106,17 +99,31 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    
+    SmartDashboard.putString("SelectedChooser", m_chooser.getSelected().getName());
    // m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
 
-    m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.SetLedsOff()));//off LED's
-
-    m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));//violet
-    
+   m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.SetLedsOff()));//off LED's
+   
+   m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));//violet
+   
    m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACone()));//yellow
+   
+  //  if (m_chooser.getSelected().getName() == "TrajectoryRunner"){
+  //      m_LedsSubsystem.LEDPatronNormal();//white
+  //    }
+  //    else if (m_chooser.getSelected().getName() == "First Path"){
+  //     m_LedsSubsystem.LEDPrimerPatron();//red
+  //    }
+  //   else if ( m_chooser.getSelected().getName() == "Newish Path"){
+  //      m_LedsSubsystem.LEDNewishPath();//blue
+  //   }
+  //   else if (m_chooser.getSelected().getName() == "Get Onto Charging Station"){
+  //     m_LedsSubsystem.LEDGetOntoChargingStation(); //green
+  //   }
 
-      
 
+    
   }
 public static double getLeftJoystickY(){
   return m_driverController.getLeftY();
@@ -154,28 +161,31 @@ public static DrivetrainSubsystem getDrive(){
     // else if ( m_chooser.getSelected() == m_Trajectory){
     //   m_LedsSubsystem.LEDGetOntoChargingStation();
     // } 
-    System.out.println(m_chooser.getSelected());
+ 
+  
+
+
+
     
-  if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-    m_LedsSubsystem.LEDPrimerPatron();//red
-  }
-  else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-    m_LedsSubsystem.LEDNewishPath();//blue
-  }
-  else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-  m_LedsSubsystem.LEDGetOntoChargingStation();//green
-  }
-  else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem,  m_Trajectory.relativeTo(m_drivetrainSubsystem.getPose()), true)){
-    m_LedsSubsystem.LEDPatronNormal();//white
-  } 
-  else if (m_chooser.getSelected() == null){
-    m_LedsSubsystem.LEDPatronNormal();
-  }
-  else{m_LedsSubsystem.LEDPatronNormal();
-    // System.out.println(m_chooser.getSelected());
-System.out.println("estoy haciendo algo");}
+  // if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
+  //   m_LedsSubsystem.LEDPrimerPatron();//red
+  // }
+  // else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true)){
+  //   m_LedsSubsystem.LEDNewishPath();//blue
+  // }
+  // else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true)){
+  // m_LedsSubsystem.LEDGetOntoChargingStation();//green
+  // }
+  // else if ( m_chooser.getSelected() == new TrajectoryRunner(m_drivetrainSubsystem,  m_Trajectory.relativeTo(m_drivetrainSubsystem.getPose()), true)){
+  //   m_LedsSubsystem.LEDPatronNormal();//white
+  // } 
+  //  }
+  //else{m_LedsSubsystem.LEDPatronNormal();
+      
+
   
 
       return m_chooser.getSelected();
   }
+
 }

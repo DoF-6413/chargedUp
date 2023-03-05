@@ -4,12 +4,16 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ledsSubsystem;
 
 public class TrajectoryRunner extends CommandBase {
   /** Creates a new TrajectoryRunner. */
@@ -18,30 +22,34 @@ public class TrajectoryRunner extends CommandBase {
   private Trajectory m_trajectory;
   private Boolean m_isFirstPath;
   private final RamseteController m_ramseteController = new RamseteController();
+  private ledsSubsystem m_ledSubsystem;
 
 
   
-  public TrajectoryRunner(DrivetrainSubsystem drive, Trajectory traj, Boolean isfirstPath) {
+  public TrajectoryRunner(DrivetrainSubsystem drive, ledsSubsystem LED, Trajectory traj, Boolean isfirstPath) {
     /*Trajectory runner takes a drive subsystem and a trajectory, and a boolean to make the robot follow a certain path. 
     If the boolean is set to true, we reset odometry*/
     m_drivetrainSubsystem = drive;
+    m_ledSubsystem = LED;
     m_trajectory = traj;
     m_isFirstPath = isfirstPath;
-  }
 
+    
+  }
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
 
     if(m_isFirstPath == true){
-    m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
+      m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
     }
     
     m_timer = new Timer();
     m_timer.start();
-
+    
   }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -58,7 +66,7 @@ public class TrajectoryRunner extends CommandBase {
       // Set the linear and angular speeds.
 
       m_drivetrainSubsystem.setRaw(refChassisSpeeds.vxMetersPerSecond, refChassisSpeeds.omegaRadiansPerSecond);
-    
+
   }
 
   // Called once the command ends or is interrupted.
