@@ -30,6 +30,7 @@ public class TelescoperReset extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_armSubsystem.spinTelescopingMotor(0);
     m_armSubsystem.resetTelescoperPosition();
     m_armSubsystem.telescoperCurrentLimit(30, 60);
   }
