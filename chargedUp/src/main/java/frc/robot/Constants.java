@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -126,7 +125,7 @@ public final class Constants {
       }
     }
 
-  public static final double kArmPositionConversion = 0;
+  // public static final double kArmPositionConversion = degrees/360 * *2048;
 
     // Arm PID Values (Tune PID Before Feedforward)
     public static final double kArmP = 0.5;
