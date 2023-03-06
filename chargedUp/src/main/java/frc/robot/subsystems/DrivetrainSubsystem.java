@@ -63,14 +63,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   public DrivetrainSubsystem() {
     
-    leftLead = new SparkMaxWrapper(DriveMotor.leftLead.CAN_ID, MotorType.kBrushless);
-    rightLead = new SparkMaxWrapper(DriveMotor.rightLead.CAN_ID, MotorType.kBrushless);
+    leftLead = new SparkMaxWrapper(4, MotorType.kBrushless);
+    rightLead = new SparkMaxWrapper(2, MotorType.kBrushless);
 
     leftLead.setInverted(DrivetrainConstants.kLeftInverted);
     rightLead.setInverted(DrivetrainConstants.kRightInverted);
 
-    leftFollower1 = new SparkMaxWrapper(DriveMotor.leftFollower1.CAN_ID, MotorType.kBrushless);
-    rightFollower1 = new SparkMaxWrapper(DriveMotor.rightFollower1.CAN_ID, MotorType.kBrushless);
+    leftFollower1 = new SparkMaxWrapper(5, MotorType.kBrushless);
+    rightFollower1 = new SparkMaxWrapper(3, MotorType.kBrushless);
 
     Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
         .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
