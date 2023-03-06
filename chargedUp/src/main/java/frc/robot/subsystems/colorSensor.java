@@ -4,37 +4,36 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ColorSensorV3.RawColor;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorMatch;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class colorSensor extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3 (i2cPort);
-
+  
   private final ColorMatch m_colorMatcher = new ColorMatch();
-
-  private final Color kpurple = new Color(0.2502, 0.2502, 0.5002);
-  private final Color kyellow = new Color(0.5315, 0.4438, 0.02515);
+  
+  public final Color kpurple = new Color(0.2502, 0.2502, 0.5002);
+  public final Color kyellow = new Color(0.5315, 0.4438, 0.02515);
+  ColorMatchResult match; 
   /** Creates a new colorSensor. */
   public colorSensor() {
     m_colorMatcher.addColorMatch(kpurple);
     m_colorMatcher.addColorMatch(kyellow);
+    
   }
 
   @Override
   public void periodic() {
     Color detectedColor = m_colorSensorV3.getColor();
-
+    m_colorMatcher.matchClosestColor(detectedColor);
     String colorString; //DO NOT DELETE, this is used in lines 40 and 43
-    ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kpurple){
       colorString = "cube";
@@ -58,5 +57,12 @@ public class colorSensor extends SubsystemBase {
 
     SmartDashboard.putNumber("Proximity", proximity);
 
+
+
   }
+
+public Color getColor() {
+      return match.color;
+    
+}
 }

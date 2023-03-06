@@ -117,15 +117,13 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
 
-        //This runs rotation motors to 77.5 degrees
-        m_auxController.y().
-        onTrue(new RotationPID(m_armSubsystem, 77.5));
-        
-        //This runs rotation motors to -77.5 degrees
-        m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
+        m_auxController.leftTrigger().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(.5)))
+        .onFalse(new InstantCommand(()-> {if (m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple){
+          m_armSubsystem.spinEndEffector(.07);
+         } else if (m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kyellow){
+          m_armSubsystem.spinEndEffector(0);}}));
 
-        //This resets the encoder value of the arm where it is currently located
-        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
   
   /**
