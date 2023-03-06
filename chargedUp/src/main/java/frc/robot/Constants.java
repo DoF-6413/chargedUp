@@ -30,12 +30,10 @@ public final class Constants {
   public static class DrivetrainConstants {
       // Todo: Remove rightFollower2 and leftFollower2 when moving to four motors
       public enum DriveMotor{
-        leftLead(10),
-        leftFollower1(11),
-        leftFollower2(12),
-        rightLead(1),
-        rightFollower1(2),
-        rightFollower2(3);
+        leftLead(4),
+        leftFollower1(5),
+        rightLead(2),
+        rightFollower1(3);
 
         public final int CAN_ID;
 

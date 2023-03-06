@@ -31,7 +31,6 @@ public class VisionSubsystem extends SubsystemBase {
   public Double yaw;
   public Double pitch;
   public Transform3d camToTarget;
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
