@@ -14,6 +14,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.ArmMotor;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -34,10 +35,11 @@ private final TalonFX m_telescopingMotor;
     m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
     m_rightRotationMotor = new CANSparkMax(ArmMotor.rightRotationMotor.CAN_ID, MotorType.kBrushless);
     m_rightRotationMotor.follow(m_leftRotationMotor);
-    m_RotationEncoder = m_leftRotationMotor.getEncoder();
-    m_RotationEncoder.setPositionConversionFactor(getEndEffectorPosition());
+    m_leftRotationMotor.setSmartCurrentLimit(10);
     
-    // m_RotationEncoder = m_leftRotationMotor.getEncoder();
+    m_RotationEncoder = m_leftRotationMotor.getEncoder();
+    m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
+    
     m_rightRotationMotor.follow(m_leftRotationMotor);
     
     m_endEffectorMotor = new TalonFX(ArmMotor.endEffectorMotor.CAN_ID);
