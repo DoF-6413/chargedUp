@@ -39,8 +39,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static CANSparkMax rightLead;
   private static CANSparkMax leftFollower1;
   private static CANSparkMax rightFollower1;
-  private static CANSparkMax leftFollower2;
-  private static CANSparkMax rightFollower2;
   
   private static RelativeEncoder encoderLeftLead;
   private static RelativeEncoder encoderRightLead;
@@ -74,20 +72,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFollower1 = new SparkMaxWrapper(DriveMotor.leftFollower1.CAN_ID, MotorType.kBrushless);
     rightFollower1 = new SparkMaxWrapper(DriveMotor.rightFollower1.CAN_ID, MotorType.kBrushless);
 
-    // Todo: Remove when moving to four motors
-    leftFollower2 = new SparkMaxWrapper(DriveMotor.leftFollower2.CAN_ID, MotorType.kBrushless);
-    rightFollower2 = new SparkMaxWrapper(DriveMotor.rightFollower2.CAN_ID, MotorType.kBrushless);
-
-    // Todo: Remove rightFollower2 and leftFollower2 when moving to four motors
-    Arrays.asList(leftLead, leftFollower1, leftFollower2, rightLead, rightFollower1, rightFollower2)
+    Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
         .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
 
     leftFollower1.follow(leftLead);
     rightFollower1.follow(rightLead);
-
-    // Todo: Remove when moving to four motors
-    rightFollower2.follow(rightLead);
-    leftFollower2.follow(leftLead);
 
     encoderLeftLead = leftLead.getEncoder();
     encoderRightLead = rightLead.getEncoder();
@@ -117,7 +106,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (RobotBase.isSimulation()) {
       m_drivetrainSimulator = new DifferentialDrivetrainSim(
           // todo: change numMotors -> 2 and update the rest of the values for new robot
-          DCMotor.getNEO(3),
+          DCMotor.getNEO(2),
           DrivetrainConstants.kgearing,
           3,
           DrivetrainConstants.kMass,
