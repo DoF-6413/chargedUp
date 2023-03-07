@@ -37,7 +37,9 @@ private final TalonFX m_telescopingMotor;
     m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
     m_rightRotationMotor = new CANSparkMax(ArmMotor.rightRotationMotor.CAN_ID, MotorType.kBrushless);
     m_rightRotationMotor.follow(m_leftRotationMotor);
-    m_leftRotationMotor.setSmartCurrentLimit(10);
+    m_leftRotationMotor.setIdleMode(IdleMode.kBrake);
+    m_rightRotationMotor.setIdleMode(IdleMode.kBrake);
+    m_leftRotationMotor.setSmartCurrentLimit(15);
     
     m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
@@ -48,6 +50,15 @@ private final TalonFX m_telescopingMotor;
     m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
     
     m_telescopingMotor = new TalonFX(ArmMotor.telescopingMotor.CAN_ID);
+    m_telescopingMotor.setNeutralMode(NeutralMode.Brake);
+
+    StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
+          true, //Is enabled?
+          15, //Continuous Current Limit
+          20, //Peak Current Limit
+          5.0); //Time Allowed to be at Peak Current Limit
+
+          m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
 
     // DigitalInput toplimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[0]);
     // DigitalInput bottomlimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[1]);

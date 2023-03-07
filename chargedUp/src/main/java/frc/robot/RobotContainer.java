@@ -110,11 +110,11 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
         m_auxController.start().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.3)))
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
         m_auxController.back().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.3)))
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
         //This runs Endeffector to Collect Cube
@@ -128,11 +128,11 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
 
         m_auxController.x().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.2)))
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(1)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
 
         m_auxController.y().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(0.5)))
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(-1)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
         //This runs Endeffector to eject game peices
         m_auxController.rightTrigger().
