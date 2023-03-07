@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.commands.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
@@ -20,35 +19,20 @@ import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.colorSensor;
-// import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
-import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.RotationPID;
 
@@ -107,12 +91,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //Spins Motor if April Tags are Recognized for 20 Ticks
-    m_driverController.a().
-        onTrue(new MovePID(m_drivetrainSubsystem, 3));
-
-    m_driverController.b().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
-
         m_auxController.start().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
@@ -144,13 +122,6 @@ public class RobotContainer {
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
   
-
-  // m_auxController.a().onTrue(new RotationPID(m_armSubsystem, 10));
-
-  // m_auxController.b().
-  // onTrue(new RotationPID(m_armSubsystem, 50));
-
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

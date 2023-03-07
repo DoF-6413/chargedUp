@@ -148,5 +148,11 @@ public final class Constants {
     public static final double kArmMaxAcceleration = 100;
     
     public static final int[] kLimitSwitches = new int[] {0, 1};
+
+    public static final boolean kIsCurrentLimitEnabled = true;
+    public static final double kContinuousCurrent = 15;
+    public static final double kPeakCurrent = 20;
+    public static final double kMaxTimeAtPeak = 5.0;
+
   }
 }
