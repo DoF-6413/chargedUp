@@ -105,6 +105,7 @@ public class RobotContainer {
         onTrue(new RotationPID(m_armSubsystem, 77.5));
         
         m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
+        
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
   

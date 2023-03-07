@@ -125,34 +125,32 @@ public final class Constants {
       }
     }
 
-    public static final double kGearing = 278;
-    public static final double kRotationPositionConversion = 360.0 /303.03;
-    // Arm PID Values (Tune PID Before Feedforward)
-    public static final double kArmP = 0.25;
-    public static final double kArmI = 0;
-    public static final double kArmD = 0;
-    public static final double kArmTolerance = 0.5;
+    //Rotation System Facts
+    public static final double kRotationGearing = 303.03;
+    public static final int kRotationCurrentLimit = 15;
+    //ticks to degrees
+    public static final double kRotationPositionConversion = 360.0 /kRotationGearing;
 
-    // Arm Feedforward Values
-    // Static Gain ()
-    public static final double kArmS = 0;
-    // Gravitational Gain (Tune this first, be specific up to 4 decimal places)
-    public static final double kArmG = 0;
-    // Velocity Gain ()
-    public static final double kArmV = 0;
-    // Acceleration Gain ()
-    public static final double kArmA = 0;
+    // Rotation Arm PID Values (Tune PID Before Feedforward)
+    public static final double kRotationP = 0.25;
+    public static final double kRotationI = 0;
+    public static final double kRotationD = 0;
+    public static final double kRotationTolerance = 0.5;
 
-    //Trapazoidal Motion Profiling
+    //Trapazoidal Motion Profiling for Rotation Arm
     public static final double kArmMaxVelocity = 100;
     public static final double kArmMaxAcceleration = 100;
     
-    public static final int[] kLimitSwitches = new int[] {0, 1};
+    // Telescoper PID Values
+    public static final double kTelescoperP = 0.5;
+    public static final double kTelescoperI = 0;
+    public static final double kTelescoperD = 0;
+    public static final double kTelescoperTolerance = 0.5;
 
-    public static final boolean kIsCurrentLimitEnabled = true;
-    public static final double kContinuousCurrent = 15;
-    public static final double kPeakCurrent = 20;
-    public static final double kMaxTimeAtPeak = 5.0;
-
+    //Telescoper Current Limit
+    public static final boolean kIsTelescoperCurrentLimitEnabled = true;
+    public static final double kTelescoperContinuousCurrent = 15;
+    public static final double kTelescoperPeakCurrent = 20;
+    public static final double kTelescoperMaxTimeAtPeak = 5.0;
   }
 }

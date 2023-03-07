@@ -35,7 +35,7 @@ private final TalonFX m_telescopingMotor;
     m_rightRotationMotor.follow(m_leftRotationMotor);
     m_leftRotationMotor.setIdleMode(IdleMode.kBrake);
     m_rightRotationMotor.setIdleMode(IdleMode.kBrake);
-    m_leftRotationMotor.setSmartCurrentLimit(15);
+    m_leftRotationMotor.setSmartCurrentLimit(ArmConstants.kRotationCurrentLimit);
     
     m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
@@ -49,10 +49,10 @@ private final TalonFX m_telescopingMotor;
     m_telescopingMotor.setNeutralMode(NeutralMode.Brake);
 
     StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
-          ArmConstants.kIsCurrentLimitEnabled, //Is enabled?
-          ArmConstants.kContinuousCurrent, //Continuous Current Limit
-          ArmConstants.kPeakCurrent, //Peak Current Limit
-          ArmConstants.kMaxTimeAtPeak); //Time Allowed to be at Peak Current Limit
+          ArmConstants.kIsTelescoperCurrentLimitEnabled, //Is enabled?
+          ArmConstants.kTelescoperContinuousCurrent, //Continuous Current Limit
+          ArmConstants.kTelescoperPeakCurrent, //Peak Current Limit
+          ArmConstants.kTelescoperMaxTimeAtPeak); //Time Allowed to be at Peak Current Limit
 
           m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
   }
