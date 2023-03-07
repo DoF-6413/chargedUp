@@ -67,11 +67,12 @@ private final TalonFX m_telescopingMotor;
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+     SmartDashboardCalls();
    
   }
 
   public void SmartDashboardCalls(){
-    SmartDashboard.putNumber("RotationPosition",m_RotationEncoder.getPosition());
+    SmartDashboard.putNumber("RotationPosition", m_RotationEncoder.getPosition());
     SmartDashboard.putNumber("EndEffectorPosition", m_endEffectorMotor.getSelectedSensorPosition());
     
   }
