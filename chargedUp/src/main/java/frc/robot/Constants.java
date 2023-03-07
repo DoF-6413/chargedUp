@@ -126,10 +126,9 @@ public final class Constants {
     }
 
     public static final double kGearing = 278;
-  public static final double kRotationPositionConversion = 2.0 * Math.PI / kGearing;
-
+    public static final double kRotationPositionConversion = 360.0 /303.03;
     // Arm PID Values (Tune PID Before Feedforward)
-    public static final double kArmP = 0.5;
+    public static final double kArmP = 0.25;
     public static final double kArmI = 0;
     public static final double kArmD = 0;
     public static final double kArmTolerance = 0.5;

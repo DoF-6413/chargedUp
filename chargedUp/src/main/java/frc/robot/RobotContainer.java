@@ -49,6 +49,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.ArmControls.RotationPID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -93,6 +95,7 @@ public class RobotContainer {
   public void drivetrainDefaultCommand(){
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
+     m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -110,35 +113,40 @@ public class RobotContainer {
 
     m_driverController.b().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
 
-        m_auxController.start().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        // m_auxController.start().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        m_auxController.back().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        // m_auxController.back().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        //This runs Endeffector to Collect Cube
-        m_auxController.a().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+        // //This runs Endeffector to Collect Cube
+        // m_auxController.b().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
-        //This runs Endeffector to Collect Cone
+        // //This runs Endeffector to Collect Cone
+        // m_auxController.a().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        m_auxController.back().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+
+        m_auxController.a().onTrue(new RotationPID(m_armSubsystem, 10));
+
         m_auxController.b().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
-
-        m_auxController.x().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(1)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
+        onTrue(new RotationPID(m_armSubsystem, 50));
 
         m_auxController.y().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(-1)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
+        onTrue(new RotationPID(m_armSubsystem, -45));
+
+        // m_auxController.x().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(-1)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
         //This runs Endeffector to eject game peices
-        m_auxController.rightTrigger().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        // m_auxController.rightTrigger().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
   }
 
