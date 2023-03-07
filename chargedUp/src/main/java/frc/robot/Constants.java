@@ -113,10 +113,10 @@ public final class Constants {
 
   public static class ArmConstants { 
     public enum ArmMotor {
-      leftRotationMotor(8),
-      rightRotationMotor(9),
-      telescopingMotor(15),
-      endEffectorMotor(16);
+      leftRotationMotor(6),
+      rightRotationMotor(7),
+      telescopingMotor(8),
+      endEffectorMotor(9);
 
       public final int CAN_ID;
 
