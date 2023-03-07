@@ -25,10 +25,8 @@ import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.colorSensor;
-// import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -99,16 +97,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-        //This extends telescoper 
-        m_auxController.start().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
-
-        //This unextends telescoper 
-        m_auxController.back().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
-
         m_auxController.start().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
