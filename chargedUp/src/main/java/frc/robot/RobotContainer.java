@@ -41,6 +41,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.ArmControls.TelescoperPID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -122,11 +123,11 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
         m_auxController.y().
-        onTrue(new RotationPID(m_armSubsystem, 77.5));
+        onTrue(new TelescoperPID(m_armSubsystem, 77.5));
         
-        m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
-        
-        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_auxController.x(). onTrue(new TelescoperPID(m_armSubsystem, -77.5));
+
+        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetTelescoperPosition()));
   }
   
   /**
