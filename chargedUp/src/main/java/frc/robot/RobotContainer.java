@@ -95,46 +95,43 @@ public class RobotContainer {
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
 
-        // m_driverController.b().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinMotor(.1))).
-        // onFalse(new InstantCommand(()-> m_armSubsystem.spinMotor(0)));
 
-        // m_auxController.start().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        m_auxController.start().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        // m_auxController.back().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        m_auxController.back().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        // //This runs Endeffector to Collect Cube
-        // m_auxController.b().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
-
-        // //This runs Endeffector to Collect Cone
-        // m_auxController.a().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
-        m_auxController.back().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
-
-        m_auxController.a().onTrue(new RotationPID(m_armSubsystem, 10));
-
+        //This runs Endeffector to Collect Cube
         m_auxController.b().
-        onTrue(new RotationPID(m_armSubsystem, 50));
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
-        m_auxController.y().
-        onTrue(new RotationPID(m_armSubsystem, -45));
-
-        // m_auxController.x().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinRotationMotors(-1)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopRotationMotors()));
-        //This runs Endeffector to eject game peices
-        // m_auxController.rightTrigger().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        //This runs Endeffector to Collect Cone
+        m_auxController.a().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        
+        
+        // This runs Endeffector to eject game peices
+        m_auxController.rightTrigger().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
+        m_auxController.y().
+        onTrue(new RotationPID(m_armSubsystem, 77.5));
+        
+        m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
+        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
+  
+
+  // m_auxController.a().onTrue(new RotationPID(m_armSubsystem, 10));
+
+  // m_auxController.b().
+  // onTrue(new RotationPID(m_armSubsystem, 50));
 
 
   /**
