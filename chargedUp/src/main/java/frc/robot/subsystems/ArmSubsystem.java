@@ -25,11 +25,8 @@ private final RelativeEncoder m_RotationEncoder;
 
 
 private final TalonFX m_endEffectorMotor;
-// private final RelativeEncoder m_endEffectorEncoder;
 
 private final TalonFX m_telescopingMotor;
-// private final RelativeEncoder m_telescopingEncoder;
-
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
@@ -52,23 +49,18 @@ private final TalonFX m_telescopingMotor;
     m_telescopingMotor.setNeutralMode(NeutralMode.Brake);
 
     StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
-          true, //Is enabled?
-          15, //Continuous Current Limit
-          20, //Peak Current Limit
-          5.0); //Time Allowed to be at Peak Current Limit
+          ArmConstants.kIsCurrentLimitEnabled, //Is enabled?
+          ArmConstants.kContinuousCurrent, //Continuous Current Limit
+          ArmConstants.kPeakCurrent, //Peak Current Limit
+          ArmConstants.kMaxTimeAtPeak); //Time Allowed to be at Peak Current Limit
 
           m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
-
-    // DigitalInput toplimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[0]);
-    // DigitalInput bottomlimitSwitch = new DigitalInput(ArmConstants.kLimitSwitches[1]);
-
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
      SmartDashboardCalls();
-   
   }
 
   public void SmartDashboardCalls(){
