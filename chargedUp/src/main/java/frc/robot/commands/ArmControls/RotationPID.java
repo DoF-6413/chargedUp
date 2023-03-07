@@ -23,9 +23,9 @@ public class RotationPID extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            ArmConstants.kArmP,
-            ArmConstants.kArmI,
-            ArmConstants.kArmD,
+            ArmConstants.kRotationP,
+            ArmConstants.kRotationI,
+            ArmConstants.kRotationD,
             // The motion profile constraints
             new TrapezoidProfile.Constraints(ArmConstants.kArmMaxVelocity, ArmConstants.kArmMaxAcceleration)),
         // This should return the measurement
@@ -42,7 +42,7 @@ public class RotationPID extends ProfiledPIDCommand {
     addRequirements(m_armSubsystem);
     // Configure additional PID options by calling `getController` here.
     getController()
-        .setTolerance(ArmConstants.kArmTolerance);
+        .setTolerance(ArmConstants.kRotationTolerance);
        
   }
 
