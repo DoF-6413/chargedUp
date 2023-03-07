@@ -9,9 +9,9 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -66,6 +66,8 @@ private final TalonFX m_telescopingMotor;
   public void SmartDashboardCalls(){
     SmartDashboard.putNumber("RotationPosition", m_RotationEncoder.getPosition());
     SmartDashboard.putNumber("EndEffectorPosition", m_endEffectorMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("TelescoperPosition", m_telescopingMotor.getSelectedSensorPosition());
+
     
   }
 
