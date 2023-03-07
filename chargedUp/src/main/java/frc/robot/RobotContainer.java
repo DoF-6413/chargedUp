@@ -77,10 +77,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+        //This extends telescoper 
         m_auxController.start().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
+        //This unextends telescoper 
         m_auxController.back().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
@@ -100,11 +102,15 @@ public class RobotContainer {
         m_auxController.rightTrigger().
         onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
-  
+
+        //This runs rotation motors to 77.5 degrees
         m_auxController.y().
         onTrue(new RotationPID(m_armSubsystem, 77.5));
         
+        //This runs rotation motors to -77.5 degrees
         m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
+
+        //This resets the encoder value of the arm where it is currently located
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
   
@@ -113,10 +119,6 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-
-   public void disablePIDSubsystems() {
-    // m_armSubsystem.disable();
-  }
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
