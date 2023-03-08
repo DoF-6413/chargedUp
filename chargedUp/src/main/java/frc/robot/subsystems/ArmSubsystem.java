@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenixpro.configs.MotionMagicConfigs;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -15,6 +17,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.ArmMotor;
 
@@ -47,14 +50,16 @@ private final TalonFX m_telescopingMotor;
     
     m_telescopingMotor = new TalonFX(ArmMotor.telescopingMotor.CAN_ID);
     m_telescopingMotor.setNeutralMode(NeutralMode.Brake);
+    m_telescopingMotor.setInverted(ArmConstants.kIsTelescoperInverted);
 
     StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
           ArmConstants.kIsTelescoperCurrentLimitEnabled, //Is enabled?
           ArmConstants.kTelescoperContinuousCurrent, //Continuous Current Limit
           ArmConstants.kTelescoperPeakCurrent, //Peak Current Limit
           ArmConstants.kTelescoperMaxTimeAtPeak); //Time Allowed to be at Peak Current Limit
-
           m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
+          //Position Conversion Factor
+    m_telescopingMotor.configSelectedFeedbackCoefficient(ArmConstants.kTelescopePositionConversionFactor);
   }
 
   @Override
