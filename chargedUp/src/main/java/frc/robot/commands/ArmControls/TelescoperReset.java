@@ -5,6 +5,7 @@
 package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class TelescoperReset extends CommandBase {
@@ -24,7 +25,7 @@ public class TelescoperReset extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSubsystem.spinTelescopingMotor(-0.1);
+    m_armSubsystem.spinTelescopingMotor(-0.4);
   }
 
   // Called once the command ends or is interrupted.
@@ -32,12 +33,12 @@ public class TelescoperReset extends CommandBase {
   public void end(boolean interrupted) {
     m_armSubsystem.spinTelescopingMotor(0);
     m_armSubsystem.resetTelescoperPosition();
-    m_armSubsystem.telescoperCurrentLimit(30, 60);
+    m_armSubsystem.telescoperCurrentLimit(ArmConstants.kTelescoperContinuousCurrent, ArmConstants.kTelescoperPeakCurrent);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_armSubsystem.telecoperCurrent() >= 20;
+    return m_armSubsystem.telecoperCurrent() >= 5;
   }
 }
