@@ -93,9 +93,9 @@ public class RobotContainer {
         // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
         // //This runs Endeffector to Collect Cone
-        // m_auxController.a().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        m_auxController.a().
+        onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        
         
         
         // // This runs Endeffector to eject game peices
@@ -106,7 +106,7 @@ public class RobotContainer {
         m_auxController.y().
         onTrue(new TelescoperPID(m_armSubsystem, 50));
         
-        m_auxController.x(). onTrue(new TelescoperPID(m_armSubsystem, 200));
+        m_auxController.x(). onTrue(new TelescoperPID(m_armSubsystem, 100));
 
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetTelescoperPosition()));
 
