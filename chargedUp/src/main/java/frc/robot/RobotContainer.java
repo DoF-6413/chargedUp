@@ -4,27 +4,25 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.colorSensor;
-import frc.robot.subsystems.VisionSubsystem;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
-import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -103,12 +101,15 @@ public class RobotContainer {
         // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
         // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
+        if ((m_armSubsystem.getRotationPosition() > 35) || (m_armSubsystem.getRotationPosition() < -35 )){
         m_auxController.y().
+        onTrue(new TelescoperPID(m_armSubsystem, 50)).onFalse(new TelescoperPID(m_armSubsystem, 0));
+        } else{
+          m_auxController.y().
+        onTrue(new TelescoperPID(m_armSubsystem, 0)).onFalse(new TelescoperPID(m_armSubsystem, 0));
+        }
+        m_auxController.x().
         onTrue(new TelescoperPID(m_armSubsystem, 50));
-        
-        m_auxController.x(). onTrue(new TelescoperPID(m_armSubsystem, 100));
-
-        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetTelescoperPosition()));
 
         m_auxController.rightBumper().onTrue(new TelescoperReset(m_armSubsystem));
   }

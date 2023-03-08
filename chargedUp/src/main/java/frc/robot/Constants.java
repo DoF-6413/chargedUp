@@ -145,7 +145,7 @@ public final class Constants {
     public static final double kTelescoperP = 0.04;
     public static final double kTelescoperI = 0;
     public static final double kTelescoperD = 0;
-    public static final double kTelescoperTolerance = 0.5;
+    public static final double kTelescoperTolerance = 2;
 
     //Telescoper Current Limit
     public static final boolean kIsTelescoperCurrentLimitEnabled = true;

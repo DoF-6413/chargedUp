@@ -38,10 +38,10 @@ public class colorSensor extends SubsystemBase {
 
     if (match.color == kpurple){
       colorString = "cube";
-      System.out.println("cube");
+      // System.out.println("cube");
     } else if (match.color == kyellow){
       colorString = "cone";
-      System.out.println("cone");
+      // System.out.println("cone");
     }
 
 

@@ -5,6 +5,7 @@
 package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -29,11 +30,11 @@ public class TelescoperPID extends PIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     m_armSubsystem = arm;
+    SmartDashboard.putNumber("Telescoper Setpoint", setpoint);
     addRequirements(m_armSubsystem);
     // Configure additional PID options by calling `getController` here.
     getController().setTolerance(ArmConstants.kTelescoperTolerance);
   }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
