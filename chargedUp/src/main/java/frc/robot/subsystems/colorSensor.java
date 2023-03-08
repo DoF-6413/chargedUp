@@ -21,48 +21,38 @@ public class colorSensor extends SubsystemBase {
   
   public final Color kpurple = new Color(0.2502, 0.2502, 0.5002);
   public final Color kyellow = new Color(0.5315, 0.4438, 0.02515);
-  ColorMatchResult match; 
   /** Creates a new colorSensor. */
   public colorSensor() {
     m_colorMatcher.addColorMatch(kpurple);
     m_colorMatcher.addColorMatch(kyellow);
     
   }
-
+  
   @Override
   public void periodic() {
-    Color detectedColor = m_colorSensorV3.getColor();
-    m_colorMatcher.matchClosestColor(detectedColor);
-    String colorString; //DO NOT DELETE, this is used in lines 40 and 43
-
-    if (match.color == kpurple){
-      colorString = "cube";
-      System.out.println("cube");
-    } else if (match.color == kyellow){
-      colorString = "cone";
-      System.out.println("cone");
-    }
-
-
+    
     double IR = m_colorSensorV3.getIR();
-
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("IR", IR);
-
     
-
     int proximity = m_colorSensorV3.getProximity();
-
     SmartDashboard.putNumber("Proximity", proximity);
-
-
-
+        
   }
-
-public Color getColor() {
-      return match.color;
+  
+  public Color getColor() {
     
-}
+    Color detectedColor = m_colorSensorV3.getColor();
+    ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+
+        if (match.color == kpurple){
+          System.out.println("cube");
+            return kpurple;
+          } else if (match.color == kyellow){
+            System.out.println("cone");
+              return kyellow;
+            } else{
+              return Color.kWhite; 
+            }
+          
+  }
 }
