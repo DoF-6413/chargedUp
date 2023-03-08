@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.TelescoperPID;
+import frc.robot.commands.ArmControls.TelescoperReset;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -106,28 +107,30 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
         .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        //This runs Endeffector to Collect Cube
-        m_auxController.b().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+        // //This runs Endeffector to Collect Cube
+        // m_auxController.b().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
 
-        //This runs Endeffector to Collect Cone
-        m_auxController.a().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        // //This runs Endeffector to Collect Cone
+        // m_auxController.a().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
         
         
-        // This runs Endeffector to eject game peices
-        m_auxController.rightTrigger().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        // // This runs Endeffector to eject game peices
+        // m_auxController.rightTrigger().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
         m_auxController.y().
-        onTrue(new TelescoperPID(m_armSubsystem, 77.5));
+        onTrue(new TelescoperPID(m_armSubsystem, 50));
         
-        m_auxController.x(). onTrue(new TelescoperPID(m_armSubsystem, -77.5));
+        m_auxController.x(). onTrue(new TelescoperPID(m_armSubsystem, 200));
 
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetTelescoperPosition()));
+
+        m_auxController.rightBumper().onTrue(new TelescoperReset(m_armSubsystem));
   }
   
   /**

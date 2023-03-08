@@ -142,15 +142,19 @@ public final class Constants {
     public static final double kArmMaxAcceleration = 100;
     
     // Telescoper PID Values
-    public static final double kTelescoperP = 0.5;
+    public static final double kTelescoperP = 0.10;
     public static final double kTelescoperI = 0;
     public static final double kTelescoperD = 0;
     public static final double kTelescoperTolerance = 0.5;
 
     //Telescoper Current Limit
     public static final boolean kIsTelescoperCurrentLimitEnabled = true;
-    public static final double kTelescoperContinuousCurrent = 15;
-    public static final double kTelescoperPeakCurrent = 20;
+    public static final double kTelescoperContinuousCurrent = 25;
+    public static final double kTelescoperPeakCurrent = 60;
     public static final double kTelescoperMaxTimeAtPeak = 5.0;
+
+    public static final boolean kIsTelescoperInverted = true;
+    public static final double kFalconTicks = 2048;
+    public static final double kTelescopePositionConversionFactor = 1/kFalconTicks;
   }
 }
