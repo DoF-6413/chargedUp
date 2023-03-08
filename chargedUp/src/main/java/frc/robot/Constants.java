@@ -156,5 +156,6 @@ public final class Constants {
     public static final boolean kIsTelescoperInverted = true;
     public static final double kFalconTicks = 2048;
     public static final double kTelescopePositionConversionFactor = 1/kFalconTicks;
+    public static final double kMaxTelescoperSpeed = 0.75;
   }
 }
