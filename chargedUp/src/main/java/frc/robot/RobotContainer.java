@@ -8,12 +8,12 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.Constants.VisionConstants;
 // import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.ArmSubsystem;
@@ -26,7 +26,7 @@ import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -40,11 +40,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
+// import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.ArmControls.inFramePerimeter;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.TelescoperSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.colorSensor;
 
 /**
@@ -56,10 +60,12 @@ import frc.robot.subsystems.colorSensor;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  
+  private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
+  private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
@@ -103,12 +109,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
         m_auxController.start().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(0.8), m_telescoperSubsystem))
+        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor(), m_telescoperSubsystem));
 
         m_auxController.back().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(-0.8), m_telescoperSubsystem))
+        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor(), m_telescoperSubsystem));
 
         // //This runs Endeffector to Collect Cube
         // m_auxController.b().
@@ -126,17 +132,13 @@ public class RobotContainer {
         // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
         // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
-        if ((m_armSubsystem.getRotationPosition() > 35) || (m_armSubsystem.getRotationPosition() < -35 )){
-        m_auxController.y().
-        onTrue(new TelescoperPID(m_armSubsystem, 50)).onFalse(new TelescoperPID(m_armSubsystem, 0));
-        } else{
-          m_auxController.y().
-        onTrue(new TelescoperPID(m_armSubsystem, 0)).onFalse(new TelescoperPID(m_armSubsystem, 0));
-        }
-        m_auxController.x().
-        onTrue(new TelescoperPID(m_armSubsystem, 50));
+        m_auxController.y().whileTrue(new inFramePerimeter(m_telescoperSubsystem, m_armSubsystem));
 
-        m_auxController.rightBumper().onTrue(new TelescoperReset(m_armSubsystem));
+
+        m_auxController.x().
+        onTrue(new TelescoperPID(m_telescoperSubsystem, 50));
+
+        m_auxController.rightBumper().onTrue(new TelescoperReset(m_telescoperSubsystem));
   }
   
   /**
