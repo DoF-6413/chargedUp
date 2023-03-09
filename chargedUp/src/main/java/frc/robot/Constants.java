@@ -114,9 +114,7 @@ public final class Constants {
   public static class ArmConstants { 
     public enum ArmMotor {
       leftRotationMotor(6),
-      rightRotationMotor(7),
-      telescopingMotor(8),
-      endEffectorMotor(9);
+      rightRotationMotor(7);
 
       public final int CAN_ID;
 
@@ -140,7 +138,11 @@ public final class Constants {
     //Trapazoidal Motion Profiling for Rotation Arm
     public static final double kArmMaxVelocity = 100;
     public static final double kArmMaxAcceleration = 100;
-    
+  }
+
+  public static class TelescoperConstants{
+    public static final int kTelescoperCANID = 8;
+
     // Telescoper PID Values
     public static final double kTelescoperP = 0.04;
     public static final double kTelescoperI = 0;
@@ -157,5 +159,9 @@ public final class Constants {
     public static final double kFalconTicks = 2048;
     public static final double kTelescopePositionConversionFactor = 1/kFalconTicks;
     public static final double kMaxTelescoperSpeed = 0.75;
+  }
+
+  public static class EndEffectorConstants{
+    public static final int kEndEffectorCANID = 9;
   }
 }

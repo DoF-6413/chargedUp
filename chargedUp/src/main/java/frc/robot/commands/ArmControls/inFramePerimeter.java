@@ -5,42 +5,40 @@
 package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
-import frc.robot.Constants.TelescoperConstants;
 
-public class TelescoperReset extends CommandBase {
-  /** Creates a new TelescoperReset. */
-  TelescoperSubsystem m_telescoperSubsystem;
-  public TelescoperReset(TelescoperSubsystem telescope) {
+public class inFramePerimeter extends CommandBase {
+  /** Creates a new inFramePerimeter. */
+  private TelescoperSubsystem m_telescoperSubsystem;
+  private ArmSubsystem m_armSubsystem;
+  public inFramePerimeter(TelescoperSubsystem telescope, ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_telescoperSubsystem = telescope;
+    m_armSubsystem = arm;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_telescoperSubsystem.telescoperCurrentLimit(10, 20);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_telescoperSubsystem.spinTelescopingMotor(-0.4);
+    if((m_armSubsystem.getRotationPosition() < 35) && (m_armSubsystem.getRotationPosition() > -35 )){
+      System.out.println("Inside Frame Perimeter");
+    } else {
+      System.out.println("Outside Frame Perimeter");
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_telescoperSubsystem.spinTelescopingMotor(0);
-    m_telescoperSubsystem.resetTelescoperPosition();
-    m_telescoperSubsystem.telescoperCurrentLimit(TelescoperConstants.kTelescoperContinuousCurrent, TelescoperConstants.kTelescoperPeakCurrent);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_telescoperSubsystem.telecoperCurrent() >= 10;
+    return false;
   }
 }
