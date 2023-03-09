@@ -11,6 +11,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,7 +21,6 @@ import frc.robot.commands.TrajectoryRunner;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.commands.ArmControls.inFramePerimeter;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -48,7 +48,6 @@ public class RobotContainer {
 
   PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
-  
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -108,8 +107,33 @@ public class RobotContainer {
         // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
         // .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
   
-        m_auxController.y().whileTrue(new inFramePerimeter(m_telescoperSubsystem, m_armSubsystem));
+        m_auxController.y()
+        .onTrue(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 130), 
+          () ->  m_armSubsystem.isInFramePerimeter()
+          ))
+        .onFalse(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          () -> m_armSubsystem.isInFramePerimeter()
+          ));
 
+        // m_auxController.y()
+        // .onTrue(
+        //   new ConditionalCommand(
+        //   new InstantCommand(() -> System.out.println("Pressed Y and is True")), 
+        //   new InstantCommand(() -> System.out.println("Pressed Y and is False")), 
+        //   () ->  m_armSubsystem.isInFramePerimeter()
+        //   ))
+        // .onFalse(
+        //   new ConditionalCommand(
+        //   new InstantCommand(() -> System.out.println("Released Y and is True")), 
+        //   new InstantCommand(() -> System.out.println("Released Y and is False")), 
+        //   () -> m_armSubsystem.isInFramePerimeter()
+        //   ));
 
         m_auxController.x().
         onTrue(new TelescoperPID(m_telescoperSubsystem, 50));
