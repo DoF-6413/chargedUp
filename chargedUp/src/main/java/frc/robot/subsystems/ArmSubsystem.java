@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -15,6 +17,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -66,5 +69,9 @@ private final RelativeEncoder m_RotationEncoder;
 
   public void stopRotationMotors(){
     m_leftRotationMotor.set(0);
+  }
+
+  public Boolean isInFramePerimeter(){
+    return ((this.getRotationPosition() < 35) && (this.getRotationPosition() > -35 )) ?  true :  false;
   }
 }
