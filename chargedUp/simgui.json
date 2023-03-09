@@ -39,6 +39,50 @@
     }
   },
   "NTProvider": {
+    "NetworkTables": {
+      "Persistent Values": {
+        "open": false
+      },
+      "Retained Values": {
+        "open": false
+      },
+      "transitory": {
+        "SmartDashboard": {
+          "open": true
+        }
+      }
+    },
+    "NetworkTables Info": {
+      "Clients": {
+        "open": true
+      }
+    },
+    "NetworkTables View": {
+      "visible": false
+    },
+    "Plot": {
+      "Plot <0>": {
+        "plots": [
+          {
+            "crosshairs": true,
+            "height": 332
+          }
+        ],
+        "window": {
+          "visible": false
+        }
+      },
+      "Plot <1>": {
+        "plots": [
+          {
+            "height": 338
+          }
+        ],
+        "window": {
+          "visible": false
+        }
+      }
+    },
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
@@ -46,10 +90,8 @@
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Field": "Field2d",
-
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/m_chooser": "String Chooser"
-
     },
     "windows": {
       "/SmartDashboard/Field": {
@@ -75,59 +117,16 @@
           "visible": true
         }
       },
-
       "/SmartDashboard/m_chooser": {
-
-      "/SmartDashboard/SendableChooser[0]": {
+        "/SmartDashboard/SendableChooser[0]": {
+          "window": {
+            "visible": true
+          }
+        },
         "window": {
           "visible": true
         }
       }
     }
-  },
-  "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
-    "Retained Values": {
-      "open": false
-    },
-    "transitory": {
-      "SmartDashboard": {
-        "open": true
-      }
-    }
-  },
-  "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    }
-  },
-  "NetworkTables View": {
-    "visible": false
-  },
-  "Plot": {
-    "Plot <0>": {
-      "plots": [
-        {
-          "crosshairs": true,
-          "height": 332
-        }
-      ],
-      "window": {
-        "visible": false
-      }
-    },
-    "Plot <1>": {
-      "plots": [
-        {
-          "height": 338
-        }
-      ],
-      "window": {
-        "visible": false
-      }
-    }
-  }
   }
 }

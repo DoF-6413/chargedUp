@@ -23,14 +23,17 @@ public class ledsSubsystem extends SubsystemBase {
 
   
   public void NeedACone(){
-    pwm.setSpeed(0.69);//yellow  
+    pwm.setSpeed(0.69);//yellow 
+    System.out.println("volvio la luzzzzzzzzzzzzz");
   }
 
   public void NeedACube(){
     pwm.setSpeed(0.91);//violet
+    System.out.println("hey muy buenas a todos guapsimos aqui vegeta 777");
   }
   public void SetLedsOff(){
     pwm.setSpeed(0.99);//off leds
+    System.out.println("se fue la luz");
   }
   public void LEDPrimerPatron(){
     pwm.setSpeed(0.61);//red
