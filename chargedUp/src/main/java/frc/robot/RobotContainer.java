@@ -4,6 +4,17 @@
 
 package frc.robot;
 
+import frc.robot.commands.*;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
@@ -17,7 +28,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,6 +40,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.colorSensor;
 import frc.robot.subsystems.ledsSubsystem;
+import frc.robot.commands.TrajectoryRunner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,12 +60,12 @@ public class RobotContainer {
   
   // PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(4, 3));
   public static PathPlannerTrajectory firstPath = PathPlanner.loadPath("firstPath", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
   
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
   Trajectory m_Trajectory = 
-  // firstPath.relativeTo(firstPath.getInitialPose());
   TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
       List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
@@ -110,6 +121,11 @@ public class RobotContainer {
    
    m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACone()));//yellow
     
+    //Spins Motor if April Tags are Recognized for 20 Ticks
+    m_driverController.a().
+        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+
+    m_driverController.b().whileTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
   }
 public static double getLeftJoystickY(){
   return m_driverController.getLeftY();

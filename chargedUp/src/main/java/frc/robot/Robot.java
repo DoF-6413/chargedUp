@@ -31,25 +31,11 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer = new RobotContainer();
   
-
-
-  
-  //when plug into roborio check the port because might need to change port 
-/* 
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
   @Override
   public void robotInit() {
-    
-   
-if (RobotBase.isSimulation()){
- SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
-
-}
-
-
-    
+    if (RobotBase.isSimulation()){
+      SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
+    }
   }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items

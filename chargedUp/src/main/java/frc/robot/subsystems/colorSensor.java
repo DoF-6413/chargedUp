@@ -37,7 +37,7 @@ public class colorSensor extends SubsystemBase {
     
     Color detectedColor = m_colorSensorV3.getColor();
 
-    String colorString; 
+    String colorString;
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kpurple){
