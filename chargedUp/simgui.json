@@ -73,7 +73,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/SendableChooser[0]": {
+      "/SmartDashboard/m_chooser": {
         "window": {
           "visible": true
         }

@@ -4,9 +4,24 @@
 
 package frc.robot;
 
+import frc.robot.commands.*;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
+import java.util.HashMap;
+import java.util.List;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.*;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +68,14 @@ public class RobotContainer {
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
+  PathPlannerTrajectory kscoreWithEvents = PathPlanner.loadPath("scoreWithEvents", new PathConstraints(1.5, 0.3));
+  Trajectory m_Trajectory = 
+  TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+      new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+      new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+  
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -61,13 +84,25 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kAuxControllerPort);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
+  /**
+   * 
+   */
   public RobotContainer() {
+
+    HashMap<String, Command> eventMap = new HashMap<>();
+eventMap.put("marker1", new RunCommand(() -> System.out.println("leaving community")));
+eventMap.put("marker2", new RunCommand(() -> System.out.println("hit marker 2")));
     // Configure the trigger bindings
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Score Cone", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-      SmartDashboard.putData(m_chooser);
+    m_chooser.addOption("follow path events", new FollowPathWithEvents(
+      new TrajectoryRunner(m_drivetrainSubsystem, kscoreWithEvents.relativeTo(m_drivetrainSubsystem.getPose()), true),
+      kscoreWithEvents.getMarkers(),
+      eventMap
+  ));
+    SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();
       
