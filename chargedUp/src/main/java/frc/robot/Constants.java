@@ -25,15 +25,6 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-    public static final boolean kRightInverted = true;
-    public static final boolean kLeftInverted = false;
-    
-    // todo: update equation
-    public static final int kWheelDiameter = 6;
-    public static final double kTicksToMeters = 1.0 / 42. * kWheelDiameter * 6.11 * Math.PI / 39.3701;
-    public static final double kTicksToFeet = 1.0 / 42. * kWheelDiameter * 6.11 * Math.PI / 12;
-    // public static final double kFeatToMeters = kTicksToFeat * 3;
-    public static final double kStopMotors = 0;
   public static class DrivetrainConstants {
       // Todo: Remove rightFollower2 and leftFollower2 when moving to four motors
       public enum DriveMotor{
