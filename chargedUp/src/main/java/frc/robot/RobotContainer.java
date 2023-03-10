@@ -18,9 +18,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.ArmControls.EndEffectorRunner;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -36,7 +38,7 @@ import frc.robot.subsystems.colorSensor;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   
@@ -63,6 +65,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Score Cone", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
       SmartDashboard.putData(m_chooser);
     configureBindings();
       
@@ -73,6 +76,7 @@ public class RobotContainer {
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
      m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
   }
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -92,11 +96,11 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor(), m_telescoperSubsystem));
 
         // //This runs Endeffector to Collect Cube
-        // m_auxController.b().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+        m_auxController.b().
+        onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
 
-        // //This runs Endeffector to Collect Cone
+        //This runs Endeffector to Collect Cone
         m_auxController.a().
         onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         
