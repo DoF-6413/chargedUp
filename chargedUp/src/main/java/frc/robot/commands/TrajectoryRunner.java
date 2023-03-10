@@ -25,6 +25,7 @@ public class TrajectoryRunner extends CommandBase {
     m_drivetrainSubsystem = drive;
     m_trajectory = traj;
     m_isFirstPath = isfirstPath;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.

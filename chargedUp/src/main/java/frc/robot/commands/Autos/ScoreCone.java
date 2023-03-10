@@ -26,7 +26,7 @@ import frc.robot.subsystems.TelescoperSubsystem;
 public class ScoreCone extends SequentialCommandGroup {
   /** Creates a new ScoreCone. */
   public ScoreCone(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
-    PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpReds", new PathConstraints(2, 0.45));
+    PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

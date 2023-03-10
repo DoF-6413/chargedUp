@@ -86,7 +86,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.drivetrainDefaultCommand();
   }
 
   /** This function is called periodically during operator control. */
