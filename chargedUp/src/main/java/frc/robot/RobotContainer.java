@@ -6,13 +6,20 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.targetFinding;
+// import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import java.util.HashMap;
@@ -69,6 +76,7 @@ public class RobotContainer {
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
   PathPlannerTrajectory kscoreWithEvents = PathPlanner.loadPath("scoreWithEvents", new PathConstraints(1.5, 0.3));
+  PathPlannerTrajectory kscorePickUpScore = PathPlanner.loadPath("scorePickUpScore", new PathConstraints(1.5, 0.3));
   Trajectory m_Trajectory = 
   TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -92,6 +100,12 @@ public class RobotContainer {
     HashMap<String, Command> eventMap = new HashMap<>();
 eventMap.put("marker1", new RunCommand(() -> System.out.println("leaving community")));
 eventMap.put("marker2", new RunCommand(() -> System.out.println("hit marker 2")));
+
+    HashMap<String, Command> eventScorePickUpScoreMap = new HashMap<>();
+eventScorePickUpScoreMap.put("score", new );
+eventScorePickUpScoreMap.put("pickUp", new );
+eventScorePickUpScoreMap.put("score2", new );
+
     // Configure the trigger bindings
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
@@ -102,6 +116,11 @@ eventMap.put("marker2", new RunCommand(() -> System.out.println("hit marker 2"))
       kscoreWithEvents.getMarkers(),
       eventMap
   ));
+    m_chooser.setDefaultOption("ScorePickUp", new FollowPathWithEvents(
+      new TrajectoryRunner(m_drivetrainSubsystem, kscorePickUpScore.relativeTo(m_drivetrainSubsystem.getPose()), true),
+       kscorePickScoreUp.getMarkers(), 
+       eventScorePickUpScoreMap
+       ));
     SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();
