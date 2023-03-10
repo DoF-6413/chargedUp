@@ -68,10 +68,11 @@ public class RobotContainer {
     m_chooser.addOption("Score Cone", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
       SmartDashboard.putData(m_chooser);
     configureBindings();
+    defaultCommands();
       
   }
 
-  public void drivetrainDefaultCommand(){
+  public void defaultCommands(){
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
      m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
