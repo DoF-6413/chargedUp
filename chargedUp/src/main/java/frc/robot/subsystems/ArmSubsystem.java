@@ -15,16 +15,24 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.ArmMotor;
+import frc.robot.Constants;
+
 
 public class ArmSubsystem extends SubsystemBase {
+private DifferentialDriveWheelSpeeds m_DifferentialDriveWheelSpeeds;
 private final CANSparkMax m_leftRotationMotor;
 private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
+
+
+
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
@@ -39,7 +47,12 @@ private final RelativeEncoder m_RotationEncoder;
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
     
     m_rightRotationMotor.follow(m_leftRotationMotor);
+   
+   // el progreso hasta ahora de andy
+   if (m_DifferentialDriveWheelSpeeds.leftMetersPerSecond > 1 ){
     
+   }
+//fin del progreso 
   }
 
   @Override
@@ -72,4 +85,5 @@ private final RelativeEncoder m_RotationEncoder;
   public Boolean isInFramePerimeter(){
     return ((this.getRotationPosition() < 35) && (this.getRotationPosition() > -35 )) ?  true :  false;
   }
+  
 }
