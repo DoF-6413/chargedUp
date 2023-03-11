@@ -4,6 +4,32 @@
 
 package frc.robot;
 
+import frc.robot.commands.*;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.colorSensor;
+// import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.Constants.VisionConstants;
+// import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+// import frc.robot.commands.targetFinding;
+// import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.colorSensor;
+// import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -85,10 +111,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+        //This extends telescoper 
         m_auxController.start().
         onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(0.8), m_telescoperSubsystem))
         .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor(), m_telescoperSubsystem));
 
+        //This unextends telescoper 
         m_auxController.back().
         onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(-0.8), m_telescoperSubsystem))
         .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor(), m_telescoperSubsystem));
@@ -141,6 +169,18 @@ public class RobotContainer {
         onTrue(new TelescoperPID(m_telescoperSubsystem, 50));
 
         m_auxController.rightBumper().onTrue(new TelescoperReset(m_telescoperSubsystem));
+        // This runs Endeffector to eject game peices
+        m_auxController.rightTrigger().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+
+        m_auxController.leftTrigger().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(.5)))
+        .onFalse(new InstantCommand(()-> {if (m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple){
+          m_armSubsystem.spinEndEffector(.07);
+         } else if (m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kyellow){
+          m_armSubsystem.spinEndEffector(0);}}));
+
   }
   
   /**
@@ -152,6 +192,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return m_chooser.getSelected();
+    return new MoveCommand(m_drivetrainSubsystem, 0, 0);
   }
 }
