@@ -6,46 +6,55 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenixpro.signals.System_StateValue;
+
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
 public class ledsSubsystem extends SubsystemBase {
-  private final PWM pwm;
+  public final PWM pwm;
   /** Creates a new ledsSubsystem. */
   public ledsSubsystem() {
     pwm = new PWM(1);
   }
 
   public void setLeds(double somevalue){
-    pwm.setSpeed(somevalue);    
+    pwm.setSpeed(somevalue);  
+    System.out.println ("CAMBIA DE COLOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
   }
 
   
   public void NeedACone(){
-    pwm.setSpeed(0.69);//yellow 
-    System.out.println("volvio la luzzzzzzzzzzzzz");
+
+    //yellow 
+    System.out.println("yellow!!!!!!!!!!!!");
   }
 
   public void NeedACube(){
     pwm.setSpeed(0.91);//violet
-    System.out.println("hey muy buenas a todos guapsimos aqui vegeta 777");
+    System.out.println("violet!!!!!!!!!!!!!!!!!!!!!!1");
   }
   public void SetLedsOff(){
     pwm.setSpeed(0.99);//off leds
-    System.out.println("se fue la luz");
+    System.out.println("se fue la luz!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   }
   public void LEDPrimerPatron(){
     pwm.setSpeed(0.61);//red
+    System.out.println("el primer patron");
   }
   public void LEDNewishPath(){
     pwm.setSpeed(0.87);//blue
+    System.out.println("newishpath vamooooooooo");
   }
   public void LEDGetOntoChargingStation(){
     pwm.setSpeed(0.73);//green
+    System.out.println("vamo pa la charge estation!!!!!");
   }
   public void LEDPatronNormal(){
     pwm.setSpeed(0.93);//white
+    System.out.println("patron normal!!!!!!!!!!!");
   }
 
   @Override

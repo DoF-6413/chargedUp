@@ -109,8 +109,9 @@ public class RobotContainer {
    
    m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));//violet
    
-   m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACone()));//yellow
-    
+   m_driverController.rightBumper().onTrue (new InstantCommand( () -> m_LedsSubsystem.setLeds(0.69)));//yellow
+   m_driverController.rightBumper().onTrue (new InstantCommand( () -> System.out.println("la fe!!!!!!!!!!")));
+
     //Spins Motor if April Tags are Recognized for 20 Ticks
     m_driverController.a().
         onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
