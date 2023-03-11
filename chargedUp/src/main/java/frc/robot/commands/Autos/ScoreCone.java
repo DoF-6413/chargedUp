@@ -25,6 +25,7 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreCone extends SequentialCommandGroup {
+
   /** Creates a new ScoreCone. */
   public ScoreCone(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
     // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));

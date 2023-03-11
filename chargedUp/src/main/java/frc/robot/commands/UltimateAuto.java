@@ -30,8 +30,7 @@ public class UltimateAuto extends SequentialCommandGroup {
   private EndEffectorSubsystem endEffector;
   private ArmSubsystem arm;
   private DrivetrainSubsystem drive;
-
-  PathPlannerTrajectory kscorePickUpScore = PathPlanner.loadPath("ScorePickUpScore", new PathConstraints(1, 0.5));
+  PathPlannerTrajectory kscorePickUpScore = PathPlanner.loadPath("ScorePickUpScore", new PathConstraints(1, .8));
   /** Creates a new UltimateAuto. */
   public UltimateAuto(DrivetrainSubsystem  m_drivetrainSubsystem, ArmSubsystem m_armSubsystem, TelescoperSubsystem m_telescoperSubsystem, EndEffectorSubsystem m_endEffectorSubsystem) {
     telescoper = m_telescoperSubsystem;
@@ -47,7 +46,7 @@ public class UltimateAuto extends SequentialCommandGroup {
       // trajectoryRunner that gets you to the cone
     new TrajectoryRunner(drive, kscorePickUpScore.relativeTo(drive.getPose()), true),
       // pikup ground
- new pickUpGround(arm, telescoper, endEffector)
+    new pickUpGround(arm, telescoper, endEffector)
       //trajectoryRunner
     );
   }

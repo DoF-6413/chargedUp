@@ -18,6 +18,7 @@ public class pickUpGround extends CommandBase {
   private TelescoperSubsystem telescoper;
   private EndEffectorSubsystem endEffector;
   private ArmSubsystem arm;
+  private static boolean stopCommand = false;
  
   /** Creates a new pickUpGround. */
   public pickUpGround(ArmSubsystem m_armSubsystem, TelescoperSubsystem m_telescoperSubsystem, EndEffectorSubsystem m_endEffectorSubsystem ) {
@@ -48,9 +49,12 @@ public class pickUpGround extends CommandBase {
     new TelescoperPID(telescoper, 0),
     //bring in arm 
     new RotationPID(arm, 0)
-    );
+     );
+     stopCommand = true;
   }
-
+//  public void stop(){
+//   stopCommand = true;
+//  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
@@ -58,6 +62,6 @@ public class pickUpGround extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return new RotationPID(arm, 0).isFinished();
+    return stopCommand;
   }
 }
