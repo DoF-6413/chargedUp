@@ -156,12 +156,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     diffDrive.arcadeDrive(driveValue, turnValue);
   }
 
-  public CANSparkMax getLeftMotor() {
-    return leftLead;
+  public double getLeftMotorSpeed() {
+    return leftLead.get();
   }
 
-  public CANSparkMax getRightMotor() {
-    return rightLead;
+  public double getRightMotorSpeed() {
+    return rightLead.get();
+  }
+
+  public double getAverageMotorSpeed(){
+    return (getLeftMotorSpeed() + getRightMotorSpeed())/2;
   }
 
   public double getPositionLeftLead() {

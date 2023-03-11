@@ -73,7 +73,7 @@ public class RobotContainer {
   public void drivetrainDefaultCommand(){
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
-     m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
+     m_armSubsystem.setDefaultCommand(m_armSubsystem.runDefaults(-m_auxController.getLeftY(), m_drivetrainSubsystem));
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the

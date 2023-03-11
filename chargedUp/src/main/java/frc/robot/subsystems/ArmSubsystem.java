@@ -19,18 +19,23 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.ArmMotor;
+import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.Constants;
 
 
 public class ArmSubsystem extends SubsystemBase {
 private DifferentialDriveWheelSpeeds m_DifferentialDriveWheelSpeeds;
+private TelescoperSubsystem m_TelescoperSubsystem;
 private final CANSparkMax m_leftRotationMotor;
 private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
-
 
 
 
@@ -47,12 +52,6 @@ private final RelativeEncoder m_RotationEncoder;
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
     
     m_rightRotationMotor.follow(m_leftRotationMotor);
-   
-   // el progreso hasta ahora de andy
-   if (m_DifferentialDriveWheelSpeeds.leftMetersPerSecond > 1 ){
-    
-   }
-//fin del progreso 
   }
 
   @Override
@@ -61,6 +60,12 @@ private final RelativeEncoder m_RotationEncoder;
      SmartDashboardCalls();
   }
 
+  public Command runDefaults(Double joystick, DrivetrainSubsystem drive){
+    return  new ParallelCommandGroup(new RunCommand(() -> spinRotationMotors(joystick)), new RunCommand(() ->
+    {if (drive.getAverageMotorSpeed() > 0.3 ){new RotationPID(this, 5.0);}}));
+  
+}
+
   public void SmartDashboardCalls(){
     SmartDashboard.putNumber("RotationPosition", getRotationPosition());    
   }
@@ -68,6 +73,8 @@ private final RelativeEncoder m_RotationEncoder;
   public double getRotationPosition(){
     return m_RotationEncoder.getPosition();
   }
+
+
   
   public void resetRotationPosition(){
     m_RotationEncoder.setPosition(0);
