@@ -29,8 +29,6 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.*;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -47,11 +45,9 @@ import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 // import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -76,7 +72,7 @@ public class RobotContainer {
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
   PathPlannerTrajectory kscoreWithEvents = PathPlanner.loadPath("scoreWithEvents", new PathConstraints(1.5, 0.3));
-  PathPlannerTrajectory kscorePickUpScore = PathPlanner.loadPath("scorePickUpScore", new PathConstraints(1.5, 0.3));
+  PathPlannerTrajectory kscorePickUpScore = PathPlanner.loadPath("ScorePickUpScore", new PathConstraints(.8, 0.3));
   Trajectory m_Trajectory = 
   TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -102,9 +98,10 @@ eventMap.put("marker1", new RunCommand(() -> System.out.println("leaving communi
 eventMap.put("marker2", new RunCommand(() -> System.out.println("hit marker 2")));
 
     HashMap<String, Command> eventScorePickUpScoreMap = new HashMap<>();
-eventScorePickUpScoreMap.put("score", new );
-eventScorePickUpScoreMap.put("pickUp", new );
-eventScorePickUpScoreMap.put("score2", new );
+// eventScorePickUpScoreMap.put("score", new RunCommand (() -> new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem)));
+eventScorePickUpScoreMap.put("score", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+eventScorePickUpScoreMap.put("pickUp", new pickUpGround(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+eventScorePickUpScoreMap.put("score2", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
 
     // Configure the trigger bindings
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
@@ -116,11 +113,12 @@ eventScorePickUpScoreMap.put("score2", new );
       kscoreWithEvents.getMarkers(),
       eventMap
   ));
-    m_chooser.setDefaultOption("ScorePickUp", new FollowPathWithEvents(
+    m_chooser.setDefaultOption("ScorePickUpScore", new FollowPathWithEvents(
       new TrajectoryRunner(m_drivetrainSubsystem, kscorePickUpScore.relativeTo(m_drivetrainSubsystem.getPose()), true),
-       kscorePickScoreUp.getMarkers(), 
+       kscorePickUpScore.getMarkers(), 
        eventScorePickUpScoreMap
        ));
+       m_chooser.addOption("Nancy's ULTIMATE FANCY AUTO",new UltimateAuto(m_drivetrainSubsystem,m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();

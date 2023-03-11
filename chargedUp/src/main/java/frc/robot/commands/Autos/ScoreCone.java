@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
@@ -26,7 +27,7 @@ import frc.robot.subsystems.TelescoperSubsystem;
 public class ScoreCone extends SequentialCommandGroup {
   /** Creates a new ScoreCone. */
   public ScoreCone(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
-    PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
+    // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -38,8 +39,8 @@ public class ScoreCone extends SequentialCommandGroup {
         new EndEffectorRunner(NEfctr, -0.8, 3),
         new TelescoperPID(telescoper, 1)
         ),
-      new RotationPID(arm, 0),
-      new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
+      new RotationPID(arm, 0)
+      // new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
     );
   }
 }
