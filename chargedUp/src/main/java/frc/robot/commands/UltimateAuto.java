@@ -20,6 +20,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ArmControls.*;
+import frc.robot.commands.Autos.PickUpGround;
 import frc.robot.commands.Autos.ScoreCone;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -30,24 +31,28 @@ public class UltimateAuto extends SequentialCommandGroup {
   private EndEffectorSubsystem endEffector;
   private ArmSubsystem arm;
   private DrivetrainSubsystem drive;
-  PathPlannerTrajectory kscorePickUpScore = PathPlanner.loadPath("ScorePickUpScore", new PathConstraints(1, .8));
+  PathPlannerTrajectory kscorePickUp = PathPlanner.loadPath("ScorePickUp", new PathConstraints(1.5, .8));
+  // PathPlannerTrajectory kPickUpRun = PathPlanner.loadPath("PickUpRun", new PathConstraints(1.5, .8));
   /** Creates a new UltimateAuto. */
   public UltimateAuto(DrivetrainSubsystem  m_drivetrainSubsystem, ArmSubsystem m_armSubsystem, TelescoperSubsystem m_telescoperSubsystem, EndEffectorSubsystem m_endEffectorSubsystem) {
     telescoper = m_telescoperSubsystem;
     endEffector = m_endEffectorSubsystem;
     arm = m_armSubsystem;
     drive =  m_drivetrainSubsystem;
-    addRequirements(telescoper, endEffector, arm);
+    addRequirements(telescoper, endEffector, arm, drive);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       // Score cone
     new ScoreCone(arm, telescoper, endEffector, drive),
       // trajectoryRunner that gets you to the cone
-    new TrajectoryRunner(drive, kscorePickUpScore.relativeTo(drive.getPose()), true),
+    new TrajectoryRunner(drive, kscorePickUp.relativeTo(drive.getPose()), true),
       // pikup ground
-    new pickUpGround(arm, telescoper, endEffector)
-      //trajectoryRunner
+    new PickUpGround(arm, telescoper, endEffector)
+      //trajectoryRunner that get you to score 
+    // new TrajectoryRunner(drive, kPickUpRun.relativeTo(drive.getPose()), true),
+     //Score Cone again
+    // new ScoreCone(arm, telescoper, endEffector, drive)
     );
   }
 }

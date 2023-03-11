@@ -43,6 +43,7 @@ import frc.robot.commands.ArmControls.RotationPID;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.Autos.PickUpGround;
 import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -72,7 +73,7 @@ public class RobotContainer {
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
   PathPlannerTrajectory kscoreWithEvents = PathPlanner.loadPath("scoreWithEvents", new PathConstraints(1.5, 0.3));
-  PathPlannerTrajectory kscorePickUpScore = PathPlanner.loadPath("ScorePickUpScore", new PathConstraints(.8, 0.3));
+  PathPlannerTrajectory kscorePickUp = PathPlanner.loadPath("ScorePickUp", new PathConstraints(.8, 0.3));
   Trajectory m_Trajectory = 
   TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -97,11 +98,11 @@ public class RobotContainer {
 eventMap.put("marker1", new RunCommand(() -> System.out.println("leaving community")));
 eventMap.put("marker2", new RunCommand(() -> System.out.println("hit marker 2")));
 
-    HashMap<String, Command> eventScorePickUpScoreMap = new HashMap<>();
+    HashMap<String, Command> eventScorePickUpMap = new HashMap<>();
 // eventScorePickUpScoreMap.put("score", new RunCommand (() -> new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem)));
-eventScorePickUpScoreMap.put("score", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-eventScorePickUpScoreMap.put("pickUp", new pickUpGround(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-eventScorePickUpScoreMap.put("score2", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+eventScorePickUpMap.put("score", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+eventScorePickUpMap.put("pickUp", new PickUpGround(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+eventScorePickUpMap.put("score2", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
 
     // Configure the trigger bindings
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
@@ -113,10 +114,10 @@ eventScorePickUpScoreMap.put("score2", new ScoreCone(m_armSubsystem, m_telescope
       kscoreWithEvents.getMarkers(),
       eventMap
   ));
-    m_chooser.setDefaultOption("ScorePickUpScore", new FollowPathWithEvents(
-      new TrajectoryRunner(m_drivetrainSubsystem, kscorePickUpScore.relativeTo(m_drivetrainSubsystem.getPose()), true),
-       kscorePickUpScore.getMarkers(), 
-       eventScorePickUpScoreMap
+    m_chooser.setDefaultOption("ScorePickUp", new FollowPathWithEvents(
+      new TrajectoryRunner(m_drivetrainSubsystem, kscorePickUp.relativeTo(m_drivetrainSubsystem.getPose()), true),
+       kscorePickUp.getMarkers(), 
+       eventScorePickUpMap
        ));
        m_chooser.addOption("Nancy's ULTIMATE FANCY AUTO",new UltimateAuto(m_drivetrainSubsystem,m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     SmartDashboard.putData("m_chooser", m_chooser);
