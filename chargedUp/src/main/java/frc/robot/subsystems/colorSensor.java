@@ -19,13 +19,14 @@ public class colorSensor extends SubsystemBase {
   
   private final ColorMatch m_colorMatcher = new ColorMatch();
   
-  public final Color kpurple = new Color(0.2502, 0.2502, 0.5002);
-  public final Color kyellow = new Color(0.5315, 0.4438, 0.02515);
+  public final static Color kpurple = new Color(0.2502, 0.2502, 0.5002);
+  public final  static Color kyellow = new Color(0.5315, 0.4438, 0.02515);
+  
   /** Creates a new colorSensor. */
   public colorSensor() {
     m_colorMatcher.addColorMatch(kpurple);
     m_colorMatcher.addColorMatch(kyellow);
-    
+   
   }
   
   @Override
@@ -49,8 +50,8 @@ public class colorSensor extends SubsystemBase {
             return kpurple;
           } else if (match.color == kyellow){
             System.out.println("cone");
-              return kyellow;
-            } else{
+          return kyellow;
+       } else{
               return Color.kWhite; 
             }
           

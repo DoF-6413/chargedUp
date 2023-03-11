@@ -38,6 +38,8 @@ import frc.robot.Constants.ArmConstants.ArmMotor;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.Constants;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.colorSensor;
 
 
 public class ArmSubsystem extends SubsystemBase {
@@ -46,6 +48,9 @@ private TelescoperSubsystem m_TelescoperSubsystem;
 private final CANSparkMax m_leftRotationMotor;
 private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
+private DrivetrainSubsystem drive;
+private colorSensor m_ColorSensor;
+
 
 
 
@@ -69,12 +74,21 @@ private final RelativeEncoder m_RotationEncoder;
     // This method will be called once per scheduler run
      SmartDashboardCalls();
   }
+public void armSafety(DrivetrainSubsystem m_drive){
+
+  // if the robot see a game piece and its moving then put the arm down
+  if(m_drive.getAverageMotorSpeed() > 0.3 && (( m_ColorSensor.getColor() == colorSensor.kpurple)||(m_ColorSensor.getColor() == colorSensor.kyellow)))
+  {new RotationPID(this, 0);}
+
+}
+
 
   public Command runDefaults(Double joystick, DrivetrainSubsystem drive){
-    return  new ParallelCommandGroup(new RunCommand(() -> spinRotationMotors(joystick)), new RunCommand(() ->
-    {if (drive.getAverageMotorSpeed() > 0.3 ){new RotationPID(this, 5.0);}}));
-  
+    return  new ParallelCommandGroup(new RunCommand(() -> spinRotationMotors(joystick)), 
+    new RunCommand(() -> armSafety(drive)));
 }
+
+
 
   public void SmartDashboardCalls(){
     SmartDashboard.putNumber("RotationPosition", getRotationPosition());    

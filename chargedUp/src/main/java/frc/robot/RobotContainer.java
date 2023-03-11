@@ -171,15 +171,15 @@ public class RobotContainer {
         m_auxController.rightBumper().onTrue(new TelescoperReset(m_telescoperSubsystem));
         // This runs Endeffector to eject game peices
         m_auxController.rightTrigger().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.2)))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
         m_auxController.leftTrigger().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(.5)))
+        onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(.5)))
         .onFalse(new InstantCommand(()-> {if (m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple){
-          m_armSubsystem.spinEndEffector(.07);
+          m_endEffectorSubsystem.spinEndEffector(.07);
          } else if (m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kyellow){
-          m_armSubsystem.spinEndEffector(0);}}));
+          m_endEffectorSubsystem.spinEndEffector(0);}}));
 
   }
   
