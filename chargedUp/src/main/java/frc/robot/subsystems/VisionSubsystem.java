@@ -65,6 +65,12 @@ public class VisionSubsystem extends SubsystemBase {
     return seeTarget() == true ? results.getBestTarget().getBestCameraToTarget() : m_default;
   }
 
+  public double getTargetYaw(){
+
+    System.out.println(yaw);
+    return( yaw != null) ? yaw : null;
+  }
+
   public boolean isHuge() {
     boolean grande = (this.seeTarget() == true) ? results.getBestTarget().getArea() > .5 : false;
     boolean huge = (this.seeTarget() == true) ? grande : false;
