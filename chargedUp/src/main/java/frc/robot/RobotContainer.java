@@ -37,7 +37,7 @@ public class RobotContainer {
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
-  private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  // private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));

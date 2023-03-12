@@ -18,17 +18,17 @@ public class gyroMovePID extends PIDCommand {
         // The controller that the command will use
         new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD),
         // This should return the measurement
-        () -> gyro.getPitch(),
+        () -> gyro.getRoll(),
         // This should return the setpoint (can also be a constant)
         () -> 0,
         // This uses the output
-        output -> { drive.setRaw(output, 0);
+        output -> { drive.setRaw(-output, 0);
           // Use the output here
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive, gyro);
     // Configure additional PID options by calling `getController` here.
-    getController().setTolerance(3);
+    getController().setTolerance(1);
   }
 
   // Returns true when the command should end.
