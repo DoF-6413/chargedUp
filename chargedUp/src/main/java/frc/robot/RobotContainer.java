@@ -79,7 +79,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     
-    m_chooser.setDefaultOption("Example_Trajectory", (new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, m_Trajectory, true)).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPatronNormal())));
+    m_chooser.setDefaultOption("Example_Trajectory", (new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, testPath, true)).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPatronNormal())));
     m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPrimerPatron())));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDNewishPath())));
     m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDGetOntoChargingStation())));
