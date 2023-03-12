@@ -29,8 +29,10 @@ public class gyroBalance extends CommandBase {
   @Override
   public void execute() {
     if(m_gyroSubsystem.getRoll() > 0){
+      //Change to negative
     m_drivetrainSubsystem.setRaw(0.5, 0);
     } else if (m_gyroSubsystem.getRoll() < 0){
+      //change to positive
       m_drivetrainSubsystem.setRaw(-0.5, 0);
     }
   }
