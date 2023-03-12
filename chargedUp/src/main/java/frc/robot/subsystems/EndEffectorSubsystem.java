@@ -21,6 +21,7 @@ private final TalonFX m_endEffectorMotor;
     
     m_endEffectorMotor = new TalonFX(EndEffectorConstants.kEndEffectorCANID);
     m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
+    m_endEffectorMotor.setInverted(true);
     
   }
 
