@@ -27,6 +27,18 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
 // import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.*;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
+import java.util.List;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -134,56 +146,36 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.2)))
         .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
         
-        // m_auxController.y()
-        // .onTrue(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 150), 
-        //   () ->  m_armSubsystem.isInFramePerimeter()
-        //   ))
-        // .onFalse(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   () -> m_armSubsystem.isInFramePerimeter()
-        //   ));
+        m_auxController.y()
+        .onTrue(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 150), 
+          () ->  m_armSubsystem.isInFramePerimeter()
+          ))
+        .onFalse(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          () -> m_armSubsystem.isInFramePerimeter()
+          ));
 
-        //   m_auxController.x()
-        // .onTrue(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 30), 
-        //   () ->  m_armSubsystem.isInFramePerimeter()
-        //   ))
-        // .onFalse(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   () -> m_armSubsystem.isInFramePerimeter()
-        //   ));
-
-        m_auxController.y().onTrue(new RotationPID(m_armSubsystem, 90));
-        m_auxController.x().onTrue(new RotationPID(m_armSubsystem, -90));
-        m_auxController.leftBumper().onTrue(new RotationPID(m_armSubsystem, 0));
-
-        // m_auxController.y()
-        // .onTrue(
-        //   new ConditionalCommand(
-        //   new InstantCommand(() -> System.out.println("Pressed Y and is True")), 
-        //   new InstantCommand(() -> System.out.println("Pressed Y and is False")), 
-        //   () ->  m_armSubsystem.isInFramePerimeter()
-        //   ))
-        // .onFalse(
-        //   new ConditionalCommand(
-        //   new InstantCommand(() -> System.out.println("Released Y and is True")), 
-        //   new InstantCommand(() -> System.out.println("Released Y and is False")), 
-        //   () -> m_armSubsystem.isInFramePerimeter()
-        //   ));
-
-        // m_auxController.x().
-        // onTrue(new TelescoperPID(m_telescoperSubsystem, 50));
+          m_auxController.x()
+        .onTrue(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 30), 
+          () ->  m_armSubsystem.isInFramePerimeter()
+          ))
+        .onFalse(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          () -> m_armSubsystem.isInFramePerimeter()
+          ));
 
 
+    m_driverController.leftBumper().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
   }
   
   /**
