@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
+import frc.robot.commands.ArmControls.RotationPID;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
@@ -99,6 +100,7 @@ public class RobotContainer {
   public void defaultCommands(){
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
+
      m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
   }
   
@@ -115,7 +117,7 @@ public class RobotContainer {
 
     m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
         // //This runs Endeffector to Collect Cube
-        
+        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         //This runs Endeffector to Collect Cone
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
@@ -132,33 +134,37 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.2)))
         .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
         
-        m_auxController.y()
-        .onTrue(
-          new ConditionalCommand(
-          new TelescoperPID(m_telescoperSubsystem, 0), 
-          new TelescoperPID(m_telescoperSubsystem, 145), 
-          () ->  m_armSubsystem.isInFramePerimeter()
-          ))
-        .onFalse(
-          new ConditionalCommand(
-          new TelescoperPID(m_telescoperSubsystem, 0), 
-          new TelescoperPID(m_telescoperSubsystem, 0), 
-          () -> m_armSubsystem.isInFramePerimeter()
-          ));
+        // m_auxController.y()
+        // .onTrue(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 150), 
+        //   () ->  m_armSubsystem.isInFramePerimeter()
+        //   ))
+        // .onFalse(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   () -> m_armSubsystem.isInFramePerimeter()
+        //   ));
 
-          m_auxController.x()
-        .onTrue(
-          new ConditionalCommand(
-          new TelescoperPID(m_telescoperSubsystem, 0), 
-          new TelescoperPID(m_telescoperSubsystem, 30), 
-          () ->  m_armSubsystem.isInFramePerimeter()
-          ))
-        .onFalse(
-          new ConditionalCommand(
-          new TelescoperPID(m_telescoperSubsystem, 0), 
-          new TelescoperPID(m_telescoperSubsystem, 0), 
-          () -> m_armSubsystem.isInFramePerimeter()
-          ));
+        //   m_auxController.x()
+        // .onTrue(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 30), 
+        //   () ->  m_armSubsystem.isInFramePerimeter()
+        //   ))
+        // .onFalse(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   () -> m_armSubsystem.isInFramePerimeter()
+        //   ));
+
+        m_auxController.y().onTrue(new RotationPID(m_armSubsystem, 90));
+        m_auxController.x().onTrue(new RotationPID(m_armSubsystem, -90));
+        m_auxController.leftBumper().onTrue(new RotationPID(m_armSubsystem, 0));
 
         // m_auxController.y()
         // .onTrue(
