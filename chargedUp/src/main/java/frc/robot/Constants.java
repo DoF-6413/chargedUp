@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kAuxControllerPort = 1;
   }
 
   public static class DrivetrainConstants {
@@ -33,17 +35,16 @@ public final class Constants {
         rightLead(2),
         rightFollower1(3);
 
-        public final int CAN_ID;
+      public final int CAN_ID;
 
-        DriveMotor(int value) {
-          CAN_ID = value;
-        }
+      DriveMotor(int value) {
+        CAN_ID = value;
       }
+    }
 
     public static final boolean kRightInverted = true;
     public static final boolean kLeftInverted = false;
 
-    
     // PID Controlls for Forawrds and Backwards
     public static final double kMoveP = 25;
     public static final double kMoveI = 0;
@@ -59,12 +60,12 @@ public final class Constants {
     // Kinematics
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(21.5);
-    
+
     // Distance between front and back wheels on robot
     public static final double WHEEL_BASE = Units.inchesToMeters(25);
 
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
-    
+
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(kMoveI, kMoveD, WHEEL_BASE);
     // Convert to wheel speeds
     DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
@@ -81,26 +82,23 @@ public final class Constants {
     public static final double kMOI = 4;
     // Final Mass of Robot including Bumbers and Batteries
     public static final double kMass = 135;
-    
+
     public static final double kwheelRadiusMeters = 3 * 0.0254;
     public static final int kWheelDiameter = 6;
-    
+
     public static final int neoEncoderTicks = 42;
     public static final double kTicksToMetersConversionFactor = 39.3701;
     public static final double kTicksToFeetConversionFactor = 12;
     public static final double kTicksToMeters = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-    / kTicksToMetersConversionFactor;
+        / kTicksToMetersConversionFactor;
     public static final double kTicksToFeet = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-    / kTicksToFeetConversionFactor;
-    
-    
-    
+        / kTicksToFeetConversionFactor;
+
     public static double loopPeriodSecs = 0.020;
-    
-    
+
     public static final double kStopMotors = 0;
   }
-  
+
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] { 0, 1.5, 3, 4 };
   }
@@ -111,8 +109,59 @@ public final class Constants {
 
     public static final double kchargingStationDistance = 5;
 
-    public static double kS = 0;
-    public static double kA = 0;
-    public static double kV = 0;
+  }
+
+  public static class ArmConstants { 
+    public enum ArmMotor {
+      leftRotationMotor(6),
+      rightRotationMotor(7);
+
+      public final int CAN_ID;
+
+      ArmMotor(int value) {
+        CAN_ID = value;
+      }
+    }
+
+    //Rotation System Facts
+    public static final double kRotationGearing = 303.03;
+    public static final int kRotationCurrentLimit = 15;
+    //ticks to degrees
+    public static final double kRotationPositionConversion = 360.0 /kRotationGearing;
+
+    // Rotation Arm PID Values (Tune PID Before Feedforward)
+    public static final double kRotationP = 0.25;
+    public static final double kRotationI = 0;
+    public static final double kRotationD = 0;
+    public static final double kRotationTolerance = 0.5;
+
+    //Trapazoidal Motion Profiling for Rotation Arm
+    public static final double kArmMaxVelocity = 100;
+    public static final double kArmMaxAcceleration = 100;
+  }
+
+  public static class TelescoperConstants{
+    public static final int kTelescoperCANID = 8;
+
+    // Telescoper PID Values
+    public static final double kTelescoperP = 0.04;
+    public static final double kTelescoperI = 0;
+    public static final double kTelescoperD = 0;
+    public static final double kTelescoperTolerance = 2;
+
+    //Telescoper Current Limit
+    public static final boolean kIsTelescoperCurrentLimitEnabled = true;
+    public static final double kTelescoperContinuousCurrent = 25;
+    public static final double kTelescoperPeakCurrent = 60;
+    public static final double kTelescoperMaxTimeAtPeak = 5.0;
+
+    public static final boolean kIsTelescoperInverted = true;
+    public static final double kFalconTicks = 2048;
+    public static final double kTelescopePositionConversionFactor = 1/kFalconTicks;
+    public static final double kMaxTelescoperSpeed = 0.75;
+  }
+
+  public static class EndEffectorConstants{
+    public static final int kEndEffectorCANID = 9;
   }
 }
