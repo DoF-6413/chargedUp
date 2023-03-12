@@ -105,20 +105,21 @@ eventScorePickUpMap.put("pickUp", new PickUpGround(m_armSubsystem, m_telescoperS
 eventScorePickUpMap.put("score2", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
 
     // Configure the trigger bindings
-    m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Score Cone", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("follow path events", new FollowPathWithEvents(
-      new TrajectoryRunner(m_drivetrainSubsystem, kscoreWithEvents.relativeTo(m_drivetrainSubsystem.getPose()), true),
-      kscoreWithEvents.getMarkers(),
-      eventMap
-  ));
-    m_chooser.setDefaultOption("ScorePickUp", new FollowPathWithEvents(
-      new TrajectoryRunner(m_drivetrainSubsystem, kscorePickUp.relativeTo(m_drivetrainSubsystem.getPose()), true),
-       kscorePickUp.getMarkers(), 
-       eventScorePickUpMap
-       ));
+  //   m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
+  //   m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
+  //   m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
+  //   m_chooser.addOption("Score Cone", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+  //   m_chooser.addOption("follow path events", new FollowPathWithEvents(
+  //     new TrajectoryRunner(m_drivetrainSubsystem, kscoreWithEvents.relativeTo(m_drivetrainSubsystem.getPose()), true),
+  //     kscoreWithEvents.getMarkers(),
+  //     eventMap
+  // ));
+
+    // m_chooser.setDefaultOption("ScorePickUp", new FollowPathWithEvents(
+    //   new TrajectoryRunner(m_drivetrainSubsystem, kscorePickUp.relativeTo(m_drivetrainSubsystem.getPose()), true),
+    //    kscorePickUp.getMarkers(), 
+    //    eventScorePickUpMap
+    //    ));
        m_chooser.addOption("Nancy's ULTIMATE FANCY AUTO",new UltimateAuto(m_drivetrainSubsystem,m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
@@ -163,55 +164,43 @@ eventScorePickUpMap.put("score2", new ScoreCone(m_armSubsystem, m_telescoperSubs
         onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.2)))
         .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
         
-        // m_auxController.y()
-        // .onTrue(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 150), 
-        //   () ->  m_armSubsystem.isInFramePerimeter()
-        //   ))
-        // .onFalse(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   () -> m_armSubsystem.isInFramePerimeter()
-        //   ));
+        m_auxController.y()
+        .onTrue(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 150), 
+          () ->  m_armSubsystem.isInFramePerimeter()
+          ))
+        .onFalse(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          () -> m_armSubsystem.isInFramePerimeter()
+          ));
 
-        //   m_auxController.x()
-        // .onTrue(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 30), 
-        //   () ->  m_armSubsystem.isInFramePerimeter()
-        //   ))
-        // .onFalse(
-        //   new ConditionalCommand(
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   new TelescoperPID(m_telescoperSubsystem, 0), 
-        //   () -> m_armSubsystem.isInFramePerimeter()
-        //   ));
+          m_auxController.x()
+        .onTrue(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 30), 
+          () ->  m_armSubsystem.isInFramePerimeter()
+          ))
+        .onFalse(
+          new ConditionalCommand(
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          new TelescoperPID(m_telescoperSubsystem, 0), 
+          () -> m_armSubsystem.isInFramePerimeter()
+          ));
 
-        m_auxController.y().onTrue(new RotationPID(m_armSubsystem, 90));
-        m_auxController.x().onTrue(new RotationPID(m_armSubsystem, -90));
-        m_auxController.leftBumper().onTrue(new RotationPID(m_armSubsystem, 0));
+          m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(0.5)))
+          .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-        // m_auxController.y()
-        // .onTrue(
-        //   new ConditionalCommand(
-        //   new InstantCommand(() -> System.out.println("Pressed Y and is True")), 
-        //   new InstantCommand(() -> System.out.println("Pressed Y and is False")), 
-        //   () ->  m_armSubsystem.isInFramePerimeter()
-        //   ))
-        // .onFalse(
-        //   new ConditionalCommand(
-        //   new InstantCommand(() -> System.out.println("Released Y and is True")), 
-        //   new InstantCommand(() -> System.out.println("Released Y and is False")), 
-        //   () -> m_armSubsystem.isInFramePerimeter()
-        //   ));
+          m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(-0.5)))
+          .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-        // m_auxController.x().
-        // onTrue(new TelescoperPID(m_telescoperSubsystem, 50));
-
+        // m_auxController.y().onTrue(new RotationPID(m_armSubsystem, 90));
+        // m_auxController.x().onTrue(new RotationPID(m_armSubsystem, -90));
+        // m_auxController.leftBumper().onTrue(new RotationPID(m_armSubsystem, 0));
 
   }
   

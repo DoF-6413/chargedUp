@@ -193,9 +193,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   
   public void setRobotFromFieldPose() {
-    if (RobotBase.isSimulation()) {
+    // if (RobotBase.isSimulation()) {
       setPose(m_odometry.getPoseMeters());
-    }
+    // }
   }
   
   public Pose2d getPose() {

@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -69,6 +70,8 @@ public class TrajectoryRunner extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    SmartDashboard.putNumber("Timer", m_timer.get());
+    SmartDashboard.putNumber("Trajectory time", m_trajectory.getTotalTimeSeconds());
     return m_trajectory.sample(m_timer.get()) == m_trajectory.sample(m_trajectory.getTotalTimeSeconds()) ? true : false;
   }
 }

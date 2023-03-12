@@ -34,9 +34,9 @@ public class PickUpGround extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
        //take arm out 
-    new RotationPID(arm, 40),
+    new RotationPID(arm, 45),
     //extend telescoper 
-    new TelescoperPID(telescoper, 10),
+    new TelescoperPID(telescoper, 130),
     //intake endeffector
     new EndEffectorRunner(endEffector, .5, 3),
     //pull back telescoper
