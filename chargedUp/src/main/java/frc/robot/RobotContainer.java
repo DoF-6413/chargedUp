@@ -6,8 +6,8 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.TrajectoryRunner;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -44,9 +43,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final static DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
-  private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  // private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
@@ -93,9 +93,11 @@ public class RobotContainer {
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
     m_driverController.a().
-        onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
+        onTrue(new MovePID(m_drivetrainSubsystem, 3));
 
-    m_driverController.b().whileTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+    m_driverController.b().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+
+    m_driverController.x().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
   }
 
   /**

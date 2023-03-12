@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 
@@ -17,9 +18,7 @@ public class MovePID extends PIDCommand {
     super(
         // The controller that the command will use
         new PIDController(
-        SmartDashboard.getNumber("kMoveP", 0), 
-        SmartDashboard.getNumber("kMoveI", 0), 
-        SmartDashboard.getNumber("kMoveD", 0)
+          DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD
         ),
         // This should return the measurement
         () -> drive.getPosition(),
@@ -32,7 +31,7 @@ public class MovePID extends PIDCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
     // Configure additional PID options by calling `getController` here.
-    getController().setTolerance(1);
+    getController().setTolerance(DrivetrainConstants.kMoveTolerance);
   }
 
   // Returns true when the command should end.
