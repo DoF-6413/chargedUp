@@ -24,7 +24,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -112,11 +114,11 @@ public class RobotContainer {
     // SmartDashboard.putString("SelectedChooser", m_chooser.getSelected().getName());
    // m_driverController.rightBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.setLeds(01)));
 
-   m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.SetLedsOff()));//off LED's
+  // m_driverController.leftBumper().onTrue(new InstantCommand( () -> m_LedsSubsystem.SetLedsOff()));//off LED's
    
-   m_driverController.start().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));//violet
+  // m_driverController.b().onTrue(new InstantCommand( () -> m_LedsSubsystem.NeedACube()));//violet
    
-   m_driverController.rightBumper().onTrue (new InstantCommand( () -> m_LedsSubsystem.setLeds(0.69)));//yellow
+  // m_driverController.a().onTrue (new InstantCommand( () -> m_LedsSubsystem.setLeds(0.69)));//yellow
 
     //Spins Motor if April Tags are Recognized for 20 Ticks
     m_driverController.a().
@@ -130,12 +132,14 @@ public class RobotContainer {
         .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor(), m_telescoperSubsystem));
 
         // //This runs Endeffector to Collect Cube
-        // m_auxController.b().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        // .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+        m_auxController.b().
+        onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)) ,new InstantCommand(() -> m_LedsSubsystem.NeedACube())))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
 
         // //This runs Endeffector to Collect Cone
         m_auxController.a().
+        onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)),new InstantCommand(() -> m_LedsSubsystem.NeedACube())));
+        m_auxController.start().
         onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         
         
