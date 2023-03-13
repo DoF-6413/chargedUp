@@ -175,7 +175,8 @@ public class RobotContainer {
           ));
 
 
-    m_driverController.leftBumper().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
+    m_driverController.y().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
+    m_driverController.x().onTrue(new gyroMovePID(m_gyroSubsystem, m_drivetrainSubsystem));
   }
   
   /**
