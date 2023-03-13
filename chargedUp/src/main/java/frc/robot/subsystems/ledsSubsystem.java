@@ -36,33 +36,33 @@ public class ledsSubsystem extends SubsystemBase {
   public void SetLedsOff(){
     pwm.setSpeed(0.99);//off leds
   }
-  public void LEDPrimerPatron(){
-    pwm.setSpeed(0.61);//red
-  }
-  public void LEDNewishPath(){
+
+  public void LEDBlue(){
     pwm.setSpeed(0.87);//blue
   }
-  public void LEDGetOntoChargingStation(){
-    pwm.setSpeed(0.73);//green
-  }
-  public void LEDPatronNormal(){
+  public void LEDWhite(){
     pwm.setSpeed(0.93);//white
      }
   
 
   @Override
   public void periodic() {
-    if ( Timer.getMatchTime() > 30 ){
-    pwm.setSpeed(0.77);//solid green
-    }
-      else if ((Timer.getMatchTime() < 30) && ( Timer.getMatchTime() > 15)){
-        pwm.setSpeed(0.61);  //solid red
-      }
-      
-        else if (Timer.getMatchTime() < 15){
-         pwm.setSpeed(-0.1);//blink in 
-      }
+   
     
     // This method will be called once per scheduler run
-      } }
+      } 
+    
+      public void matchTime(){
+        if ( Timer.getMatchTime() > 30 ){
+          pwm.setSpeed(0.77);//solid green
+          }
+            else if ((Timer.getMatchTime() < 30) && ( Timer.getMatchTime() > 15)){
+              pwm.setSpeed(0.61);  //solid red
+            }
+            
+              else if (Timer.getMatchTime() < 15){
+               pwm.setSpeed(-0.1);//blink in 
+            }
+      }
+    }
 

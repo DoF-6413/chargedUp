@@ -81,10 +81,10 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     
-    m_chooser.setDefaultOption("Example_Trajectory", (new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, testPath, true)).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPatronNormal())));
-    m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDPrimerPatron())));
-    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDNewishPath())));
-    m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true).alongWith(new RunCommand(() -> m_LedsSubsystem.LEDGetOntoChargingStation())));
+    m_chooser.setDefaultOption("Example_Trajectory", (new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, testPath, true)));
+    m_chooser.addOption("First Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, firstPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, m_LedsSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
     
     
     SmartDashboard.putData("m_chooser", m_chooser);
@@ -134,13 +134,17 @@ public class RobotContainer {
         // //This runs Endeffector to Collect Cube
         m_auxController.b().
         onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)) ,new InstantCommand(() -> m_LedsSubsystem.NeedACube())))
-        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
+        .onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)),new InstantCommand(() -> m_LedsSubsystem.matchTime())));
 
         // //This runs Endeffector to Collect Cone
         m_auxController.a().
-        onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)),new InstantCommand(() -> m_LedsSubsystem.NeedACube())));
+        onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)),new InstantCommand(() -> m_LedsSubsystem.NeedACube())))
+        .onFalse(new ParallelCommandGroup((new InstantCommand(() -> m_LedsSubsystem.matchTime())), (new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()))));
+       
+       
         m_auxController.start().
         onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+
         
         
         
