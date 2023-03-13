@@ -62,6 +62,7 @@ import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 // import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.colorSensor;
@@ -74,10 +75,10 @@ import frc.robot.subsystems.colorSensor;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem);
   
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
