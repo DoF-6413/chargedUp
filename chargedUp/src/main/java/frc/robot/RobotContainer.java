@@ -22,7 +22,6 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 import frc.robot.commands.ArmControls.RotationPID;
-import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
@@ -175,9 +174,9 @@ public class RobotContainer {
           () -> m_armSubsystem.isInFramePerimeter()
           ));
 
-
+    m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
     m_driverController.y().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
-    m_driverController.x().onTrue(new gyroMovePID(m_gyroSubsystem, m_drivetrainSubsystem));
+    m_driverController.b().onTrue(new MovePID(m_drivetrainSubsystem, 3.0));
   }
   
   /**
