@@ -8,7 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SimulationDevices.NavXWrapper;
 
@@ -19,6 +19,7 @@ public class GyroSubsystem extends SubsystemBase {
     m_gyro = new NavXWrapper(SPI.Port.kMXP, (byte) 200);
     //Accounts for gyro offset
     m_gyro.setAngleAdjustment(90);
+    
   }
 
   public double getAngle(){
@@ -43,6 +44,8 @@ public class GyroSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
+    SmartDashboard.putNumber("Roll", getRoll());
   }
 
   public double getGyroAngle(){
