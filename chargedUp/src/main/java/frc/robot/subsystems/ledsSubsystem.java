@@ -54,16 +54,13 @@ public class ledsSubsystem extends SubsystemBase {
   public void periodic() {
     if ( Timer.getMatchTime() > 30 ){
     pwm.setSpeed(0.77);//solid green
-    System.out.println("green");
     }
       else if ((Timer.getMatchTime() < 30) && ( Timer.getMatchTime() > 15)){
-        System.out.println("red");
         pwm.setSpeed(0.61);  //solid red
       }
       
         else if (Timer.getMatchTime() < 15){
-         pwm.setSpeed(-0.1);//blink in red
-         System.out.println("blink red");
+         pwm.setSpeed(-0.1);//blink in 
       }
     
     // This method will be called once per scheduler run
