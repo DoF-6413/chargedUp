@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class ledsSubsystem extends SubsystemBase {
   public final PWM pwm;
-  private Timer m_Timer;
   /** Creates a new ledsSubsystem. */
   public ledsSubsystem() {
     pwm = new PWM(1);
@@ -25,13 +24,13 @@ public class ledsSubsystem extends SubsystemBase {
 
   
   public void NeedACone(){
-    
-
     pwm.setSpeed(0.69);//yellow 
+    
   }
 
   public void NeedACube(){
     pwm.setSpeed(0.91);//violet
+
   }
   public void SetLedsOff(){
     pwm.setSpeed(0.99);//off leds
@@ -47,22 +46,20 @@ public class ledsSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-   
+      if ( Timer.getMatchTime() > 30 ){
+        pwm.setSpeed(0.77);//solid green
+        }
+          else if ((Timer.getMatchTime() < 30) && ( Timer.getMatchTime() > 15)){
+     
+          pwm.setSpeed(0.61);  //solid red
+          }
+          
+            else if (Timer.getMatchTime() < 15){
+             pwm.setSpeed(-0.1);//blink in red
+            }
+          
     
     // This method will be called once per scheduler run
-      } 
-    
-      public void matchTime(){
-        if ( Timer.getMatchTime() > 30 ){
-          pwm.setSpeed(0.77);//solid green
-          }
-            else if ((Timer.getMatchTime() < 30) && ( Timer.getMatchTime() > 15)){
-              pwm.setSpeed(0.61);  //solid red
-            }
-            
-              else if (Timer.getMatchTime() < 15){
-               pwm.setSpeed(-0.1);//blink in 
-            }
       }
     }
 

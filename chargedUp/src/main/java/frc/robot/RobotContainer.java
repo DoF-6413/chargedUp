@@ -134,12 +134,11 @@ public class RobotContainer {
         // //This runs Endeffector to Collect Cube
         m_auxController.b().
         onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)) ,new InstantCommand(() -> m_LedsSubsystem.NeedACube())))
-        .onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)),new InstantCommand(() -> m_LedsSubsystem.matchTime())));
-
+        .onFalse(new ParallelCommandGroup((new InstantCommand(() -> m_LedsSubsystem.periodic())), (new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()))));
         // //This runs Endeffector to Collect Cone
         m_auxController.a().
-        onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)),new InstantCommand(() -> m_LedsSubsystem.NeedACube())))
-        .onFalse(new ParallelCommandGroup((new InstantCommand(() -> m_LedsSubsystem.matchTime())), (new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()))));
+        onTrue(new ParallelCommandGroup(new InstantCommand(() ->m_endEffectorSubsystem.spinEndEffector(0.5)),new InstantCommand(() -> m_LedsSubsystem.NeedACone())))
+        .onFalse(new ParallelCommandGroup((new InstantCommand(() -> m_LedsSubsystem.periodic())), (new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()))));
        
        
         m_auxController.start().
@@ -210,7 +209,8 @@ public static DrivetrainSubsystem getDrive(){
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
 
-      return m_chooser.getSelected();
+       return m_chooser.getSelected();
+      // return null;
   }
 
 }
