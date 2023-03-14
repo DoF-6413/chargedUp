@@ -182,11 +182,11 @@ public class RobotContainer {
 
         m_auxController.povUp().onTrue(new RotationPID(m_armSubsystem, ArmConstants.kHighPeak));
         
-        m_auxController.povDown().onTrue(new RotationPID(m_armSubsystem, ArmConstants.kMidBottom));
+        m_auxController.povLeft().onTrue(new RotationPID(m_armSubsystem, ArmConstants.kMidBottom));
 
-        m_auxController.povLeft().onTrue(new RotationPID(m_armSubsystem, ArmConstants.kRotationZeroValue));
+        m_auxController.povDown().onTrue(new RotationPID(m_armSubsystem, -ArmConstants.kHighPeak));
 
-        m_auxController.povRight().onTrue(new RotationPID(m_armSubsystem, ArmConstants.kRotationZeroValue));
+        m_auxController.povRight().onTrue(new RotationPID(m_armSubsystem, -ArmConstants.kMidBottom));
 
 
   }
