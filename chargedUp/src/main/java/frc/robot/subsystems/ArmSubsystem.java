@@ -15,6 +15,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.networktables.BooleanSubscriber;
@@ -27,7 +29,7 @@ public class ArmSubsystem extends SubsystemBase {
 private final CANSparkMax m_leftRotationMotor;
 private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
-
+private final AnalogPotentiometer m_pot;
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
@@ -41,7 +43,7 @@ private final RelativeEncoder m_RotationEncoder;
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
     
     m_rightRotationMotor.follow(m_leftRotationMotor);
-    
+    m_pot = new AnalogPotentiometer(ArmConstants.kpotetiometerPort, ArmConstants.kpotetiometerRange, ArmConstants.kpotentiometerOffset);
   }
 
   @Override
@@ -52,6 +54,7 @@ private final RelativeEncoder m_RotationEncoder;
 
   public void SmartDashboardCalls(){
     SmartDashboard.putNumber("RotationPosition", getRotationPosition());    
+    SmartDashboard.putNumber("Potentiometer Reading", m_pot.get());
   }
 
   public double getRotationPosition(){
@@ -69,6 +72,10 @@ private final RelativeEncoder m_RotationEncoder;
 
   public void stopRotationMotors(){
     m_leftRotationMotor.set(0);
+  }
+
+  public double getPotentiometer(){
+    return m_pot.get();
   }
 
   public Boolean isInFramePerimeter(){
