@@ -18,15 +18,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.getPoseAprilTag;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.colorSensor;
+import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,15 +38,16 @@ import frc.robot.subsystems.colorSensor;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem);
   
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
-  private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  // private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
@@ -139,6 +142,12 @@ public class RobotContainer {
         onTrue(new TelescoperPID(m_telescoperSubsystem, 50));
 
         m_auxController.rightBumper().onTrue(new TelescoperReset(m_telescoperSubsystem));
+
+        m_auxController.leftTrigger().
+        onTrue(new InstantCommand(()-> SmartDashboard.putNumber("Best fiducialID", m_visionSubsystem.getBestFiducialID())));
+        // .onFalse(new InstantCommand(()-> SmartDashboard.putNumber("Best fiducialID", 0)));
+
+        m_auxController.leftBumper().onTrue(new getPoseAprilTag(m_drivetrainSubsystem, m_visionSubsystem, m_gyroSubsystem));
   }
   
   /**

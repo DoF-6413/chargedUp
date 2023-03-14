@@ -3,36 +3,79 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
-import edu.wpi.first.math.geometry.Transform3d;
+import org.photonvision.PhotonUtils;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.VisionSubsystem; 
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.GyroSubsystem;
+
+
 
 public class getPoseAprilTag extends CommandBase {
   private final DrivetrainSubsystem m_DrivetrainSubsystem;
 private final VisionSubsystem m_VisionSubsystem;
+private final GyroSubsystem m_GyroSubsystem;
+public static Pose3d m_derivedPose;
 
   /** Creates a new getPoseAprilTag. */
-  public getPoseAprilTag(DrivetrainSubsystem drive, VisionSubsystem vision) {
+  public getPoseAprilTag(DrivetrainSubsystem drive, VisionSubsystem vision, GyroSubsystem gyro) {
     m_DrivetrainSubsystem = drive;
     m_VisionSubsystem = vision;
-   addRequirements(m_DrivetrainSubsystem, m_VisionSubsystem);
+    m_GyroSubsystem = gyro;
+    m_derivedPose = null;
+   addRequirements(m_DrivetrainSubsystem, m_VisionSubsystem, m_GyroSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // grab apriltag 
-    double yaw = m_VisionSubsystem.getTargetYaw();
-    Transform3d distanceTo = m_VisionSubsystem.distanceFinder(); 
+
+    m_derivedPose = PhotonUtils.estimateFieldToRobotAprilTag(m_VisionSubsystem.target.getBestCameraToTarget(),new Pose3d( m_VisionSubsystem.target.getBestCameraToTarget().getX(), m_VisionSubsystem.target.getBestCameraToTarget().getY(),  m_VisionSubsystem.target.getBestCameraToTarget().getZ(), m_VisionSubsystem.target.getBestCameraToTarget().getRotation()) ,VisionConstants.cameraOnRobot);
+
+    // grab apriltag -20 = camera angle
+    // double theta = m_VisionSubsystem.getBestFiducial().getYaw();
+    // // or target.getYaw();
+    // SmartDashboard.putNumber("yaw", theta);
     
+    // double distanceTo = PhotonUtils.calculateDistanceToTargetMeters(
+    //   1.13, 1.27, 0, Units.radiansToDegrees(m_VisionSubsystem.getBestFiducial().getPitch()
+    //   ));
+    // //  != null ?( m_VisionSubsystem.distanceFinder().getTranslation() !=null ) ? m_VisionSubsystem.distanceFinder().getTranslation().getDistance(null): null: null; 
+    // SmartDashboard.putNumber("distance To April Tag", distanceTo);
+    
+    // int currentTag = m_VisionSubsystem.getBestFiducialID();
+    // SmartDashboard.putNumber("Current Tag", currentTag);
+
+    // Pose2d targetPose = VisionConstants.tagPoses[currentTag];
+    // SmartDashboard.putNumber("target Pose x",targetPose.getX());
+    // SmartDashboard.putNumber("target Pose Y",targetPose.getY());
+
+    // double xOffset = distanceTo * new Rotation2d(theta).getCos();
+    // SmartDashboard.putNumber("X Offset", xOffset);
+
+    // double yOffset = distanceTo * new Rotation2d(theta).getSin();
+    // SmartDashboard.putNumber("Y Offset", yOffset);
+
+    // double derivedX = targetPose.getX() + xOffset;
+    // SmartDashboard.putNumber("derived X", derivedX);
+
+    // double derivedY = targetPose.getY() + yOffset;
+    // SmartDashboard.putNumber("derived Y", derivedY);
+
+    // derivedPose = new Pose2d(derivedX, derivedY, m_GyroSubsystem.getRotation2d() );
+    // SmartDashboard.putNumber("derived Pose X", derivedPose.getX());
+    // SmartDashboard.putNumber("derived Pose Y",targetPose.getY());
   }
+
+  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    System.out.println( m_derivedPose.toPose2d().toString());
+  m_DrivetrainSubsystem.resetOdometry(m_derivedPose.toPose2d());
   }
 
   // Called once the command ends or is interrupted.

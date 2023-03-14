@@ -5,13 +5,20 @@
 package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.VisionConstants;
+
 
 public class VisionSubsystem extends SubsystemBase {
   private static final double CAMERA_HEIGHT_METERS = 1;
@@ -22,12 +29,22 @@ public class VisionSubsystem extends SubsystemBase {
   public VisionSubsystem() {
 
     PortForwarder.add(5800, "photonvision.local", 5800);
+
+    int aprilTag1 = 1;
+    int aprilTag2 = 2;
+    int aprilTag3 = 3;
+    int aprilTag4 = 4;
+    int aprilTag5 = 5;
+    int aprilTag6 = 6;
+    int aprilTag7 = 7;
+    int aprilTag8 = 8;
+
   }
 
   // todo: provide portforwaring to connect without radio
   PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
-  private PhotonPipelineResult results = new PhotonPipelineResult();
-  public PhotonTrackedTarget target;
+  private static PhotonPipelineResult results = new PhotonPipelineResult();
+  public PhotonTrackedTarget target = results.getBestTarget();
   public Double yaw;
   public Double pitch;
   public Transform3d camToTarget;
@@ -40,7 +57,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   public void updateSmartDashboard() {
     SmartDashboard.putBoolean("target?", seeTarget());
-    SmartDashboard.putNumber("Best fiducial", getBestFiducial());
+    SmartDashboard.putNumber("Best fiducial ID", getBestFiducialID());
     SmartDashboard.putNumber("distance X", distanceFinder().getX());
     SmartDashboard.putNumber("distance Y", distanceFinder().getY());
     SmartDashboard.putNumber("distance Z", distanceFinder().getZ());
@@ -56,13 +73,17 @@ public class VisionSubsystem extends SubsystemBase {
     return results.hasTargets();
   }
 
-  public int getBestFiducial() {
+  public  int getBestFiducialID() {
     return seeTarget() == true ? results.getBestTarget().getFiducialId() : 0;
   }
 
-  public Transform3d distanceFinder() {
+  public PhotonTrackedTarget getBestFiducial() {
+    return seeTarget() == true ? results.getBestTarget() : new PhotonTrackedTarget();
+  }
+
+  public Translation3d distanceFinder() {
     Transform3d m_default = new Transform3d();
-    return seeTarget() == true ? results.getBestTarget().getBestCameraToTarget() : m_default;
+    return seeTarget() == true ? results.getBestTarget().getBestCameraToTarget().getTranslation() :new Translation3d();
   }
 
   public double getTargetYaw(){
@@ -76,5 +97,16 @@ public class VisionSubsystem extends SubsystemBase {
     boolean huge = (this.seeTarget() == true) ? grande : false;
     return huge;
   }
+
+  public double getZ() {
+    if (results.hasTargets() == true) {
+    return target.getYaw();
+    } else {
+      return 1000;
+    }
+  }
+
+
+  
 
 }

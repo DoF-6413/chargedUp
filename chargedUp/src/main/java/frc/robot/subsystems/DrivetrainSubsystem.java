@@ -55,13 +55,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static EncoderSim m_rightSimEncoder;
   private static EncoderSim m_leftSimEncoder;
   
-  private static DifferentialDriveOdometry m_odometry;
+  public static DifferentialDriveOdometry m_odometry;
   public static Field2d m_field2d;
-  private static GyroSubsystem gyro = new GyroSubsystem();
+  private static GyroSubsystem gyro;
 
   SimDouble gyroAngleSim;
   
-  public DrivetrainSubsystem() {
+  public DrivetrainSubsystem(GyroSubsystem m_gyro) {
     
     leftLead = new SparkMaxWrapper(DriveMotor.leftLead.CAN_ID, MotorType.kBrushless);
     rightLead = new SparkMaxWrapper(DriveMotor.rightLead.CAN_ID, MotorType.kBrushless);
@@ -84,7 +84,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToMeters);
     encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToMeters);
 
-    
+    gyro = m_gyro;
     diffDrive = new DifferentialDrive(leftLead, rightLead);
     
     // Todo: Find out what this does
@@ -189,6 +189,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     encoderLeftLead.setPosition(0);
     encoderRightLead.setPosition(0);
   }
+
+
 
   
   

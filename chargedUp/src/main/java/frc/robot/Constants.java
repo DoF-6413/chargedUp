@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -101,6 +106,15 @@ public final class Constants {
 
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] { 0, 1.5, 3, 4 };
+
+    public static final Pose2d[] tagPoses = new Pose2d[] { null,new Pose2d(1,1, new Rotation2d(0))};
+    //new Pose2d(3,1, new Rotation2d(0)), new Pose2d(5,1, new Rotation2d(0)), new Pose2d(7,1, new Rotation2d(0)), new Pose2d(1,-10, new Rotation2d(0)), new Pose2d(3,-10, new Rotation2d(0)), new Pose2d(5,-10, new Rotation2d(0)), new Pose2d(7,-10, new Rotation2d(0))
+
+
+    // this tells info about where te camera is on the robot ex: 
+    public static final Transform3d cameraOnRobot = new Transform3d( 
+      new Translation3d(0,0,0),
+      new Rotation3d(0,0,0));
   }
 
   public static class AutoConstants {
@@ -164,4 +178,5 @@ public final class Constants {
   public static class EndEffectorConstants{
     public static final int kEndEffectorCANID = 9;
   }
+
 }
