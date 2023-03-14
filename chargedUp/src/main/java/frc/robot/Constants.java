@@ -141,6 +141,10 @@ public final class Constants {
     //Trapazoidal Motion Profiling for Rotation Arm
     public static final double kArmMaxVelocity = 100;
     public static final double kArmMaxAcceleration = 100;
+
+    public static final int kpotetiometerPort = 0;
+    public static final double kpotetiometerRange = 180;
+    public static final double kpotentiometerOffset = 0;
   }
 
   public static class TelescoperConstants{
