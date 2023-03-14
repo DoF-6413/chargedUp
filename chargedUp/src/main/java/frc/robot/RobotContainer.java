@@ -4,6 +4,17 @@
 
 package frc.robot;
 
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -12,14 +23,9 @@ import com.pathplanner.lib.PathPoint;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
@@ -37,6 +43,9 @@ import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 // import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.ArmControls.RotationPID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -176,6 +185,41 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimator));
 
         m_driverController.y().onTrue(new TrajectoryRunner(m_drivetrainSubsystem, traj1, true));
+        //This extends telescoper 
+        m_auxController.start().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+
+        //This unextends telescoper 
+        m_auxController.back().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+
+        //This runs Endeffector to Collect Cube
+        m_auxController.b().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+
+        //This runs Endeffector to Collect Cone
+        m_auxController.a().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        
+        
+        // This runs Endeffector to eject game peices
+        m_auxController.rightTrigger().
+        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
+        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+
+        //This runs rotation motors to 77.5 degrees
+        m_auxController.y().
+        onTrue(new RotationPID(m_armSubsystem, 77.5));
+        
+        //This runs rotation motors to -77.5 degrees
+        m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
+
+        //This resets the encoder value of the arm where it is currently located
+        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
   }
   
   /**

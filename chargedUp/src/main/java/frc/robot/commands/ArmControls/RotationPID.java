@@ -26,6 +26,7 @@ public class RotationPID extends ProfiledPIDCommand {
             ArmConstants.kRotationP,
             ArmConstants.kRotationI,
             ArmConstants.kRotationD,
+          
             // The motion profile constraints
             new TrapezoidProfile.Constraints(ArmConstants.kArmMaxVelocity, ArmConstants.kArmMaxAcceleration)),
         // This should return the measurement
