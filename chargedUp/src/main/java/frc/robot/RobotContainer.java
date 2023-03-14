@@ -22,6 +22,7 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.ArmControls.RotationReset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
@@ -129,7 +130,7 @@ public class RobotContainer {
 
     m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
         // //This runs Endeffector to Collect Cube
-        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
         //This runs Endeffector to Collect Cone
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));

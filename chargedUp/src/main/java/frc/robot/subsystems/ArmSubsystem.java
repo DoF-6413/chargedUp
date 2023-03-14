@@ -74,6 +74,10 @@ private final AnalogPotentiometer m_pot;
     m_leftRotationMotor.set(0);
   }
 
+  public double getPotentiometer(){
+    return m_pot.get();
+  }
+
   public Boolean isInFramePerimeter(){
     return ((this.getRotationPosition() < 35) && (this.getRotationPosition() > -35 )) ?  true :  false;
   }

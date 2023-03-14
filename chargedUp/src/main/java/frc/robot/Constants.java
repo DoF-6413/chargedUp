@@ -142,9 +142,9 @@ public final class Constants {
     public static final double kArmMaxVelocity = 100;
     public static final double kArmMaxAcceleration = 100;
 
-    public static final int kpotetiometerPort = 0;
+    public static final int kpotetiometerPort = 3;
     public static final double kpotetiometerRange = 180;
-    public static final double kpotentiometerOffset = 0;
+    public static final double kpotentiometerOffset = -96;
   }
 
   public static class TelescoperConstants{
