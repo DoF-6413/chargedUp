@@ -8,38 +8,30 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TrajectoryRunner;
-import frc.robot.commands.ArmControls.EndEffectorRunner;
-import frc.robot.commands.ArmControls.RotationPID;
-import frc.robot.commands.ArmControls.TelescoperPID;
-import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.gyroBalance;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreCone extends SequentialCommandGroup {
-  /** Creates a new ScoreCone. */
-  public ScoreCone(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
-    // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
+public class G1TRAroundCSBalance extends SequentialCommandGroup {
+
+  PathPlannerTrajectory kAroundCSLeftBalance = PathPlanner.loadPath("AroundCSLeftBalance", new PathConstraints(1, .5));
+  
+  /** Creates a new G1TRAroundCSBalance. */
+  public G1TRAroundCSBalance(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TelescoperReset(telescoper),
-      new RotationPID(arm, -107),
-      new TelescoperPID(telescoper, 147),
-      new RotationPID(arm, -83),
-      new ParallelCommandGroup(
-        new EndEffectorRunner(NEfctr, -0.8, 3),
-        new TelescoperPID(telescoper, 1)
-        ),
-      new RotationPID(arm, 0)
-      // new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
+      new ScoreCone(arm, telescoper, endEffector, drive),
+      new TrajectoryRunner(drive, kAroundCSLeftBalance.relativeTo(drive.getPose()), true),
+      new gyroBalance(gyro, drive)
     );
   }
 }
