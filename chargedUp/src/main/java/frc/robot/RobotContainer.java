@@ -13,6 +13,7 @@ import frc.robot.subsystems.colorSensor;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -149,14 +150,20 @@ public class RobotContainer {
 
         m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
         m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
-
-        m_auxController.leftBumper().
-           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
-          .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+        //This runs Endeffector to Collect Cone
+        // m_auxController.a().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_auxController.a().
+        onTrue(new ParallelCommandGroup (
+        new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)),
+        new InstantCommand(()-> m_LEDSubsystem.LEDTimer())))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
         
-        m_auxController.rightBumper().
-           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
-          .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
+        m_auxController.b().
+        onTrue(new ParallelCommandGroup (
+          new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)),
+          new InstantCommand(()-> m_LEDSubsystem.LEDTimer())))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
 
         // // This runs Endeffector to eject game peices
         m_auxController.rightTrigger().
@@ -181,7 +188,7 @@ public class RobotContainer {
 
         m_auxController.b().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.70)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
-        
+
     m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
     m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
   }

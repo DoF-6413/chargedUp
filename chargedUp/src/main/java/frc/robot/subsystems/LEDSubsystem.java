@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
@@ -40,6 +41,19 @@ public class LEDSubsystem extends SubsystemBase {
     pwm.setSpeed(0.93);//white
      }
   
+  public void LEDTimer(){
+    if ( Timer.getMatchTime() > 30 ){
+      pwm.setSpeed(0.77);//solid green
+      }
+        else if ((Timer.getMatchTime() < 30) && ( Timer.getMatchTime() > 15)){
+   
+        pwm.setSpeed(0.61);  //solid red
+        }
+        
+          else if (Timer.getMatchTime() < 15){
+           pwm.setSpeed(-0.1);//blink in red
+          }
+  }
 
   @Override
   public void periodic() {
