@@ -26,8 +26,8 @@ import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.DrivetrainConstants.DriveMotor;
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.Constants.DrivetrainConstants.DriveMotor;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -73,7 +73,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFollower1 = new SparkMaxWrapper(DriveMotor.rightFollower1.CAN_ID, MotorType.kBrushless);
 
     Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
-        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
+        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kCoast));
 
     leftFollower1.follow(leftLead);
     rightFollower1.follow(rightLead);
@@ -247,5 +247,4 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     gyroAngleSim.set(m_drivetrainSimulator.getHeading().getDegrees());
   }
-  
 }

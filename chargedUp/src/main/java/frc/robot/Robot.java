@@ -9,7 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+
+import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorSensorV3.RawColor;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorMatch;
+import edu.wpi.first.wpilibj.I2C;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,7 +38,6 @@ public class Robot extends TimedRobot {
       SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
     }
   }
-
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items
    * like diagnostics
@@ -43,7 +50,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-   
     CommandScheduler.getInstance().run();
     
     
@@ -51,10 +57,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   /**
    * This autonomous runs the autonomous command selected by your
@@ -68,11 +76,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    
+    // Reset the drivetrain's odometry to the starting pose of the trajectory. thisd should only happen if it is the first autonomus routine ran
+    // RobotContainer.m_drivetrainSubsystem.resetOdometry(m_Trajectory.getInitialPose());
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    
+  }
 
   @Override
   public void teleopInit() {
@@ -102,5 +115,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-  } 
+  }
+
+  /** This function is called once when the robot is first started up. */
+ 
+ 
 }
