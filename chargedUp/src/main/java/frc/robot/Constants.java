@@ -54,10 +54,13 @@ public final class Constants {
     public static final boolean kLeftInverted = false;
 
     // PID Controlls for Forawrds and Backwards
-    public static final double kMoveP = 25;
+    public static final double kMoveP = 0.7;
     public static final double kMoveI = 0;
     public static final double kMoveD = 0;
-    public static final double kMoveTolerance = 1;
+    public static final double kMoveTolerance = 0.1;
+
+    //FeefForward
+    
 
     // PID Controlls for Turning
     public static final double kTurnP = 0;
