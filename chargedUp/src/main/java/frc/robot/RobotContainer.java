@@ -21,6 +21,7 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.ArmControls.RotationReset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
@@ -247,7 +248,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
     m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
         // //This runs Endeffector to Collect Cube
-        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
         //This runs Endeffector to Collect Cone
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
@@ -297,11 +298,8 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         //   new TelescoperPID(m_telescoperSubsystem, 0), 
         //   () -> m_armSubsystem.isInFramePerimeter()
         //   ));
-    // m_driverController.a().onTrue(new RotationPID(m_armSubsystem, 90));
-    // m_driverController.b().onTrue(new RotationPID(m_armSubsystem, -90));
-    // m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
-    m_driverController.y().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
-    // m_driverController.b().onTrue(new MovePID(m_drivetrainSubsystem, 3.0));
+    m_driverController.a().onTrue(new RotationPID(m_armSubsystem, 90));
+    m_driverController.b().onTrue(new RotationPID(m_armSubsystem, -90));
   }
   
   /**
