@@ -24,11 +24,9 @@ public class RotationReset extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_armSubsystem.getPotentiometer() < 1.0 && m_armSubsystem.getPotentiometer() > -1.0){
-      m_armSubsystem.stopRotationMotors();
-    } else if (m_armSubsystem.getPotentiometer() > 1){
+    if (m_armSubsystem.getPotentiometer() > 0.5){
       m_armSubsystem.spinRotationMotors(-0.2);
-    } else if (m_armSubsystem.getPotentiometer() < -1){
+    } else if (m_armSubsystem.getPotentiometer() < -0.5){
       m_armSubsystem.spinRotationMotors(0.2);
     }
   }
@@ -37,6 +35,7 @@ public class RotationReset extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_armSubsystem.stopRotationMotors();
+    m_armSubsystem.resetRotationPosition();
   }
 
   // Returns true when the command should end.

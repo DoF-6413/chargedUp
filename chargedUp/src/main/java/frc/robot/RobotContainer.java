@@ -180,11 +180,8 @@ public class RobotContainer {
         //   new TelescoperPID(m_telescoperSubsystem, 0), 
         //   () -> m_armSubsystem.isInFramePerimeter()
         //   ));
-    // m_driverController.a().onTrue(new RotationPID(m_armSubsystem, 90));
-    // m_driverController.b().onTrue(new RotationPID(m_armSubsystem, -90));
-    // m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
-    m_driverController.y().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
-    // m_driverController.b().onTrue(new MovePID(m_drivetrainSubsystem, 3.0));
+    m_driverController.a().onTrue(new RotationPID(m_armSubsystem, 90));
+    m_driverController.b().onTrue(new RotationPID(m_armSubsystem, -90));
   }
   
   /**
