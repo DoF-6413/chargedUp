@@ -34,6 +34,8 @@ public class ScoreCone extends SequentialCommandGroup {
       new RotationPID(arm, -107),
       new TelescoperPID(telescoper, 147),
       new RotationPID(arm, -83),
+
+      //make the following a follow path with events to change time
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfctr, -0.8, 3),
         new TelescoperPID(telescoper, 1)
