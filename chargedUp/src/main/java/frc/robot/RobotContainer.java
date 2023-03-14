@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 // import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.Constants.VisionConstants;
 // import frc.robot.commands.targetFinding;
@@ -89,7 +90,7 @@ public class RobotContainer {
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem);
-  
+  private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
   private final WristSubsystem m_wristSubsystem = new WristSubsystem();
@@ -180,8 +181,9 @@ public class RobotContainer {
 
         m_auxController.b().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.70)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
-
-    
+        
+    m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
+    m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
   }
   
   /**
