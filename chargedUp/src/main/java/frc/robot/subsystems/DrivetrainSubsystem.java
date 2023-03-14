@@ -57,11 +57,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   private static DifferentialDriveOdometry m_odometry;
   public static Field2d m_field2d;
-  private static GyroSubsystem gyro = new GyroSubsystem();
+  
+  private static GyroSubsystem gyro;
 
   SimDouble gyroAngleSim;
   
-  public DrivetrainSubsystem() {
+  public DrivetrainSubsystem(GyroSubsystem m_gyro) {
     
     leftLead = new SparkMaxWrapper(DriveMotor.leftLead.CAN_ID, MotorType.kBrushless);
     rightLead = new SparkMaxWrapper(DriveMotor.rightLead.CAN_ID, MotorType.kBrushless);
@@ -84,7 +85,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     encoderLeftLead.setPositionConversionFactor(DrivetrainConstants.kTicksToMeters);
     encoderRightLead.setPositionConversionFactor(DrivetrainConstants.kTicksToMeters);
 
-    
+    gyro = m_gyro;
     diffDrive = new DifferentialDrive(leftLead, rightLead);
     
     // Todo: Find out what this does
@@ -229,6 +230,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(simEncoderLeftRep.getRate(), simEncoderRightRep.getRate());
+  }
+
+  /** */
+  public void switchIdleMode(boolean setCoast){
+if (setCoast == true){
+  Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
+        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kCoast));
+} else if (setCoast ==false){
+  Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
+        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
+}
   }
 
   @Override

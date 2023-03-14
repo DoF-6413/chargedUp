@@ -4,15 +4,20 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -23,11 +28,6 @@ private final CANSparkMax m_leftRotationMotor;
 private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
 
-
-private final TalonFX m_endEffectorMotor;
-
-private final TalonFX m_telescopingMotor;
-
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
@@ -35,26 +35,13 @@ private final TalonFX m_telescopingMotor;
     m_rightRotationMotor.follow(m_leftRotationMotor);
     m_leftRotationMotor.setIdleMode(IdleMode.kBrake);
     m_rightRotationMotor.setIdleMode(IdleMode.kBrake);
-    m_leftRotationMotor.setSmartCurrentLimit(15);
+    m_leftRotationMotor.setSmartCurrentLimit(ArmConstants.kRotationCurrentLimit);
     
     m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
     
     m_rightRotationMotor.follow(m_leftRotationMotor);
     
-    m_endEffectorMotor = new TalonFX(ArmMotor.endEffectorMotor.CAN_ID);
-    m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
-    
-    m_telescopingMotor = new TalonFX(ArmMotor.telescopingMotor.CAN_ID);
-    m_telescopingMotor.setNeutralMode(NeutralMode.Brake);
-
-    StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
-          ArmConstants.kIsCurrentLimitEnabled, //Is enabled?
-          ArmConstants.kContinuousCurrent, //Continuous Current Limit
-          ArmConstants.kPeakCurrent, //Peak Current Limit
-          ArmConstants.kMaxTimeAtPeak); //Time Allowed to be at Peak Current Limit
-
-          m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
   }
 
   @Override
@@ -64,9 +51,7 @@ private final TalonFX m_telescopingMotor;
   }
 
   public void SmartDashboardCalls(){
-    SmartDashboard.putNumber("RotationPosition", m_RotationEncoder.getPosition());
-    SmartDashboard.putNumber("EndEffectorPosition", m_endEffectorMotor.getSelectedSensorPosition());
-    
+    SmartDashboard.putNumber("RotationPosition", getRotationPosition());    
   }
 
   public double getRotationPosition(){
@@ -86,51 +71,7 @@ private final TalonFX m_telescopingMotor;
     m_leftRotationMotor.set(0);
   }
 
-
-  public double getEndEffectorPosition(){
-    return m_endEffectorMotor.getSelectedSensorPosition();
-  }
-
-  public void resetEndEffectorPosition(){ 
-    m_endEffectorMotor.setSelectedSensorPosition(0);
-  }
-
-  public void spinEndEffector(double speed){
-    m_endEffectorMotor.set(TalonFXControlMode.PercentOutput, speed);
-  }
-
-
-  public void stopEndEffector(){
-    m_endEffectorMotor.set(TalonFXControlMode.PercentOutput, 0);
-  }
-
-  public double getTelescoperPosition(){
-    return m_telescopingMotor.getSelectedSensorPosition();
-  }
-
-  public void resetTelescoperPosition(){
-    m_telescopingMotor.setSelectedSensorPosition(0);
-  }
-
-  public void spinTelescopingMotor(double speed){
-    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, speed);
-  }
-
-  public void stopTelescopingMotor(){
-    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, 0);
-  }
-
-  public void telescoperCurrentLimit(double continuousCurrent, double maxCurrent){
-        StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
-          true, //Is enabled?
-          continuousCurrent, //Continuous Current Limit
-          maxCurrent, //Peak Current Limit
-          5.0); //Time Allowed to be at Peak Current Limit
-
-          m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
-  }
-
-  public double telecoperCurrent(){
-    return m_telescopingMotor.getStatorCurrent();
+  public Boolean isInFramePerimeter(){
+    return ((this.getRotationPosition() < 35) && (this.getRotationPosition() > -35 )) ?  true :  false;
   }
 }

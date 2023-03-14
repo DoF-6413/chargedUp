@@ -8,21 +8,63 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.subsystems.GyroSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.Constants.VisionConstants;
+// import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+// import frc.robot.commands.targetFinding;
+// import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.colorSensor;
+// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.*;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
+import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.RotationPID;
+// import frc.robot.commands.ArmControls.TelescoperConditional;
+import frc.robot.commands.ArmControls.TelescoperPID;
+import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.Autos.ScoreCone;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.TelescoperSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,16 +74,19 @@ import frc.robot.commands.ArmControls.RotationPID;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem);
+  
+  private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
+  private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
-  private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  // private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
-  
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -57,16 +102,20 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, newishPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, getOntoChargingStation.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Score Cone", new ScoreCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
       SmartDashboard.putData(m_chooser);
     configureBindings();
+    defaultCommands();
       
   }
 
-  public void drivetrainDefaultCommand(){
+  public void defaultCommands(){
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
+
      m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
   }
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -77,41 +126,64 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-        //This extends telescoper 
-        m_auxController.start().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
 
-        //This unextends telescoper 
-        m_auxController.back().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
-
-        //This runs Endeffector to Collect Cube
-        m_auxController.b().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
-
+    m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
+        // //This runs Endeffector to Collect Cube
+        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         //This runs Endeffector to Collect Cone
+        // m_auxController.a().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         m_auxController.a().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
+        onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
         
-        
-        // This runs Endeffector to eject game peices
+        m_auxController.b().
+        onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
+
+        // // This runs Endeffector to eject game peices
         m_auxController.rightTrigger().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(-0.2)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopEndEffector()));
-
-        //This runs rotation motors to 77.5 degrees
-        m_auxController.y().
-        onTrue(new RotationPID(m_armSubsystem, 77.5));
+        onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.5)))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
         
-        //This runs rotation motors to -77.5 degrees
-        m_auxController.x(). onTrue(new RotationPID(m_armSubsystem, -77.5));
+        m_auxController.y().onTrue(new InstantCommand(()->m_telescoperSubsystem.spinTelescopingMotor(1))).
+        onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-        //This resets the encoder value of the arm where it is currently located
-        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        
+        m_auxController.x().onTrue(new InstantCommand(()->m_telescoperSubsystem.spinTelescopingMotor(-1))).
+        onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
+        // m_auxController.y()
+        // .onTrue(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 150), 
+        //   () ->  m_armSubsystem.isInFramePerimeter()
+        //   ))
+        // .onFalse(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   () -> m_armSubsystem.isInFramePerimeter()
+        //   ));
+
+        //   m_auxController.x()
+        // .onTrue(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 30), 
+        //   () ->  m_armSubsystem.isInFramePerimeter()
+        //   ))
+        // .onFalse(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   () -> m_armSubsystem.isInFramePerimeter()
+        //   ));
+    // m_driverController.a().onTrue(new RotationPID(m_armSubsystem, 90));
+    // m_driverController.b().onTrue(new RotationPID(m_armSubsystem, -90));
+    // m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+    m_driverController.y().onTrue(new gyroBalance(m_gyroSubsystem, m_drivetrainSubsystem));
+    // m_driverController.b().onTrue(new MovePID(m_drivetrainSubsystem, 3.0));
   }
   
   /**

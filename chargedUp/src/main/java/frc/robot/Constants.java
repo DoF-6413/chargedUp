@@ -46,10 +46,13 @@ public final class Constants {
     public static final boolean kLeftInverted = false;
 
     // PID Controlls for Forawrds and Backwards
-    public static final double kMoveP = 25;
+    public static final double kMoveP = 0.7;
     public static final double kMoveI = 0;
     public static final double kMoveD = 0;
-    public static final double kMoveTolerance = 1;
+    public static final double kMoveTolerance = 0.1;
+
+    //FeefForward
+    
 
     // PID Controlls for Turning
     public static final double kTurnP = 0;
@@ -114,9 +117,7 @@ public final class Constants {
   public static class ArmConstants { 
     public enum ArmMotor {
       leftRotationMotor(6),
-      rightRotationMotor(7),
-      telescopingMotor(8),
-      endEffectorMotor(9);
+      rightRotationMotor(7);
 
       public final int CAN_ID;
 
@@ -125,34 +126,45 @@ public final class Constants {
       }
     }
 
-    public static final double kGearing = 278;
-    public static final double kRotationPositionConversion = 360.0 /303.03;
-    // Arm PID Values (Tune PID Before Feedforward)
-    public static final double kArmP = 0.25;
-    public static final double kArmI = 0;
-    public static final double kArmD = 0;
-    public static final double kArmTolerance = 0.5;
+    //Rotation System Facts
+    public static final double kRotationGearing = 303.03;
+    public static final int kRotationCurrentLimit = 15;
+    //ticks to degrees
+    public static final double kRotationPositionConversion = 360.0 /kRotationGearing;
 
-    // Arm Feedforward Values
-    // Static Gain ()
-    public static final double kArmS = 0;
-    // Gravitational Gain (Tune this first, be specific up to 4 decimal places)
-    public static final double kArmG = 0;
-    // Velocity Gain ()
-    public static final double kArmV = 0;
-    // Acceleration Gain ()
-    public static final double kArmA = 0;
+    // Rotation Arm PID Values (Tune PID Before Feedforward)
+    public static final double kRotationP = 0.25;
+    public static final double kRotationI = 0;
+    public static final double kRotationD = 0;
+    public static final double kRotationTolerance = 0.5;
 
-    //Trapazoidal Motion Profiling
+    //Trapazoidal Motion Profiling for Rotation Arm
     public static final double kArmMaxVelocity = 100;
     public static final double kArmMaxAcceleration = 100;
-    
-    public static final int[] kLimitSwitches = new int[] {0, 1};
+  }
 
-    public static final boolean kIsCurrentLimitEnabled = true;
-    public static final double kContinuousCurrent = 15;
-    public static final double kPeakCurrent = 20;
-    public static final double kMaxTimeAtPeak = 5.0;
+  public static class TelescoperConstants{
+    public static final int kTelescoperCANID = 8;
 
+    // Telescoper PID Values
+    public static final double kTelescoperP = 0.04;
+    public static final double kTelescoperI = 0;
+    public static final double kTelescoperD = 0;
+    public static final double kTelescoperTolerance = 2;
+
+    //Telescoper Current Limit
+    public static final boolean kIsTelescoperCurrentLimitEnabled = true;
+    public static final double kTelescoperContinuousCurrent = 25;
+    public static final double kTelescoperPeakCurrent = 60;
+    public static final double kTelescoperMaxTimeAtPeak = 5.0;
+
+    public static final boolean kIsTelescoperInverted = false;
+    public static final double kFalconTicks = 2048;
+    public static final double kTelescopePositionConversionFactor = 1/kFalconTicks;
+    public static final double kMaxTelescoperSpeed = 0.75;
+  }
+
+  public static class EndEffectorConstants{
+    public static final int kEndEffectorCANID = 9;
   }
 }
