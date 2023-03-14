@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -25,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kAuxControllerPort = 1;
   }
 
   public static class DrivetrainConstants {
@@ -35,17 +35,16 @@ public final class Constants {
         rightLead(2),
         rightFollower1(3);
 
-        public final int CAN_ID;
+      public final int CAN_ID;
 
-        DriveMotor(int value) {
-          CAN_ID = value;
-        }
+      DriveMotor(int value) {
+        CAN_ID = value;
       }
+    }
 
     public static final boolean kRightInverted = true;
     public static final boolean kLeftInverted = false;
 
-    
     // PID Controlls for Forawrds and Backwards
     public static final double kMoveP = 25;
     public static final double kMoveI = 0;
@@ -61,12 +60,12 @@ public final class Constants {
     // Kinematics
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = Units.inchesToMeters(21.5);
-    
+
     // Distance between front and back wheels on robot
     public static final double WHEEL_BASE = Units.inchesToMeters(25);
 
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
-    
+
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(kMoveI, kMoveD, WHEEL_BASE);
     // Convert to wheel speeds
     DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
@@ -83,26 +82,23 @@ public final class Constants {
     public static final double kMOI = 4;
     // Final Mass of Robot including Bumbers and Batteries
     public static final double kMass = 135;
-    
+
     public static final double kwheelRadiusMeters = 3 * 0.0254;
     public static final int kWheelDiameter = 6;
-    
+
     public static final int neoEncoderTicks = 42;
     public static final double kTicksToMetersConversionFactor = 39.3701;
     public static final double kTicksToFeetConversionFactor = 12;
     public static final double kTicksToMeters = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-    / kTicksToMetersConversionFactor;
+        / kTicksToMetersConversionFactor;
     public static final double kTicksToFeet = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-    / kTicksToFeetConversionFactor;
-    
-    
-    
+        / kTicksToFeetConversionFactor;
+
     public static double loopPeriodSecs = 0.020;
-    
-    
+
     public static final double kStopMotors = 0;
   }
-  
+
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] { 0, 1.5, 3, 4 };
   }
@@ -113,8 +109,50 @@ public final class Constants {
 
     public static final double kchargingStationDistance = 5;
 
-    public static double kS = 0;
-    public static double kA = 0;
-    public static double kV = 0;
+  }
+
+  public static class ArmConstants { 
+    public enum ArmMotor {
+      leftRotationMotor(6),
+      rightRotationMotor(7),
+      telescopingMotor(8),
+      endEffectorMotor(9);
+
+      public final int CAN_ID;
+
+      ArmMotor(int value) {
+        CAN_ID = value;
+      }
+    }
+
+    public static final double kGearing = 278;
+    public static final double kRotationPositionConversion = 360.0 /303.03;
+    // Arm PID Values (Tune PID Before Feedforward)
+    public static final double kArmP = 0.25;
+    public static final double kArmI = 0;
+    public static final double kArmD = 0;
+    public static final double kArmTolerance = 0.5;
+
+    // Arm Feedforward Values
+    // Static Gain ()
+    public static final double kArmS = 0;
+    // Gravitational Gain (Tune this first, be specific up to 4 decimal places)
+    public static final double kArmG = 0;
+    // Velocity Gain ()
+    public static final double kArmV = 0;
+    // Acceleration Gain ()
+    public static final double kArmA = 0;
+
+    //Trapazoidal Motion Profiling
+    public static final double kArmMaxVelocity = 100;
+    public static final double kArmMaxAcceleration = 100;
+    
+    public static final int[] kLimitSwitches = new int[] {0, 1};
+
+    public static final boolean kIsCurrentLimitEnabled = true;
+    public static final double kContinuousCurrent = 15;
+    public static final double kPeakCurrent = 20;
+    public static final double kMaxTimeAtPeak = 5.0;
+
   }
 }
