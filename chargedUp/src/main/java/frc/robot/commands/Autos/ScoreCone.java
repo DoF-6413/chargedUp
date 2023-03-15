@@ -31,16 +31,16 @@ public class ScoreCone extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new RotationPID(arm, -107),
+      new RotationPID(arm, -100),
       new TelescoperPID(telescoper, 147),
-      new RotationPID(arm, -83),
+      new RotationPID(arm, -83)
 
       //make the following a follow path with events to change time
-      new ParallelCommandGroup(
-        new EndEffectorRunner(NEfctr, -0.8, 3),
-        new TelescoperPID(telescoper, 1)
-        ),
-      new RotationPID(arm, 0)
+      // new ParallelCommandGroup(
+      //   new EndEffectorRunner(NEfctr, -0.8, 0.5),
+      //   new TelescoperPID(telescoper, 1)
+      //   ),
+      // new RotationPID(arm, 0)
       // new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
     );
   }

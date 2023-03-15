@@ -60,6 +60,7 @@ import frc.robot.commands.ArmControls.RotationPID;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
 import frc.robot.commands.Autos.CenterRScoreOutBalance;
 import frc.robot.commands.Autos.G1TRAroundCSBalance;
@@ -175,6 +176,24 @@ public class RobotContainer {
         m_auxController.b().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.70)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
+        //   m_auxController.x()
+        // .onTrue(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 30), 
+        //   () ->  m_armSubsystem.isInFramePerimeter()
+        //   ))
+        // .onFalse(
+        //   new ConditionalCommand(
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   new TelescoperPID(m_telescoperSubsystem, 0), 
+        //   () -> m_armSubsystem.isInFramePerimeter()
+    //     //   ));
+    // m_driverController.a().onTrue(new RotationPID(m_armSubsystem, 90));
+    // m_driverController.b().onTrue(new RotationPID(m_armSubsystem, -90));
+
+    m_driverController.a().onTrue(new BackingOutArm(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    
   }
   
   /**
