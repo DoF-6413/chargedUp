@@ -150,17 +150,12 @@ public class RobotContainer {
 
         m_auxController.y()
             .onTrue(
-              new ConditionalCommand(
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention), 
-              () ->  m_armSubsystem.isInFramePerimeter()
-              ))
-            .onFalse(
-              new ConditionalCommand(
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              () -> m_armSubsystem.isInFramePerimeter()
-              ));
+              // new ConditionalCommand(
+              // new TelescoperPID(m_telescoperSubsystem, 0), 
+              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+              // () ->  m_armSubsystem.isInFramePerimeter()
+              // ))
+            .onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
 
         m_auxController.x().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(1)))
