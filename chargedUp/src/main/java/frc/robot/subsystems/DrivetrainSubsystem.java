@@ -74,7 +74,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFollower1 = new SparkMaxWrapper(DriveMotor.rightFollower1.CAN_ID, MotorType.kBrushless);
 
     Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
-        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kCoast));
+        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
 
     leftFollower1.follow(leftLead);
     rightFollower1.follow(rightLead);

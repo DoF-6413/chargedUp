@@ -174,19 +174,12 @@ public class RobotContainer {
               () -> m_armSubsystem.isInFramePerimeter()
               ));
 
-        m_auxController.a()
-          .onTrue(new RotationPID(m_armSubsystem, ArmConstants.kHPMPHB));
+        m_auxController.a().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(1)))
+        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-        m_auxController.b()
-          .onTrue(new RotationPID(m_armSubsystem, -ArmConstants.kHPMPHB));
+        m_auxController.b().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(-1)))
+        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-        m_auxController.povUp().onTrue(new RotationPID(m_armSubsystem, ArmConstants.kHighPeak));
-        
-        m_auxController.povLeft().onTrue(new RotationPID(m_armSubsystem, ArmConstants.kMidBottom));
-
-        m_auxController.povDown().onTrue(new RotationPID(m_armSubsystem, -ArmConstants.kHighPeak));
-
-        m_auxController.povRight().onTrue(new RotationPID(m_armSubsystem, -ArmConstants.kMidBottom));
 
 
   }
@@ -200,6 +193,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return m_chooser.getSelected();
+    return null;
   }
 }
