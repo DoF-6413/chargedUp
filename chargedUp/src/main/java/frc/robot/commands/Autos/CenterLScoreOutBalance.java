@@ -30,7 +30,7 @@ public class CenterLScoreOutBalance extends SequentialCommandGroup {
 
   
   
-  PathPlannerTrajectory kOverCSBalance = PathPlanner.loadPath("OverCSBalance", new PathConstraints(1, 1));
+  PathPlannerTrajectory kOverCSBalance = PathPlanner.loadPath("OverCSBalance", new PathConstraints(1.5, 1.2));
   
   
   /** Creates a new CenterLScoreOutBalance. */
