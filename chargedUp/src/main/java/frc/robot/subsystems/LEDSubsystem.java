@@ -12,7 +12,7 @@ public class LEDSubsystem extends SubsystemBase {
   /** Creates a new LEDSubsystem. */
   public final PWM pwm;
   public LEDSubsystem() {
-    pwm = new PWM(1);
+    pwm = new PWM(2);
     
   }
 
