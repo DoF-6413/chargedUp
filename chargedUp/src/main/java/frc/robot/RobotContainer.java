@@ -66,6 +66,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 // import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.colorSensor;
 
@@ -84,6 +85,7 @@ public class RobotContainer {
   
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
+  private final WristSubsystem m_wristSubsystem = new WristSubsystem();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
@@ -148,39 +150,22 @@ public class RobotContainer {
 
         m_auxController.y()
             .onTrue(
-              new ConditionalCommand(
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention), 
-              () ->  m_armSubsystem.isInFramePerimeter()
-              ))
-            .onFalse(
-              new ConditionalCommand(
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              () -> m_armSubsystem.isInFramePerimeter()
-              ));
+              // new ConditionalCommand(
+              // new TelescoperPID(m_telescoperSubsystem, 0), 
+              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+              // () ->  m_armSubsystem.isInFramePerimeter()
+              // ))
+            .onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
-        m_auxController.x()
-            .onTrue(
-              new ConditionalCommand(
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMCGB), 
-              () ->  m_armSubsystem.isInFramePerimeter()
-              ))
-            .onFalse(
-              new ConditionalCommand(
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              new TelescoperPID(m_telescoperSubsystem, 0), 
-              () -> m_armSubsystem.isInFramePerimeter()
-              ));
 
-        m_auxController.a().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(1)))
+        m_auxController.x().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(1)))
         .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-        m_auxController.b().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(-1)))
-        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
+        m_auxController.a().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.70)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
-
+        m_auxController.b().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.70)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
   }
   
