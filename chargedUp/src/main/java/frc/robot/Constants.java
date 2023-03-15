@@ -183,6 +183,14 @@ public final class Constants {
     public static final int kpotetiometerPort = 3;
     public static final double kpotetiometerRange = 180;
     public static final double kpotentiometerOffset = -96;
+    //Arm Values
+    public static final double kRotationZeroValue = 0;
+    public static final double kHighPeak = 98;
+    public static final double kMidBottom= 75;
+
+    /**Human Player, Mid Cone Peak, High Cone Bottom Value */
+    public static final double kHPMPHB = 85;
+    public static final double kfloorCube = 33;
   }
 
   public static class TelescoperConstants{
@@ -204,6 +212,12 @@ public final class Constants {
     public static final double kFalconTicks = 2048;
     public static final double kTelescopePositionConversionFactor = 1/kFalconTicks;
     public static final double kMaxTelescoperSpeed = 0.75;
+
+    //Arm Values
+    public static final double kMaxExtention = 150;
+    /** Telescoper for Mid Cone, Ground Block, and  */
+    public static final double kMCGB = 50;
+    public static final double kGroundCone = 55;
   }
 
   public static class EndEffectorConstants{
