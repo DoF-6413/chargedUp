@@ -48,7 +48,7 @@ public class gyroBalance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_drivetrainSubsystem.setRaw(0, 0);
-    m_drivetrainSubsystem.switchIdleMode(true);
+    // m_drivetrainSubsystem.switchIdleMode(true);
   }
 
   // Returns true when the command should end.

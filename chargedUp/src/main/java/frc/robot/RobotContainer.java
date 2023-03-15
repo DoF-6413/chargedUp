@@ -153,17 +153,12 @@ public class RobotContainer {
         //This runs Endeffector to Collect Cone
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
-        m_auxController.a().
+        m_auxController.leftTrigger().
         onTrue(new ParallelCommandGroup (
         new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)),
         new InstantCommand(()-> m_LEDSubsystem.LEDTimer())))
         .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
         
-        m_auxController.b().
-        onTrue(new ParallelCommandGroup (
-          new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)),
-          new InstantCommand(()-> m_LEDSubsystem.LEDTimer())))
-        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
 
         // // This runs Endeffector to eject game peices
         m_auxController.rightTrigger().
@@ -186,10 +181,10 @@ public class RobotContainer {
         m_auxController.x().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(1)))
         .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-        m_auxController.a().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.70)))
+        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.70)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
-        m_auxController.b().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.70)))
+        m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.70)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
     m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
