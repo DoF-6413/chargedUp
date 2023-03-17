@@ -22,6 +22,7 @@ public class EndEffectorRunner extends CommandBase {
     m_speed = speed;
     m_timer = new Timer();
     m_time = time;
+    addRequirements(NEfctr);
   }
 
   // Called when the command is initially scheduled.
