@@ -169,7 +169,7 @@ public class RobotContainer {
 
         // // This runs Endeffector to eject game peices
         m_auxController.rightTrigger().
-           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.5)))
+           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3)))
            .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
           ;
 

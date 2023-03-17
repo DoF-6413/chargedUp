@@ -30,11 +30,8 @@ public class ScoreCone extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(
-
-        new TelescoperReset(telescoper),
-        new RotationPID(arm, -100)
-      ),
+      new TelescoperReset(telescoper),
+      new RotationPID(arm, -100),
       new TelescoperPID(telescoper, 147),
       new RotationPID(arm, -83)
 
