@@ -187,7 +187,7 @@ public final class Constants {
   }
 
   public static class WristConstants{
-    public static final double kgearing = (50); 
+    public static final double kgearing = (116.667); 
     public static final double kwristRotationPositionConversion =360.0 / kgearing;
     //Wrist PID Values 
     public static final double kWristP = 0.05;
