@@ -30,15 +30,15 @@ public class gyroBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_gyroSubsystem.getRoll() > -5 && m_gyroSubsystem.getRoll() < 5){
+    if(m_gyroSubsystem.getRoll() > -10 && m_gyroSubsystem.getRoll() < 10){
       m_drivetrainSubsystem.setRaw(0, 0);
     }
      else if(m_gyroSubsystem.getRoll() > 0){
       //Change to negative
-    m_drivetrainSubsystem.setRaw(0.3, 0);
+    m_drivetrainSubsystem.setRaw(0.35, 0);
     } else if (m_gyroSubsystem.getRoll() < 0){
       //change to positive
-      m_drivetrainSubsystem.setRaw(-0.3, 0);
+      m_drivetrainSubsystem.setRaw(-0.35, 0);
     } else {
       m_drivetrainSubsystem.setRaw(0, 0);
     }
