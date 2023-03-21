@@ -76,6 +76,7 @@ import frc.robot.commands.ArmControls.RotationPID;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.ArmControls.WristPID;
 import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
 import frc.robot.commands.Autos.CenterRScoreOutBalance;
@@ -214,6 +215,10 @@ public class RobotContainer {
         m_auxController.povUp().whileTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
     m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
+
+    m_driverController.a().onTrue(new WristPID(m_wristSubsystem, 90));
+    m_driverController.b().onTrue(new WristPID(m_wristSubsystem, 180));
+    m_driverController.x().onTrue(new WristPID(m_wristSubsystem, 0));
   }
   
   /**

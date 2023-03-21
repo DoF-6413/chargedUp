@@ -185,4 +185,16 @@ public final class Constants {
   public static class EndEffectorConstants{
     public static final int kEndEffectorCANID = 9;
   }
+
+  public static class WristConstants{
+    public static final double kgearing = 50; 
+    public static final double kwristRotationPositionConversion = 360 / kgearing;
+    //Wrist PID Values 
+    public static final double kWristP = 0;
+    public static final double kWristI = 0;
+    public static final double kWristD = 0;
+    public static final double kWristTolerance = 360;
+
+    
+  }
 }
