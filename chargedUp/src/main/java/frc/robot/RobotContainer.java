@@ -114,6 +114,7 @@ public class RobotContainer {
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
   private final WristSubsystem m_wristSubsystem = new WristSubsystem();
+  private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
