@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.WristConstants;
 
 public class WristSubsystem extends SubsystemBase {
   /** Creates a new WristSubsystem. */
@@ -19,8 +20,9 @@ public class WristSubsystem extends SubsystemBase {
   public WristSubsystem() {
     m_wrist = new CANSparkMax(10, MotorType.kBrushless);
     m_wristEncoder = m_wrist.getEncoder();
-    m_wrist.setSmartCurrentLimit(5);
+    m_wrist.setSmartCurrentLimit(30);
     m_wrist.setIdleMode(IdleMode.kBrake);
+    m_wristEncoder.setPositionConversionFactor(WristConstants.kwristRotationPositionConversion);
   }
 
     public final void spinWrist(double speed){

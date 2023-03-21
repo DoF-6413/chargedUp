@@ -70,7 +70,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.RotationPID;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
@@ -219,6 +218,10 @@ public class RobotContainer {
     m_driverController.a().onTrue(new WristPID(m_wristSubsystem, 90));
     m_driverController.b().onTrue(new WristPID(m_wristSubsystem, 180));
     m_driverController.x().onTrue(new WristPID(m_wristSubsystem, 0));
+    // m_driverController.start().onTrue(new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
+    m_driverController.back().onTrue(new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
+    m_driverController.start().onTrue(new InstantCommand(()-> m_wristSubsystem.resetWrist()));
+
   }
   
   /**

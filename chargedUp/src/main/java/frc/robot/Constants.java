@@ -187,13 +187,13 @@ public final class Constants {
   }
 
   public static class WristConstants{
-    public static final double kgearing = 50; 
-    public static final double kwristRotationPositionConversion = 360 / kgearing;
+    public static final double kgearing = (50); 
+    public static final double kwristRotationPositionConversion =360.0 / kgearing;
     //Wrist PID Values 
-    public static final double kWristP = 0;
+    public static final double kWristP = 0.05;
     public static final double kWristI = 0;
     public static final double kWristD = 0;
-    public static final double kWristTolerance = 360;
+    public static final double kWristTolerance = 10;
 
     
   }
