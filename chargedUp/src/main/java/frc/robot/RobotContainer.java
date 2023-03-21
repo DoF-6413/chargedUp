@@ -4,19 +4,82 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants.TelescoperConstants;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.colorSensor;
+// import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.Constants.VisionConstants;
+// import frc.robot.commands.targetFinding;
+import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+// import frc.robot.commands.targetFinding;
+// import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.ArmControls.RotationReset;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.colorSensor;
+// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.*;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
-import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
+import java.util.List;
 
-import edu.wpi.first.wpilibj.XboxController.Button;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.ArmControls.EndEffectorRunner;
+import frc.robot.commands.ArmControls.RotationPID;
+// import frc.robot.commands.ArmControls.TelescoperConditional;
+import frc.robot.commands.ArmControls.TelescoperPID;
+import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.Autos.BackingOutArm;
+import frc.robot.commands.Autos.CenterLScoreOutBalance;
+import frc.robot.commands.Autos.CenterRScoreOutBalance;
+import frc.robot.commands.Autos.G1TRAroundCSBalance;
+import frc.robot.commands.Autos.G3TLAroundCSBalance;
+import frc.robot.commands.Autos.ScoreBalance;
+import frc.robot.commands.Autos.ScoreCone;
+import frc.robot.commands.Autos.ScoreHigh;
+import frc.robot.commands.Autos.ScoreRunRight;
+import frc.robot.commands.Autos.scoreRun;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.WristSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,18 +89,58 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem);
+  private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
+  private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
+  private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
+  private final WristSubsystem m_wristSubsystem = new WristSubsystem();
+
+  //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
+  // private final colorSensor m_colorSensorSubsystem = new colorSensor();
+
+  // PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory runOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.5, 0.8));
+  PathPlannerTrajectory overCSBalance = PathPlanner.loadPath("OverCSBalance", new PathConstraints(1.5, 1.2));
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+      public final static CommandXboxController m_auxController =
+      new CommandXboxController(OperatorConstants.kAuxControllerPort);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
     // Configure the trigger bindings
+    // m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, runOutCommunity.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, overCSBalance.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Score High", new ScoreHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+    m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
+    defaultCommands();
+      
   }
 
+  public void defaultCommands(){
+    m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
+     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
+
+     m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
+  }
+  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -48,50 +151,60 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+        m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
+        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        //This runs Endeffector to Collect Cone
+        // m_auxController.a().
+        // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_auxController.leftTrigger().
+        onTrue(new ParallelCommandGroup (
+        new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)),
+        new InstantCommand(()-> m_LEDSubsystem.LEDTimer())))
+        .onFalse(new ParallelCommandGroup (
+          new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()), 
+          new InstantCommand(()-> m_LEDSubsystem.LEDTimer())));
+        
+        
 
-    m_driverController.a().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "a")) );
-    m_driverController.b().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "b")) );
+        // // This runs Endeffector to eject game peices
+        m_auxController.rightTrigger().
+           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3)))
+           .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+          ;
 
-    m_driverController.x().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "x")) );
-
-    m_driverController.y().whileTrue(new RunCommand(() ->SmartDashboard.putString("button pressed", "y")) );
-
-    //D-Pad buttons
-    m_driverController.povUp().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Up")) );
-
-    m_driverController.povDown().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Down")) );
-    
-    m_driverController.povRight().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Right")) );
-
-    m_driverController.povLeft().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "Left")) );
+        m_auxController.y()
+            .onTrue(
+              // new ConditionalCommand(
+              // new TelescoperPID(m_telescoperSubsystem, 0), 
+              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+              // () ->  m_armSubsystem.isInFramePerimeter()
+              // ))
+            .onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
 
-    m_driverController.leftBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftBumper")) );
+        m_auxController.x().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(1)))
+        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
-    m_driverController.rightBumper().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightBumper")) );
+        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
-    m_driverController.leftTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "leftTrigger")) );
+        m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
-    m_driverController.rightTrigger().whileTrue(new RunCommand(() -> SmartDashboard.putString("button pressed", "rightTrigger")) );
-
-    m_driverController.start().whileTrue(new RunCommand (() -> SmartDashboard.putString("button pressed", "startButton")) );
-
+    m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
+    m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
   }
-
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
+
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    
+    return m_chooser.getSelected();
   }
 }
