@@ -67,7 +67,9 @@ import frc.robot.commands.Autos.CenterLScoreOutBalance;
 import frc.robot.commands.Autos.CenterRScoreOutBalance;
 import frc.robot.commands.Autos.G1TRAroundCSBalance;
 import frc.robot.commands.Autos.G3TLAroundCSBalance;
+import frc.robot.commands.Autos.ScoreBalance;
 import frc.robot.commands.Autos.ScoreCone;
+import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
 import frc.robot.subsystems.ArmSubsystem;
@@ -124,6 +126,8 @@ public class RobotContainer {
     // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
     m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, runOutCommunity.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, overCSBalance.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Score High", new ScoreHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+    m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();
@@ -157,15 +161,16 @@ public class RobotContainer {
         onTrue(new ParallelCommandGroup (
         new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)),
         new InstantCommand(()-> m_LEDSubsystem.LEDTimer())))
-        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+        .onFalse(new ParallelCommandGroup (
+          new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()), 
+          new InstantCommand(()-> m_LEDSubsystem.LEDTimer())));
+        
         
 
         // // This runs Endeffector to eject game peices
         m_auxController.rightTrigger().
-           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.5)))
-          .onFalse(new ParallelCommandGroup (
-            new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()), 
-            new InstantCommand(()-> m_LEDSubsystem.LEDTimer())));
+           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3)))
+           .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
           ;
 
         m_auxController.y()
