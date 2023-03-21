@@ -144,10 +144,10 @@ public final class Constants {
 
     public static final int kpotetiometerPort = 3;
     public static final double kpotetiometerRange = 180;
-    public static final double kpotentiometerOffset = -75;
+    public static final double kpotentiometerOffset = -62;
     //Arm Values
     public static final double kRotationZeroValue = 0;
-    public static final double kHighPeak = 100;
+    public static final double kHighPeak = 105;
     public static final double kMidBottom= 75;
 
     /**Human Player, Mid Cone Peak, High Cone Bottom Value */
