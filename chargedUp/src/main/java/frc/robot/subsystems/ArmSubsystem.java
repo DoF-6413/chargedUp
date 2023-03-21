@@ -89,25 +89,4 @@ private final AnalogPotentiometer m_pot;
     return ((this.getRotationPosition() < 35) && (this.getRotationPosition() > -35 )) ?  true :  false;
   }
 
-  public void spinTelescopingMotor(double speed){
-    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, speed);
-  }
-
-  public void stopTelescopingMotor(){
-    m_telescopingMotor.set(TalonFXControlMode.PercentOutput, 0);
-  }
-
-  public void telescoperCurrentLimit(double continuousCurrent, double maxCurrent){
-        StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
-          true, //Is enabled?
-          continuousCurrent, //Continuous Current Limit
-          maxCurrent, //Peak Current Limit
-          5.0); //Time Allowed to be at Peak Current Limit
-
-          m_telescopingMotor.configStatorCurrentLimit(m_currentLimitConfig);
-  }
-
-  public double telecoperCurrent(){
-    return m_telescopingMotor.getStatorCurrent();
-  }
 }
