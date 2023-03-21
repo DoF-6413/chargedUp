@@ -86,6 +86,7 @@ import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
+import frc.robot.commands.TeleopAutomations.ConePickUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
 import frc.robot.commands.TeleopAutomations.PlaceHigh;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
@@ -178,7 +179,8 @@ public class RobotContainer {
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         m_auxController.leftTrigger().
-        onTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+        onTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
+        onFalse(new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
         
         
 
@@ -212,16 +214,9 @@ public class RobotContainer {
         m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
-        m_auxController.povUp().whileTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
     m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
 
-    m_driverController.a().onTrue(new WristPID(m_wristSubsystem, 90));
-    m_driverController.b().onTrue(new WristPID(m_wristSubsystem, 180));
-    m_driverController.x().onTrue(new WristPID(m_wristSubsystem, 0));
-    // m_driverController.start().onTrue(new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
-    m_driverController.back().onTrue(new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
-    m_driverController.start().onTrue(new InstantCommand(()-> m_wristSubsystem.resetWrist()));
 
   }
   

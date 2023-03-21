@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.TeleopAutomations;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -25,9 +25,9 @@ public class ConePickUp extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new ConditionalCommand(
-          new WristPID(wrist, 180),
+          new WristPID(wrist, -180),
           new WristPID(wrist, 0), 
-          () -> (wrist.getPosition() > -5 && wrist.getPosition() < 5)),
+          () -> (wrist.getPosition() > -30 && wrist.getPosition() < 30)),
        
         new TelescoperPID(telerescoper, 0)
       ),
