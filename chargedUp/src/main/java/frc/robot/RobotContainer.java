@@ -72,6 +72,9 @@ import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
+import frc.robot.commands.TeleopAutomations.PickupCone;
+import frc.robot.commands.TeleopAutomations.PlaceHigh;
+import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -139,6 +142,8 @@ public class RobotContainer {
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
 
      m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
+    //  m_telescoperSubsystem.setDefaultCommand(new TelescoperPID(m_telescoperSubsystem, 0));
+    m_telescoperSubsystem.setDefaultCommand(new TelescoperReset(m_telescoperSubsystem));
   }
   
   /**
@@ -153,17 +158,12 @@ public class RobotContainer {
   private void configureBindings() {
 
         m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
-        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
         //This runs Endeffector to Collect Cone
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         m_auxController.leftTrigger().
-        onTrue(new ParallelCommandGroup (
-        new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)),
-        new InstantCommand(()-> m_LEDSubsystem.LEDTimer())))
-        .onFalse(new ParallelCommandGroup (
-          new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()), 
-          new InstantCommand(()-> m_LEDSubsystem.LEDTimer())));
+        onTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
         
         
 
@@ -175,16 +175,21 @@ public class RobotContainer {
 
         m_auxController.y()
             .onTrue(
+              // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+              new PositionHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem))
+            .onFalse(
+              new PlaceHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+
+      
+
+        m_auxController.x()
+            .onTrue(
               // new ConditionalCommand(
               // new TelescoperPID(m_telescoperSubsystem, 0), 
-              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+              new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMCGB))
               // () ->  m_armSubsystem.isInFramePerimeter()
               // ))
             .onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
-
-
-        m_auxController.x().onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(1)))
-        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
@@ -192,6 +197,7 @@ public class RobotContainer {
         m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
+        m_auxController.povUp().whileTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
     m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
   }
