@@ -6,17 +6,24 @@ package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TelescoperConstants;
+import frc.robot.commands.TeleopAutomations.PlaceHigh;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TelescoperPID extends PIDCommand {
-  /** Creates a new TelescoperPID. */
+public class TelescoperWrapper extends PIDCommand {
+  /** Creates a new TelescoperWrapper. */
   private TelescoperSubsystem m_telescoperSubsystem;
-  public TelescoperPID(TelescoperSubsystem telescope, double setpoint) {
+  private ArmSubsystem m_armSubsystem;
+  private EndEffectorSubsystem m_endEffectorSubsystem;
+
+  public TelescoperWrapper(TelescoperSubsystem telescope, ArmSubsystem arm, EndEffectorSubsystem NEfector, double setpoint) {
     super(
         // The controller that the command will use
         new PIDController(TelescoperConstants.kTelescoperP, TelescoperConstants.kTelescoperI, TelescoperConstants.kTelescoperD),
@@ -30,6 +37,8 @@ public class TelescoperPID extends PIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     m_telescoperSubsystem = telescope;
+    m_armSubsystem = arm;
+    m_endEffectorSubsystem = NEfector;
     SmartDashboard.putNumber("Telescoper Setpoint", setpoint);
     addRequirements(m_telescoperSubsystem);
     // Configure additional PID options by calling `getController` here.
@@ -38,7 +47,7 @@ public class TelescoperPID extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getController().atSetpoint();
+    return CommandScheduler.getInstance().isScheduled(new PlaceHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     // return false;
   }
 }

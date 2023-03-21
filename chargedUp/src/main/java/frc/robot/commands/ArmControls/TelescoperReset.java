@@ -5,8 +5,6 @@
 package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.Constants.TelescoperConstants;
 
@@ -16,12 +14,13 @@ public class TelescoperReset extends CommandBase {
   public TelescoperReset(TelescoperSubsystem telescope) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_telescoperSubsystem = telescope;
+    addRequirements(m_telescoperSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_telescoperSubsystem.telescoperCurrentLimit(10, 20);
+    m_telescoperSubsystem.telescoperCurrentLimit(20, 40);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,6 +40,6 @@ public class TelescoperReset extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_telescoperSubsystem.telecoperCurrent() >= 10;
+    return m_telescoperSubsystem.telecoperCurrent() >= 20;
   }
 }

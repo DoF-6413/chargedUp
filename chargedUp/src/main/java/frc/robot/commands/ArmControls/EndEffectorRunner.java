@@ -29,6 +29,7 @@ public class EndEffectorRunner extends CommandBase {
   @Override
   public void initialize() {
     m_endEffexEffectorSubsystem.stopEndEffector();
+    m_timer.reset();
     m_timer.start();
   }
 
