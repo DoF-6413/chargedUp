@@ -23,7 +23,7 @@ public class CubePIckUp extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
-        new WristPID(wrist, 90 ),
+        new WristPID(wrist, -90 ),
         new TelescoperPID(telescoper, 0)
         ),
         new RotationPID(arm, 0)

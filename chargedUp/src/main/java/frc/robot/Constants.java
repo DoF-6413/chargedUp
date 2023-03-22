@@ -144,7 +144,7 @@ public final class Constants {
 
     public static final int kpotetiometerPort = 3;
     public static final double kpotetiometerRange = 180;
-    public static final double kpotentiometerOffset = -62;
+    public static final double kpotentiometerOffset = -64;
     //Arm Values
     public static final double kRotationZeroValue = 0;
     public static final double kHighPeak = 105;

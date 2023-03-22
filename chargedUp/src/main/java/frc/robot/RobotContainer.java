@@ -87,6 +87,8 @@ import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
+import frc.robot.commands.TeleopAutomations.CubePIckUp;
+// import frc.robot.commands.TeleopAutomations.CubePickUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
 import frc.robot.commands.TeleopAutomations.PlaceHigh;
 import frc.robot.commands.TeleopAutomations.PlaceMid;
@@ -149,7 +151,8 @@ public class RobotContainer {
     m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, overCSBalance.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Score High", new ScoreHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
     m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    SmartDashboard.putData("m_chooser", m_chooser);
+
+    SmartDashboard.putData("hahah", m_chooser);
     configureBindings();
     defaultCommands();
       
@@ -157,10 +160,10 @@ public class RobotContainer {
 
   public void defaultCommands(){
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
-     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()), m_drivetrainSubsystem));
+     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()*0.75), m_drivetrainSubsystem));
 
      m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
-    //  m_telescoperSubsystem.setDefaultCommand(new TelescoperPID(m_telescoperSubsystem, 0));
+     m_telescoperSubsystem.setDefaultCommand(new TelescoperPID(m_telescoperSubsystem, 0));
     // m_telescoperSubsystem.setDefaultCommand(new TelescoperReset(m_telescoperSubsystem));
   }
   
@@ -176,26 +179,26 @@ public class RobotContainer {
   private void configureBindings() {
 
         m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
-        m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
+        // m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
+        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         //This runs Endeffector to Collect Cone
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         m_auxController.leftTrigger().
         onTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
-        onFalse(new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
+        onFalse (new ConditionalCommand(
+          new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem),
+          new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem),
+          ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kyellow));
         
-        
-
-        // // This runs Endeffector to eject game peices
-        m_auxController.rightTrigger().
-           onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3)))
-           .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
-          ;
+        m_auxController.rightTrigger().onTrue(
+          new EndEffectorRunner(m_endEffectorSubsystem, -0.3, 3)
+        );
 
         m_auxController.y()
             .onTrue(
               // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
-              new PositionHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem))
+              new PositionHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
             .onFalse(
               new PlaceHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
@@ -203,9 +206,19 @@ public class RobotContainer {
 
         m_auxController.x()
             .onTrue(
-              new PositionMid(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
+              new PositionMid(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
               .onFalse(
                 new PlaceMid(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+
+        m_auxController.a().onTrue(
+          new TelescoperPID(m_telescoperSubsystem, 50)).
+          onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+
+          m_auxController.b().onTrue(
+            new TelescoperPID(m_telescoperSubsystem, 16)).
+            onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+
+        m_auxController.povUp().onTrue(new EndEffectorRunner(m_endEffectorSubsystem, 0.5, 1));
 
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
@@ -228,6 +241,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return new MoveCommand(m_drivetrainSubsystem, 5, 0.65);
+    return m_chooser.getSelected();
   }
 }
