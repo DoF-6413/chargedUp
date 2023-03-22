@@ -179,7 +179,7 @@ public final class Constants {
     public static final double kMaxExtention = 50;
     /** Telescoper for Mid Cone, Ground Block, and  */
     public static final double kMCGB = 16;
-    public static final double kGroundCone = 55;
+    public static final double kGroundCone = 0;
   }
 
   public static class EndEffectorConstants{
