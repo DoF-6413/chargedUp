@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import java.time.chrono.ThaiBuddhistChronology;
+
 import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -50,16 +52,17 @@ public double distanceTo;
   public void execute() {
 
     if(m_VisionSubsystem.getBestFiducial() != null){
-    double theta = ((m_VisionSubsystem.getBestFiducial().getBestCameraToTarget().getRotation().getZ()*180)/3.14159265359);
+      //transform radian to degress
+    double thetaRadian = ((m_VisionSubsystem.getBestFiducial().getBestCameraToTarget().getRotation().getZ()*180)/3.14159265359);
+    double theta = (thetaRadian *180)/3.14159265359;
     if (theta > 0){
 theta = 180 - theta;
     }if (theta < 0){
       theta += 180;
     }
     System.out.println(theta); 
-   // System.out.println(theta);
-        //transform radian to degress
         
+    distanceTo = m_VisionSubsystem.getBestFiducial().getBestCameraToTarget().getX();
      
         SmartDashboard.putNumber("distance To April Tag", distanceTo);
         
@@ -71,11 +74,12 @@ theta = 180 - theta;
           
           SmartDashboard.putNumber("target Pose x",targetPose.getX());
           SmartDashboard.putNumber("target Pose Y",targetPose.getY());
-        
-        double xOffset = distanceTo * new Rotation2d(theta).getCos();
+          
+
+        double xOffset = distanceTo * new Rotation2d(thetaRadian).getCos();
         SmartDashboard.putNumber("X Offset", xOffset);
     
-        double yOffset = distanceTo * new Rotation2d(theta).getSin();
+        double yOffset = distanceTo * new Rotation2d(thetaRadian).getSin();
         SmartDashboard.putNumber("Y Offset", yOffset);
     
         double derivedX = targetPose.getX() + xOffset;
@@ -83,13 +87,14 @@ theta = 180 - theta;
     
         double derivedY = targetPose.getY() + yOffset;
         SmartDashboard.putNumber("derived Y", derivedY);
-    
+        
         m_derivedPose = new Pose2d(derivedX, derivedY, m_GyroSubsystem.getRotation2d() );
         SmartDashboard.putNumber("derived Pose X", m_derivedPose.getX());
         SmartDashboard.putNumber("derived Pose Y",targetPose.getY());
+
       
-    distanceTo = PhotonUtils.calculateDistanceToTargetMeters(
-      1.13, 1.27, 0, Units.radiansToDegrees(m_VisionSubsystem.getBestFiducial().getPitch()));
+    // distanceTo = PhotonUtils.calculateDistanceToTargetMeters(
+    //   1.13, 1.27, 0, Units.radiansToDegrees(m_VisionSubsystem.getBestFiducial().getPitch()));
      
     // System.out.println( m_derivedPose.toString());
   m_DrivetrainSubsystem.resetOdometry(m_derivedPose);
