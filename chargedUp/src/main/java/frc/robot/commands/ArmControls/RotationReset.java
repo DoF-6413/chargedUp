@@ -36,7 +36,6 @@ public class RotationReset extends CommandBase {
   public void end(boolean interrupted) {
     m_armSubsystem.stopRotationMotors();
     m_armSubsystem.resetRotationPosition();
-    
   }
 
   // Returns true when the command should end.

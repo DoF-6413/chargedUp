@@ -144,10 +144,10 @@ public final class Constants {
 
     public static final int kpotetiometerPort = 3;
     public static final double kpotetiometerRange = 180;
-    public static final double kpotentiometerOffset = -64;
+    public static final double kpotentiometerOffset = -75;
     //Arm Values
     public static final double kRotationZeroValue = 0;
-    public static final double kHighPeak = 105;
+    public static final double kHighPeak = 100;
     public static final double kMidBottom= 75;
 
     /**Human Player, Mid Cone Peak, High Cone Bottom Value */
@@ -184,17 +184,5 @@ public final class Constants {
 
   public static class EndEffectorConstants{
     public static final int kEndEffectorCANID = 9;
-  }
-
-  public static class WristConstants{
-    public static final double kgearing = (116.667); 
-    public static final double kwristRotationPositionConversion =360.0 / kgearing;
-    //Wrist PID Values 
-    public static final double kWristP = 0.05;
-    public static final double kWristI = 0;
-    public static final double kWristD = 0;
-    public static final double kWristTolerance = 10;
-
-    
   }
 }

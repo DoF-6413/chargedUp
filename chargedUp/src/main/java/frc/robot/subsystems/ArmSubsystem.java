@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -23,12 +22,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmConstants.ArmMotor;
 
@@ -88,5 +81,4 @@ private final AnalogPotentiometer m_pot;
   public Boolean isInFramePerimeter(){
     return ((this.getRotationPosition() < 35) && (this.getRotationPosition() > -35 )) ?  true :  false;
   }
-
 }
