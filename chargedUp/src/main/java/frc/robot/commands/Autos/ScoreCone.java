@@ -10,6 +10,8 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.RotationPID;
@@ -31,9 +33,9 @@ public class ScoreCone extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new RotationPID(arm, -100),
-      new TelescoperPID(telescoper, 147),
-      new RotationPID(arm, -83)
+      new RotationPID(arm, -ArmConstants.kHighPeak),
+      new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),
+      new RotationPID(arm, -ArmConstants.kHPMPHB)
 
       //make the following a follow path with events to change time
       // new ParallelCommandGroup(
