@@ -5,41 +5,40 @@
 package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.Constants.TelescoperConstants;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.Constants.WristConstants;
+import frc.robot.subsystems.WristSubsystem;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TelescoperPID extends PIDCommand {
-  /** Creates a new TelescoperPID. */
-  private TelescoperSubsystem m_telescoperSubsystem;
-  public TelescoperPID(TelescoperSubsystem telescope, double setpoint) {
+public class WristPID extends PIDCommand {
+  /** Creates a new WristPID. */
+  private WristSubsystem m_wristSubsystem;
+  public WristPID(WristSubsystem wrist, double setpoint) {
     super(
         // The controller that the command will use
-        new PIDController(TelescoperConstants.kTelescoperP, TelescoperConstants.kTelescoperI, TelescoperConstants.kTelescoperD),
+        new PIDController(WristConstants.kWristP, WristConstants.kWristI, WristConstants.kWristD),
         // This should return the measurement
-        () -> telescope.getTelescoperPosition(),
+        () -> wrist.getPosition(),
         // This should return the setpoint (can also be a constant)
         () -> setpoint,
         // This uses the output
-        output -> { telescope.spinTelescopingMotor(output);
+        output -> { wrist.spinWrist(output);
           // Use the output here
         });
     // Use addRequirements() here to declare subsystem dependencies.
-    m_telescoperSubsystem = telescope;
-    SmartDashboard.putNumber("Telescoper Setpoint", setpoint);
-    addRequirements(m_telescoperSubsystem);
+
+    m_wristSubsystem = wrist;
+    addRequirements(m_wristSubsystem);
     // Configure additional PID options by calling `getController` here.
-    getController().setTolerance(TelescoperConstants.kTelescoperTolerance);
+    getController().setTolerance(WristConstants.kWristTolerance);
   }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return getController().atSetpoint();
-    // return false;
   }
 }

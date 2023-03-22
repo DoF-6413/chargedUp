@@ -4,29 +4,34 @@
 
 package frc.robot.commands.TeleopAutomations;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.TelescoperPID;
-import frc.robot.commands.ArmControls.TelescoperReset;
+import frc.robot.commands.ArmControls.WristPID;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class PickupCone extends SequentialCommandGroup {
-  /** Creates a new PickupCone. */
-  public PickupCone(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEffector) {
+public class ConePickUp extends SequentialCommandGroup {
+  /** Creates a new ConePickUp. */
+  public ConePickUp(WristSubsystem wrist, TelescoperSubsystem telerescoper ,ArmSubsystem arm) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      
-    new TelescoperReset(telescoper),
-      new RotationPID(arm, ArmConstants.kHPMPHB),
-      new EndEffectorRunner(NEffector, 0.5, 5)
+      new ParallelCommandGroup(
+        new ConditionalCommand(
+          new WristPID(wrist, -180),
+          new WristPID(wrist, 0), 
+          () -> (wrist.getPosition() > -30 && wrist.getPosition() < 30)),
+       
+        new TelescoperPID(telerescoper, 0)
+      ),
+      new RotationPID(arm, 0)
     );
   }
 }
