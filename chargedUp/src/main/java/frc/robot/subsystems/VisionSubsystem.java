@@ -44,7 +44,7 @@ public class VisionSubsystem extends SubsystemBase {
   // todo: provide portforwaring to connect without radio
   PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
   private static PhotonPipelineResult results = new PhotonPipelineResult();
-  public PhotonTrackedTarget target = results.getBestTarget();
+  public PhotonTrackedTarget target = results != null ? results.getBestTarget() : null;
   public Double yaw;
   public Double pitch;
   public Transform3d camToTarget;

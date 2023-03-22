@@ -107,7 +107,7 @@ public final class Constants {
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] { 0, 1.5, 3, 4 };
 
-    public static final Pose2d[] tagPoses = new Pose2d[] { null,new Pose2d(1,1, new Rotation2d(0))};
+    public static final Pose2d[] tagPoses = new Pose2d[] { null, null, null, null, new Pose2d(1,1, new Rotation2d(0))};
     //new Pose2d(3,1, new Rotation2d(0)), new Pose2d(5,1, new Rotation2d(0)), new Pose2d(7,1, new Rotation2d(0)), new Pose2d(1,-10, new Rotation2d(0)), new Pose2d(3,-10, new Rotation2d(0)), new Pose2d(5,-10, new Rotation2d(0)), new Pose2d(7,-10, new Rotation2d(0))
 
 

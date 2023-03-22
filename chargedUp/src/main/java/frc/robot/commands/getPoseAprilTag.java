@@ -23,13 +23,14 @@ public class getPoseAprilTag extends CommandBase {
 private final VisionSubsystem m_VisionSubsystem;
 private final GyroSubsystem m_GyroSubsystem;
 public static Pose2d m_derivedPose;
-
+public double distanceTo;
   /** Creates a new getPoseAprilTag. */
   public getPoseAprilTag(DrivetrainSubsystem drive, VisionSubsystem vision, GyroSubsystem gyro) {
     m_DrivetrainSubsystem = drive;
     m_VisionSubsystem = vision;
     m_GyroSubsystem = gyro;
     m_derivedPose = null;
+    
    addRequirements(m_DrivetrainSubsystem, m_VisionSubsystem, m_GyroSubsystem);
   }
 
@@ -40,46 +41,60 @@ public static Pose2d m_derivedPose;
     
     //COMMENTED OUT because this approach did not work and we couldn't get the right yaw 
     // grab apriltag -20 = camera angle
-    double theta = m_VisionSubsystem.getBestFiducial().getYaw();
-    // or target.getYaw();
-    SmartDashboard.putNumber("yaw", theta);
-    
-    double distanceTo = PhotonUtils.calculateDistanceToTargetMeters(
-      1.13, 1.27, 0, Units.radiansToDegrees(m_VisionSubsystem.getBestFiducial().getPitch()));
-     
-    SmartDashboard.putNumber("distance To April Tag", distanceTo);
-    
-    int currentTag = m_VisionSubsystem.getBestFiducialID();
-    SmartDashboard.putNumber("Current Tag", currentTag);
-
-    Pose2d targetPose = VisionConstants.tagPoses[currentTag];
-    SmartDashboard.putNumber("target Pose x",targetPose.getX());
-    SmartDashboard.putNumber("target Pose Y",targetPose.getY());
-
-    double xOffset = distanceTo * new Rotation2d(theta).getCos();
-    SmartDashboard.putNumber("X Offset", xOffset);
-
-    double yOffset = distanceTo * new Rotation2d(theta).getSin();
-    SmartDashboard.putNumber("Y Offset", yOffset);
-
-    double derivedX = targetPose.getX() + xOffset;
-    SmartDashboard.putNumber("derived X", derivedX);
-
-    double derivedY = targetPose.getY() + yOffset;
-    SmartDashboard.putNumber("derived Y", derivedY);
-
-    m_derivedPose = new Pose2d(derivedX, derivedY, m_GyroSubsystem.getRotation2d() );
-    SmartDashboard.putNumber("derived Pose X", m_derivedPose.getX());
-    SmartDashboard.putNumber("derived Pose Y",targetPose.getY());
-  }
+   }
 
   
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println( m_derivedPose.toString());
+
+    if(m_VisionSubsystem.getBestFiducial() != null){
+    double theta = ((m_VisionSubsystem.getBestFiducial().getBestCameraToTarget().getRotation().getZ()*180)/3.14159265359);
+    if (theta > 0){
+theta = 180 - theta;
+    }if (theta < 0){
+      theta += 180;
+    }
+    System.out.println(theta); 
+   // System.out.println(theta);
+        //transform radian to degress
+        
+     
+        SmartDashboard.putNumber("distance To April Tag", distanceTo);
+        
+        int currentTag = m_VisionSubsystem.getBestFiducialID();
+        SmartDashboard.putNumber("Current Tag", currentTag);
+    
+        Pose2d targetPose = VisionConstants.tagPoses[currentTag];
+        if(targetPose != null){
+          
+          SmartDashboard.putNumber("target Pose x",targetPose.getX());
+          SmartDashboard.putNumber("target Pose Y",targetPose.getY());
+        
+        double xOffset = distanceTo * new Rotation2d(theta).getCos();
+        SmartDashboard.putNumber("X Offset", xOffset);
+    
+        double yOffset = distanceTo * new Rotation2d(theta).getSin();
+        SmartDashboard.putNumber("Y Offset", yOffset);
+    
+        double derivedX = targetPose.getX() + xOffset;
+        SmartDashboard.putNumber("derived X", derivedX);
+    
+        double derivedY = targetPose.getY() + yOffset;
+        SmartDashboard.putNumber("derived Y", derivedY);
+    
+        m_derivedPose = new Pose2d(derivedX, derivedY, m_GyroSubsystem.getRotation2d() );
+        SmartDashboard.putNumber("derived Pose X", m_derivedPose.getX());
+        SmartDashboard.putNumber("derived Pose Y",targetPose.getY());
+      
+    distanceTo = PhotonUtils.calculateDistanceToTargetMeters(
+      1.13, 1.27, 0, Units.radiansToDegrees(m_VisionSubsystem.getBestFiducial().getPitch()));
+     
+    // System.out.println( m_derivedPose.toString());
   m_DrivetrainSubsystem.resetOdometry(m_derivedPose);
+        }
+    }
   }
 
   // Called once the command ends or is interrupted.
