@@ -11,6 +11,7 @@ import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.TelescoperPID;
+import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
@@ -25,11 +26,13 @@ public class GroundPickUp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new TelescoperReset(telscoper),
       new RotationPID(arm, ArmConstants.kfloorCube),
       new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
       new ParallelCommandGroup(
-        new EndEffectorRunner(NEfector, 0.5, 0),
+        new EndEffectorRunner(NEfector, 0.5, 1),
         new TelescoperPID(telscoper, TelescoperConstants.kGroundCone)),
+      new RotationPID(arm, 40),
       new TelescoperPID(telscoper, 0),
       new RotationPID(arm, 0)
 
