@@ -88,6 +88,7 @@ import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
 import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
+import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
 import frc.robot.commands.TeleopAutomations.CubePIckUp;
 // import frc.robot.commands.TeleopAutomations.CubePickUp;
@@ -96,6 +97,7 @@ import frc.robot.commands.TeleopAutomations.PlaceHigh;
 import frc.robot.commands.TeleopAutomations.PlaceMid;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionMid;
+import frc.robot.commands.TeleopAutomations.PositionPickUp;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -190,10 +192,11 @@ public class RobotContainer {
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
         m_auxController.leftTrigger().
         onTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
-        onFalse (new ConditionalCommand(
-          new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem),
-          new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem),
-          ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kyellow));
+        onFalse (
+          // new ConditionalCommand(
+          // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
+          new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
+          // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
         
         m_auxController.rightTrigger().onTrue(
           new EndEffectorRunner(m_endEffectorSubsystem, -0.3, 3)
@@ -233,7 +236,8 @@ public class RobotContainer {
     m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
     m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
 
-    m_driverController.x().onTrue(new GroundPickUp(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem));
+    m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
+    .onFalse(new BackIn(m_telescoperSubsystem, m_armSubsystem));
   }
   
   /**
