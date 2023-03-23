@@ -84,6 +84,7 @@ import frc.robot.commands.Autos.G3TLAroundCSBalance;
 import frc.robot.commands.Autos.GroundPickUp;
 import frc.robot.commands.Autos.ScoreBalance;
 import frc.robot.commands.Autos.ScoreCone;
+import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
 import frc.robot.commands.Autos.ScoreRunRight;
@@ -155,8 +156,8 @@ public class RobotContainer {
     m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, overCSBalance.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Score High", new ScoreHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
     m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    
     m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
     SmartDashboard.putData("hahah", m_chooser);
     configureBindings();
@@ -169,7 +170,7 @@ public class RobotContainer {
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()*0.75), m_drivetrainSubsystem));
 
      m_armSubsystem.setDefaultCommand(new RunCommand(() -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
-     m_telescoperSubsystem.setDefaultCommand(new TelescoperPID(m_telescoperSubsystem, 0));
+    //  m_telescoperSubsystem.setDefaultCommand(new TelescoperPID(m_telescoperSubsystem, 0));
     // m_telescoperSubsystem.setDefaultCommand(new TelescoperReset(m_telescoperSubsystem));
   }
   
