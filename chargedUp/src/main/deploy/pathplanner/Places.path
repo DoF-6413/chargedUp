@@ -3,11 +3,36 @@
     {
       "anchorPoint": {
         "x": 6.545962151753363,
-        "y": 4.670439768229964
+        "y": 4.647601431955001
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.746620382129653,
+        "x": 6.169129603216471,
+        "y": 4.750373945192335
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.348595073258523,
+        "y": 4.78463144960478
+      },
+      "prevControl": {
+        "x": 5.293563257856423,
+        "y": 5.127861129239707
+      },
+      "nextControl": {
+        "x": 2.7662174982469625,
         "y": 4.681858936367445
       },
       "holonomicAngle": 0,
@@ -24,37 +49,12 @@
     },
     {
       "anchorPoint": {
-        "x": 3.188726719333781,
-        "y": 4.807469785879743
+        "x": 1.9097798879358443,
+        "y": 3.905355503018699
       },
       "prevControl": {
-        "x": 4.370921066628459,
-        "y": 4.991772120296378
-      },
-      "nextControl": {
-        "x": 2.778740995319596,
-        "y": 4.743553623375479
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 1.8755223835233994,
-        "y": 3.779744653506401
-      },
-      "prevControl": {
-        "x": 2.343708277160144,
-        "y": 3.7911638216438828
+        "x": 2.2066782595103653,
+        "y": 3.905355503018699
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -70,5 +70,8 @@
       }
     }
   ],
+  "maxVelocity": 1.0,
+  "maxAcceleration": 0.8,
+  "isReversed": false,
   "markers": []
 }

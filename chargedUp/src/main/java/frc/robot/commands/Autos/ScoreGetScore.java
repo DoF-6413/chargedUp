@@ -38,6 +38,7 @@ public class ScoreGetScore extends SequentialCommandGroup {
   HashMap<String, Command> eventBringArmIn = new HashMap<>();
   eventBringArmIn.put("BringInArm", new BackingOutArm(arm, telescoper, NEfector));
   eventBringArmIn.put("positionPickUp", new PositionPickUp(telescoper, arm, NEfector));
+  eventBringArmIn.put("PICKUP", new BackIn(telescoper, arm));
     addCommands(
       new ScoreCone(arm, telescoper, NEfector, drive),
     new FollowPathWithEvents(
@@ -45,8 +46,7 @@ public class ScoreGetScore extends SequentialCommandGroup {
       kPickUp.getMarkers(),
       eventBringArmIn
       ),
-    new BackIn(telescoper, arm),
-    new TrajectoryRunner(drive, kPlace.relativeTo(drive.getPose()), true),
+   
     new ScoreHigh(arm, telescoper, NEfector, drive)
     );
   }
