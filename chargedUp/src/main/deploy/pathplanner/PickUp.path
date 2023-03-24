@@ -95,8 +95,8 @@
       }
     }
   ],
-  "maxVelocity": 1.0,
-  "maxAcceleration": 0.8,
+  "maxVelocity": 1.5,
+  "maxAcceleration": 1.0,
   "isReversed": null,
   "markers": [
     {
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "position": 0.5454545454545519,
+      "position": 0.3709090909090884,
       "names": [
         "positionPickUp"
       ]
