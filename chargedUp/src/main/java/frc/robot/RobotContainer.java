@@ -200,8 +200,8 @@ public class RobotContainer {
           // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
         
         m_auxController.rightTrigger().onTrue(
-          new EndEffectorRunner(m_endEffectorSubsystem, -0.3, 3)
-        );
+          new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
+          onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
         m_auxController.y()
             .onTrue(
@@ -226,8 +226,6 @@ public class RobotContainer {
             new TelescoperPID(m_telescoperSubsystem, 16)).
             onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
-        m_auxController.povUp().onTrue(new EndEffectorRunner(m_endEffectorSubsystem, 0.5, 1));
-
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
@@ -239,6 +237,10 @@ public class RobotContainer {
 
     m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
     .onFalse(new BackIn(m_telescoperSubsystem, m_armSubsystem));
+
+    m_driverController.rightBumper().onTrue(
+      new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
+      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
   }
   
   /**
