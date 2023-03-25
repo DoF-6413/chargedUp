@@ -5,9 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -107,14 +110,34 @@ public final class Constants {
   public static class VisionConstants {
     public static final double[] ksetpoints = new double[] { 0, 1.5, 3, 4 };
 
-    public static final Pose2d[] tagPoses = new Pose2d[] { null, null, null, null, new Pose2d(1,1, new Rotation2d(0))};
-    //new Pose2d(3,1, new Rotation2d(0)), new Pose2d(5,1, new Rotation2d(0)), new Pose2d(7,1, new Rotation2d(0)), new Pose2d(1,-10, new Rotation2d(0)), new Pose2d(3,-10, new Rotation2d(0)), new Pose2d(5,-10, new Rotation2d(0)), new Pose2d(7,-10, new Rotation2d(0))
+    public static final Pose3d[] tagPoses = new Pose3d[] {new Pose3d(null),
+    new Pose3d(new Translation3d(15.513558,1.071626,0.462788), new Rotation3d(new Quaternion(0.0, 0.0, 0.0, 1.0))),//id 1
+    new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(new Quaternion(0, 0, 0, 0))),//id 2
+    new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(new Quaternion(0, 0, 0, 0))),//id 3
+    new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(new Quaternion(0, 0, 0, 0))),//id 4
+    new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(new Quaternion(0, 0, 0, 0))),//id 5
+    new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(new Quaternion(0, 0, 0, 0))),//id 6
+    new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(new Quaternion(0, 0, 0, 0))),//id 7
+    new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(new Quaternion(0, 0, 0, 0))),//id 8
 
+  };
 
-    // this tells info about where te camera is on the robot ex: 
-    public static final Transform3d cameraOnRobot = new Transform3d( 
-      new Translation3d(0,0,0),
-      new Rotation3d(0,0,0));
+  //new Pose2d(3,1, new Rotation2d(0)), new Pose2d(5,1, new Rotation2d(0)), new Pose2d(7,1, new Rotation2d(0)), new Pose2d(1,-10, new Rotation2d(0)), new Pose2d(3,-10, new Rotation2d(0)), new Pose2d(5,-10, new Rotation2d(0)), new Pose2d(7,-10, new Rotation2d(0))
+  
+  
+  // this tells info about where te camera is on the robot ex: 
+  public static final Transform3d cameraOnRobot = new Transform3d( 
+    new Translation3d(0,0,0),
+    new Rotation3d(0,0,0));
+    
+  public static final double kaprilTagAmbiguityThreshold = 0.2;
+  public static final double kfieldLengthMeters = 16.54175;
+  public static final double kfieldWidthMeters =  8.0137; 
+
+  public static final Pose2d FLIPPING_POSE = new Pose2d(
+    new Translation2d(kfieldLengthMeters,kfieldWidthMeters),
+    new Rotation2d(Math.PI));
+
   }
 
   public static class AutoConstants {
