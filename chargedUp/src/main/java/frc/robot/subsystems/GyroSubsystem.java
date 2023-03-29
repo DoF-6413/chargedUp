@@ -24,6 +24,10 @@ public class GyroSubsystem extends SubsystemBase {
     m_gyro.zeroYaw();
   }
 
+  public void calibrate(){
+    m_gyro.calibrate();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
