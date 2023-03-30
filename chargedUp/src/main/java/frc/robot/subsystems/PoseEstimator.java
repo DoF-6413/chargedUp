@@ -89,13 +89,14 @@ public class PoseEstimator extends SubsystemBase {
       default:
       // No valid alliance data. Nothing we can do about it      sawTag
       if (allianceChanged && vision.seeTarget()) {
+        //me que de dormido porfas ve el video y comntinuea
     }
       // The alliance changed, which changes the coordinate system.
       // Since a tag was seen, and the tags are all relative to the coordinate system, the estimated pose
       // needs to be transformed to the new coordinate system.
       var newPose = flipAlliance();
       poseEstimator.resetPosition(gyro.m_gyro.getRotation2d(),drivetrainSubsystem.getPositionLeftLead() ,drivetrainSubsystem.getPositionRightLead(), newPose);
-      //nota para andres del futuro capaz y esta mal porque se necesitan en metros y no se si sean en metros
+
     }
   }
   @Override

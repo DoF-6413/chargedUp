@@ -69,7 +69,7 @@ theta = 180 - theta;
         int currentTag = m_VisionSubsystem.getBestFiducialID();
         SmartDashboard.putNumber("Current Tag", currentTag);
     
-        Pose2d targetPose = VisionConstants.tagPoses[currentTag];
+        Pose3d targetPose = VisionConstants.tagPoses[currentTag];
         if(targetPose != null){
           
           SmartDashboard.putNumber("target Pose x",targetPose.getX());

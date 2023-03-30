@@ -8,7 +8,6 @@ import java.io.IOException;
 
 
 import org.photonvision.*;
-import org.photonvision.RobotPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 

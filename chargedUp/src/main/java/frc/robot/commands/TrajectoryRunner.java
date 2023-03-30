@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.PathPoint;
+
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -44,7 +46,7 @@ public class TrajectoryRunner extends CommandBase {
   @Override
   public void execute() {
     m_drivetrainSubsystem.updateOdometry();
-
+new PathPoint(null, null)
     // // Update robot position on Field2d.
     m_drivetrainSubsystem.setRobotFromFieldPose();
 
