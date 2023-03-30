@@ -49,7 +49,7 @@ public class RobotContainer {
 
     //Moves Robot Using Joysticks
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
-     m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(), m_driverController.getLeftX()), m_drivetrainSubsystem));
+     m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(),- m_driverController.getRightX()), m_drivetrainSubsystem));
     configureBindings();
 
 
