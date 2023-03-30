@@ -47,9 +47,15 @@
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/hahah": "String Chooser",
       "/SmartDashboard/m_chooser": "String Chooser"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "Robot": {
           "arrowColor": [
@@ -73,7 +79,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/m_chooser": {
+      "/SmartDashboard/hahah": {
         "window": {
           "visible": true
         }

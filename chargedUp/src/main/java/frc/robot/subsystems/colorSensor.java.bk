@@ -27,10 +27,10 @@ public class colorSensor extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3 (i2cPort);
   private final ColorMatch m_colorMatcher = new ColorMatch();
-  private Color detectedColor = null;
   
   public final Color kpurple = new Color(0.2502, 0.2502, 0.5002);
   public final Color kyellow = new Color(0.5315, 0.4438, 0.02515);
+  private Color detectedColor = kyellow;
   /** Creates a new colorSensor. */
   public colorSensor() {
     m_colorMatcher.addColorMatch(kpurple);
