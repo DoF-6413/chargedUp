@@ -152,7 +152,7 @@ public final class Constants {
 
     /**Human Player, Mid Cone Peak, High Cone Bottom Value */
     public static final double kHPMPHB = 87;
-    public static final double kfloorCube = 33;
+    public static final double kfloorCube = 35;
   }
 
   public static class TelescoperConstants{
@@ -179,7 +179,7 @@ public final class Constants {
     public static final double kMaxExtention = 50;
     /** Telescoper for Mid Cone, Ground Block, and  */
     public static final double kMCGB = 16;
-    public static final double kGroundCone = 55;
+    public static final double kGroundCone = 30;
   }
 
   public static class EndEffectorConstants{
