@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.getEstimatedPose;
-import frc.robot.commands.getPoseAprilTag;
+// import frc.robot.commands.getPoseAprilTag;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
@@ -152,7 +152,7 @@ public class RobotContainer {
         onTrue(new InstantCommand(()-> SmartDashboard.putNumber("Best fiducialID", m_visionSubsystem.getBestFiducialID())));
         // .onFalse(new InstantCommand(()-> SmartDashboard.putNumber("Best fiducialID", 0)));
 
-        m_auxController.leftBumper().onTrue(new getPoseAprilTag(m_drivetrainSubsystem, m_visionSubsystem, m_gyroSubsystem));
+        // m_auxController.leftBumper().onTrue(new getPoseAprilTag(m_drivetrainSubsystem, m_visionSubsystem, m_gyroSubsystem));
 
         m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem));
   }

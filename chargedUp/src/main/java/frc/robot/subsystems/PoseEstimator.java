@@ -6,15 +6,19 @@ package frc.robot.subsystems;
 import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide;
 import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -64,7 +68,7 @@ public class PoseEstimator extends SubsystemBase {
   /** Creates a new PoseEstimator. */
   public PoseEstimator(GyroSubsystem gyro,DrivetrainSubsystem drive,VisionSubsystem vision,
   DifferentialDriveKinematics kinematics ) {
-    
+     
       m_drivetrainSubsystem = drive;
       m_gyroSubsystem = gyro;
       m_visionSubsystem = vision;
@@ -111,12 +115,20 @@ public class PoseEstimator extends SubsystemBase {
       var target = PhotonPipelineResult.getBestTarget();
       var fiducialid = target.getFiducialId();
       if(target.getPoseAmbiguity() <= 0.2 && fiducialid >= 0 && fiducialid < 9) {
-        var targetPose = VisionConstants.tagPoses[fiducialid];
-        Transform3d camToTarget = target.getBestCameraToTarget();
-        Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
-
-        var visionMeasurement = camPose.transformBy(VisionConstants.cameraOnRobot);
-        poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultsTimestamp);
+       
+        AprilTagFieldLayout atfl;
+        try {
+          atfl = new AprilTagFieldLayout(AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField().getTags(), 20, 20);
+          Pose3d targetPose = atfl.getTagPose(fiducialid).get();
+          Transform3d camToTarget = target.getBestCameraToTarget();
+          Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
+  
+          var visionMeasurement = camPose.transformBy(VisionConstants.cameraOnRobot);
+          poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultsTimestamp);
+        } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
     }
 
