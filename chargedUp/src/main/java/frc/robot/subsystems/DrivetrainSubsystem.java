@@ -228,8 +228,32 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters().getRotation().getDegrees();
   }
   
+  /*
+  Note: In the example code, he manually sets one velocity outfut to be negative(inverted)? 
+  He does that with pos as well, but we don't and havent had any problems so Im not gonna manually invert it 
+  (he also did do te set inverted AND he has the same motors, encoders, and motor controllers as us)
+  Could be a point of failure 
+  */
+  public double getVelocityLeftLead(){
+    return encoderLeftLead.getVelocity();
+  }
+
+  public double getVelocityRightLead(){
+    return encoderRightLead.getVelocity();
+  }
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    if(RobotBase.isSimulation()){
     return new DifferentialDriveWheelSpeeds(simEncoderLeftRep.getRate(), simEncoderRightRep.getRate());
+    }else{
+      return new DifferentialDriveWheelSpeeds(getVelocityLeftLead(), getVelocityRightLead());
+    }
+
+  }
+
+  public void tankDrive(double leftVolts, double rightVolts){
+    leftLead.setVoltage(leftVolts);
+    rightLead.setVoltage(rightVolts);
+    diffDrive.feed();
   }
 
   /** */
