@@ -39,7 +39,6 @@ public class VisionSubsystem extends SubsystemBase {
   public Double pitch;
   public Transform3d camToTarget;
   public static PoseEstimator photonrobotPoseEstimator;
-  private final PoseStrategy m_poseStrategy;
   
   /** Creates a new VisionSubsystem. */
   public VisionSubsystem() {
@@ -55,50 +54,14 @@ public class VisionSubsystem extends SubsystemBase {
     int aprilTag7 = 7;
     int aprilTag8 = 8;
 
-
-
-    PoseEstimator PoseEstimator = null;
-    try {
-      var layout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
-      // PV estimates will always be blue, they'll get flipped by robot thread
-      layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
-      if (camera != null) {
-        photonrobotPoseEstimator = new PoseEstimator(
-            layout, m_poseStrategy.MULTI_TAG_PNP, camera, VisionConstants.cameraOnRobot.inverse());
-      }
-    } catch(IOException e) {
-      DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
-      photonrobotPoseEstimator = null;
-    }
-    this.poseEstimatorDifferentialDrive = poseEstimatorDifferentialDrive;
+;
 
   }
 
   public static PhotonPipelineResult photonResult(){
     return camera.getLatestResult();
   }
-  public static Runnable photonRunnable(){
-   if (poseEstimatorDifferentialDrive != null && camera != null && !RobotState.isAutonomous()) {
-    var photonResults = camera.getLatestResult();
-
-    if (results.hasTargets() && (results.targets.size() > 1 || results.targets.get(0).getPoseAmbiguity() < VisionConstants.kaprilTagAmbiguityThreshold)) {
-      pose
-      
-      update(photonResults).ifPresent(estimatedRobotPose ->{
-      
-        var estimatedPose = estimatedRobotPose.estimatedPose;
-        if (estimatedPose.getX() > 0.0 && estimatedPose.getX() <= VisionConstants.kfieldLengthMeters
-        && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= VisionConstnats.kfieldWidthMeters) {
-          atomicEstimatedRobotPose.set(estimatedRobotPose);
-        }
-      });
-      }
-    
-   }
-
-
-
-  }
+  
 
   // todo: provide portforwaring to connect without radio
   @Override

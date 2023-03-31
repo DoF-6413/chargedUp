@@ -46,7 +46,7 @@ public class TrajectoryRunner extends CommandBase {
   @Override
   public void execute() {
     m_drivetrainSubsystem.updateOdometry();
-new PathPoint(null, null)
+// new PathPoint(null, null);
     // // Update robot position on Field2d.
     m_drivetrainSubsystem.setRobotFromFieldPose();
 

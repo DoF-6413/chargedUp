@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
-import org.photonvision.RobotPoseEstimator.PoseStrategy;
+import org.photonvision.RobotPoseEstimator;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.VecBuilder;
@@ -23,8 +23,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.VisionSubsystem;
@@ -54,26 +54,27 @@ public class PoseEstimator extends SubsystemBase {
   private double previousPipelineTimestamp = 0;
 
   
-  private static final Notifier photonNotifier = new Notifier(VisionSubsystem.photonRunnable());
   
-  VisionSubsystem vision;
-  DifferentialDrivePoseEstimator poseEstimator;
-  GyroSubsystem gyro;
-  DrivetrainSubsystem drivetrainSubsystem;
-  Field2d field2d;
+  VisionSubsystem m_visionSubsystem;
+  static DifferentialDrivePoseEstimator poseEstimator;
+  GyroSubsystem m_gyroSubsystem;
+  DrivetrainSubsystem m_drivetrainSubsystem;
+  Field2d field2d = new Field2d();
    
   /** Creates a new PoseEstimator. */
-  public PoseEstimator(GyroSubsystem gyro,DrivetrainSubsystem drivetrainSubsystem,VisionSubsystem vision,DifferentialDriveKinematics kinematics,DifferentialDrivePoseEstimator poseEstimator,Supplier<PoseEstimator> PositionSupplier,Supplier<Rotation2d> rotationSupplier ) {
+  public PoseEstimator(GyroSubsystem gyro,DrivetrainSubsystem drive,VisionSubsystem vision,
+  DifferentialDriveKinematics kinematics ) {
     
+      m_drivetrainSubsystem = drive;
+      m_gyroSubsystem = gyro;
+      m_visionSubsystem = vision;
 
-
-    new DifferentialDrivePoseEstimator(kinematics,gyro.getRotation2d(), drivetrainSubsystem.getPositionLeftLead(), drivetrainSubsystem.getPositionRightLead(), new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
+    poseEstimator = new DifferentialDrivePoseEstimator(kinematics,gyro.getRotation2d(), drive.getPositionLeftLead(), drive.getPositionRightLead(), new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
   
-    photonNotifier.setName("PhotonRunnable");
-    photonNotifier.startPeriodic(0.02);
+
   }
-  private Pose2d flipAlliance() {
-    return flipAlliance().relativeTo(VisionConstants.FLIPPING_POSE);
+  private Pose2d flipAlliance(Pose2d pose2d) {
+    return flipAlliance(pose2d).relativeTo(VisionConstants.FLIPPING_POSE);
   }
   public void setAlliance(Alliance alliance) {
     boolean allianceChanged = false;
@@ -88,15 +89,15 @@ public class PoseEstimator extends SubsystemBase {
         break;
       default:
       // No valid alliance data. Nothing we can do about it      sawTag
-      if (allianceChanged && vision.seeTarget()) {
+      if (allianceChanged && m_visionSubsystem.seeTarget()) {
         //me que de dormido porfas ve el video y comntinuea
-    }
+    
       // The alliance changed, which changes the coordinate system.
       // Since a tag was seen, and the tags are all relative to the coordinate system, the estimated pose
       // needs to be transformed to the new coordinate system.
-      var newPose = flipAlliance();
-      poseEstimator.resetPosition(gyro.m_gyro.getRotation2d(),drivetrainSubsystem.getPositionLeftLead() ,drivetrainSubsystem.getPositionRightLead(), newPose);
-
+      var newPose = flipAlliance(getcurrentPose());
+      poseEstimator.resetPosition(m_gyroSubsystem.getRotation2d(), m_drivetrainSubsystem.getPositionLeftLead() , m_drivetrainSubsystem.getPositionRightLead(), newPose);
+      }
     }
   }
   @Override
@@ -118,14 +119,27 @@ public class PoseEstimator extends SubsystemBase {
         poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultsTimestamp);
       }
     }
-    //update pose estimator with drivetrain sensors
-    poseEstimator.update(
-      gyro.getRotation2d(), previousPipelineTimestamp, previousPipelineTimestamp);
 
+   
+    //update pose estimator with drivetrain sensors
+
+    poseEstimator.update(
+      m_gyroSubsystem.getRotation2d(), previousPipelineTimestamp, previousPipelineTimestamp);
+  
        field2d.setRobotPose(getcurrentPose());
+
+       var smartDashboardPose = poseEstimator.getEstimatedPosition();
+       SmartDashboard.putString(" derived pose", smartDashboardPose.toString());
+       if (originPosition == kRedAllianceWallRightSide){
+        smartDashboardPose = flipAlliance(smartDashboardPose);
+       }
+
+
+       field2d.setRobotPose(smartDashboardPose);
   }
   
-  public Pose2d getcurrentPose(){
+  public static Pose2d getcurrentPose(){
     return poseEstimator.getEstimatedPosition();
   }
 }
+  
