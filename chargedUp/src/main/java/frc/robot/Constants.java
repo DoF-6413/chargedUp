@@ -78,16 +78,18 @@ public final class Constants {
     public static final double kMass = 135;
 
     public static final double kwheelRadiusMeters = 3 * 0.0254;
-    public static final int kWheelDiameter = 6;
+    public static final double kWheelDiameter = Units.inchesToMeters(6);
 
     public static final int neoEncoderTicks = 42;
     public static final double kTicksToMetersConversionFactor = 39.3701;
     public static final double kTicksToFeetConversionFactor = 12;
+
     public static final double kTicksToMeters = 
-    // 1.0 / neoEncoderTicks * 
-    kWheelDiameter * kgearing * Math.PI/ kTicksToMetersConversionFactor;
+    (kWheelDiameter * Math.PI) /kgearing;
+
+
     public static final double kTicksToFeet = 
-    // 1.0 / neoEncoderTicks * 
+    1.0 / neoEncoderTicks * 
     kWheelDiameter * kgearing * Math.PI/ kTicksToFeetConversionFactor;
 
     public static double loopPeriodSecs = 0.020;

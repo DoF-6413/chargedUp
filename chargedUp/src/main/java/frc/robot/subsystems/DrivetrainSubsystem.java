@@ -141,14 +141,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   
   public void SmartDashboardCalls() {
-    SmartDashboard.putNumber("Drivetrain Right", this.getPositionRightLead());
-    SmartDashboard.putNumber("Heading", getHeading());
-    SmartDashboard.putString("Pose", getPose().toString());
-    SmartDashboard.putNumber("Drivetrain Position", getPosition());
-    SmartDashboard.putNumber("Left Lead", leftLead.get());
-    SmartDashboard.putNumber("Right Lead", rightLead.get());
-    SmartDashboard.putNumber("Pose X", m_odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("Pose Y", m_odometry.getPoseMeters().getY());
+    // SmartDashboard.putNumber("Drivetrain Right", this.getPositionRightLead());
+    // SmartDashboard.putNumber("Heading", getHeading());
+    // SmartDashboard.putString("Pose", getPose().toString());
+    // SmartDashboard.putNumber("Drivetrain Position", getPosition());
+    // SmartDashboard.putNumber("Left Lead", leftLead.get());
+    // SmartDashboard.putNumber("Right Lead", rightLead.get());
+    // SmartDashboard.putNumber("Pose X", m_odometry.getPoseMeters().getX());
+    // SmartDashboard.putNumber("Pose Y", m_odometry.getPoseMeters().getY());
     SmartDashboard.putNumber("Left position", getPositionLeftLead());
     SmartDashboard.putNumber("Right position", getPositionRightLead());
   }

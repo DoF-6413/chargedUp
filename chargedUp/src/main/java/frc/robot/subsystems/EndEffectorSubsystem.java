@@ -32,7 +32,7 @@ private final TalonFX m_endEffectorMotor;
   }
 
   public void SmartDashboardCalls(){
-    SmartDashboard.putNumber("EndEffectorPosition", getEndEffectorPosition());
+    // SmartDashboard.putNumber("EndEffectorPosition", getEndEffectorPosition());
   }
 
   
