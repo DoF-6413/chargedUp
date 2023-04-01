@@ -24,22 +24,22 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreMovePickupScore extends SequentialCommandGroup {
   /** Creates a new ScoreMovePickupScore. */
-  PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1, .8));
-  PathPlannerTrajectory kPlace = PathPlanner.loadPath("Place", new PathConstraints(1, .8));
+  // PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1, .8));
+  PathPlannerTrajectory kPlace = PathPlanner.loadPath("TestingRamsete", new PathConstraints(2, 4));
   public ScoreMovePickupScore(DrivetrainSubsystem drive, ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
-    HashMap<String, Command> eventBringArmIn = new HashMap<>();
-    eventBringArmIn.put("BringInArm", new BackingOutArm(arm, telescoper, NEfector));
+    // HashMap<String, Command> eventBringArmIn = new HashMap<>();
+    // eventBringArmIn.put("BringInArm", new BackingOutArm(arm, telescoper, NEfector));
     
     addCommands(
     // new ScoreCone(arm, telescoper, NEfector, drive),
-    new FollowPathWithEvents(
-      new TrajectoryRunner(drive, kPickUp.relativeTo(drive.getPose()), true),
-      kPickUp.getMarkers(),
-      eventBringArmIn
-      ),
+    // new FollowPathWithEvents(
+    //   new TrajectoryRunner(drive, kPickUp.relativeTo(drive.getPose()), true),
+    //   kPickUp.getMarkers(),
+    //   eventBringArmIn
+    //   ),
     // new GroundPickUp(telescoper, arm, NEfector),
     new TrajectoryRunner(drive, kPlace.relativeTo(drive.getPose()), true)
     // new ScoreHigh(arm, telescoper, NEfector, drive)
