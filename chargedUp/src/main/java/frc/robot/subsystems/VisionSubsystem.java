@@ -67,8 +67,8 @@ public class VisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    results = camera.getLatestResult();
-    updateSmartDashboard();
+    // results = camera.getLatestResult();
+    // updateSmartDashboard();
   }
 
   public void updateSmartDashboard() {

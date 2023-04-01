@@ -7,11 +7,7 @@ import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kBlueAll
 import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.function.Supplier;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.RobotPoseEstimator;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -22,17 +18,13 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
@@ -138,16 +130,15 @@ public class PoseEstimator extends SubsystemBase {
     poseEstimator.update(
       m_gyroSubsystem.getRotation2d(), previousPipelineTimestamp, previousPipelineTimestamp);
   
-       field2d.setRobotPose(getcurrentPose());
+      //  field2d.setRobotPose(getcurrentPose());
 
-       var smartDashboardPose = poseEstimator.getEstimatedPosition();
-       SmartDashboard.putString(" derived pose", smartDashboardPose.toString());
-       if (originPosition == kRedAllianceWallRightSide){
-        smartDashboardPose = flipAlliance(smartDashboardPose);
-       }
+      //  var smartDashboardPose = poseEstimator.getEstimatedPosition();
+      //  if (originPosition == kRedAllianceWallRightSide){
+      //   smartDashboardPose = flipAlliance(smartDashboardPose);
+      //  }
 
 
-       field2d.setRobotPose(smartDashboardPose);
+      //  field2d.setRobotPose(smartDashboardPose);
   }
   
   public static Pose2d getcurrentPose(){
