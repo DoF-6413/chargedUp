@@ -7,7 +7,10 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,9 +58,14 @@ public class RobotContainer {
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
-  PathPlannerTrajectory newishPath = PathPlanner.loadPath("Newish path", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory newishPath = PathPlanner.loadPath("VisionTest", new PathConstraints(2, 0.8));
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
-
+ 
+  PathPlannerTrajectory traj1 = PathPlanner.generatePath(
+    new PathConstraints(4, 3), 
+    new PathPoint(m_drivetrainSubsystem.getPose().getTranslation(),m_gyroSubsystem.getRotation2d()), // position, heading
+    new PathPoint(newishPath.getInitialPose().getTranslation(), newishPath.getInitialPose().getRotation()) // position, heading
+);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -155,6 +163,8 @@ public class RobotContainer {
         // m_auxController.leftBumper().onTrue(new getPoseAprilTag(m_drivetrainSubsystem, m_visionSubsystem, m_gyroSubsystem));
 
         m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem));
+
+        m_driverController.y().onTrue(new TrajectoryRunner(m_drivetrainSubsystem, traj1, false));
   }
   
   /**
