@@ -29,18 +29,6 @@ public class TrajectoryRunner extends CommandBase {
     m_drivetrainSubsystem = drive;
     m_trajectory = traj;
     m_isFirstPath = isfirstPath;
-    addRequirements(drive);
-  }
-  
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    
-    if(m_isFirstPath == true){
-      m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
-    }
-    
-    m_drivetrainSubsystem.setRobotFromFieldPose();
     m_ramseteCommand = new RamseteCommand(
       m_trajectory, 
       m_drivetrainSubsystem::getPose, 
@@ -57,7 +45,19 @@ public class TrajectoryRunner extends CommandBase {
       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
       m_drivetrainSubsystem::tankDrive, 
       m_drivetrainSubsystem);
+    addRequirements(drive);
+  }
+  
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
     
+    if(m_isFirstPath == true){
+      m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
+    }
+    
+    m_drivetrainSubsystem.setRobotFromFieldPose();
+    m_ramseteCommand.schedule();
     m_timer = new Timer();
     m_timer.start();
     

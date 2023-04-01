@@ -34,15 +34,15 @@ public class ScoreMovePickupScore extends SequentialCommandGroup {
     eventBringArmIn.put("BringInArm", new BackingOutArm(arm, telescoper, NEfector));
     
     addCommands(
-    new ScoreCone(arm, telescoper, NEfector, drive),
+    // new ScoreCone(arm, telescoper, NEfector, drive),
     new FollowPathWithEvents(
       new TrajectoryRunner(drive, kPickUp.relativeTo(drive.getPose()), true),
       kPickUp.getMarkers(),
       eventBringArmIn
       ),
-    new GroundPickUp(telescoper, arm, NEfector),
-    new TrajectoryRunner(drive, kPlace.relativeTo(drive.getPose()), true),
-    new ScoreHigh(arm, telescoper, NEfector, drive)
+    // new GroundPickUp(telescoper, arm, NEfector),
+    new TrajectoryRunner(drive, kPlace.relativeTo(drive.getPose()), true)
+    // new ScoreHigh(arm, telescoper, NEfector, drive)
     );
   }
 }
