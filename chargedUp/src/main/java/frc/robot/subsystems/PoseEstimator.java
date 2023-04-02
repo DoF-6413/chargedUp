@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,7 +33,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public class PoseEstimator extends SubsystemBase {
 
-  private OriginPosition originPosition = kBlueAllianceWallRightSide;
+  private OriginPosition originPosition = kRedAllianceWallRightSide;
 
   
  /**
@@ -56,7 +57,8 @@ public class PoseEstimator extends SubsystemBase {
   GyroSubsystem m_gyroSubsystem;
   DrivetrainSubsystem m_drivetrainSubsystem;
   Field2d field2d = new Field2d();
-   
+  Pose3d m_visionMeasurement;
+  static double resultsTimestamp;
   /** Creates a new PoseEstimator. */
   public PoseEstimator(GyroSubsystem gyro,DrivetrainSubsystem drive,VisionSubsystem vision,
   DifferentialDriveKinematics kinematics ) {
@@ -64,12 +66,12 @@ public class PoseEstimator extends SubsystemBase {
       m_drivetrainSubsystem = drive;
       m_gyroSubsystem = gyro;
       m_visionSubsystem = vision;
-
+      setAlliance(DriverStation.getAlliance());
     poseEstimator = new DifferentialDrivePoseEstimator(kinematics,gyro.getRotation2d(), drive.getPositionLeftLead(), drive.getPositionRightLead(), new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
   
 
   }
-  private Pose2d flipAlliance(Pose2d pose2d) {
+  private static Pose2d flipAlliance(Pose2d pose2d) {
     return flipAlliance(pose2d).relativeTo(VisionConstants.FLIPPING_POSE);
   }
   public void setAlliance(Alliance alliance) {
@@ -101,7 +103,7 @@ public class PoseEstimator extends SubsystemBase {
     // This method will be called once per scheduler run
 
     var PhotonPipelineResult = VisionSubsystem.camera.getLatestResult();
-    var resultsTimestamp = PhotonPipelineResult.getTimestampSeconds();
+    resultsTimestamp = PhotonPipelineResult.getTimestampSeconds();
     if (resultsTimestamp != previousPipelineTimestamp && PhotonPipelineResult.hasTargets()){
       previousPipelineTimestamp = resultsTimestamp;
       var target = PhotonPipelineResult.getBestTarget();
@@ -114,9 +116,8 @@ public class PoseEstimator extends SubsystemBase {
           Pose3d targetPose = atfl.getTagPose(fiducialid).get();
           Transform3d camToTarget = target.getBestCameraToTarget();
           Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
-  
-          var visionMeasurement = camPose.transformBy(VisionConstants.cameraOnRobot);
-          poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultsTimestamp);
+          m_visionMeasurement = camPose.transformBy(VisionConstants.cameraOnRobot);
+        
         } catch (IOException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -128,7 +129,7 @@ public class PoseEstimator extends SubsystemBase {
     //update pose estimator with drivetrain sensors
 
     poseEstimator.update(
-      m_gyroSubsystem.getRotation2d(), previousPipelineTimestamp, previousPipelineTimestamp);
+      m_gyroSubsystem.getRotation2d(), m_drivetrainSubsystem.getPositionLeftLead(), m_drivetrainSubsystem.getPositionRightLead());
   
       //  field2d.setRobotPose(getcurrentPose());
 
@@ -141,7 +142,10 @@ public class PoseEstimator extends SubsystemBase {
       //  field2d.setRobotPose(smartDashboardPose);
   }
   
-  public static Pose2d getcurrentPose(){
+  public Pose2d getcurrentPose(){
+    poseEstimator.addVisionMeasurement(m_visionMeasurement.toPose2d(), resultsTimestamp);
+    SmartDashboard.putString("final Pose", poseEstimator.getEstimatedPosition().toString());
+    SmartDashboard.putString("visionmeasure", m_visionMeasurement.toPose2d().toString());
     return poseEstimator.getEstimatedPosition();
   }
 }

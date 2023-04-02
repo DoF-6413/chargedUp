@@ -13,11 +13,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class getEstimatedPose extends CommandBase {
   /** Creates a new getEstimatedPose. */
-  PoseEstimator oseEstimator;
-  public getEstimatedPose(GyroSubsystem gyro,DrivetrainSubsystem drive, VisionSubsystem vision ) {
+  private DrivetrainSubsystem m_drive;
+  private GyroSubsystem m_gyro;
+  private VisionSubsystem m_vision;
+  private static PoseEstimator m_PoseEstimator;
+  private boolean finishVar = false;
+  public getEstimatedPose(GyroSubsystem gyro,DrivetrainSubsystem drive, VisionSubsystem vision, PoseEstimator pose ) {
     // Use addRequirements() here to declare subsystem dependencies.
-    new PoseEstimator(
-      gyro,drive, vision, DrivetrainConstants.kinematics);
+    m_drive = drive;
+    m_gyro = gyro;
+    m_vision = vision;
+    m_PoseEstimator = pose;
   }
 
   // Called when the command is initially scheduled.
@@ -27,10 +33,10 @@ public class getEstimatedPose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-  PoseEstimator.getcurrentPose();
-
- SmartDashboard.putString("derivedposet", PoseEstimator.getcurrentPose().toString());
+    m_PoseEstimator.getcurrentPose();
+  m_drive.resetOdometry(m_PoseEstimator.getcurrentPose());
+ SmartDashboard.putString("derivedposet", m_PoseEstimator.getcurrentPose().toString());
+ finishVar = true;
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +46,6 @@ public class getEstimatedPose extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finishVar;
   }
 }

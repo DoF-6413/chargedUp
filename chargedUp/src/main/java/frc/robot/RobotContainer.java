@@ -8,6 +8,10 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.getEstimatedPose;
@@ -27,6 +32,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -47,6 +53,7 @@ public class RobotContainer {
   
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
+  private final PoseEstimator m_PoseEstimator = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem,DrivetrainConstants.kinematics );
  
 
 
@@ -56,11 +63,19 @@ public class RobotContainer {
   PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   PathPlannerTrajectory newishPath = PathPlanner.loadPath("VisionTest", new PathConstraints(2, 0.8));
   PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
- 
+ PathPlannerTrajectory RightRed2 = PathPlanner.loadPath("RightRed2", new PathConstraints(4, 4));
+
+
+ PathPlannerTrajectory RightRed2Traj = PathPlanner.generatePath(
+  new PathConstraints(0.5,0.5), 
+  new PathPoint(m_drivetrainSubsystem.getPose().getTranslation(),m_gyroSubsystem.getRotation2d()),
+new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPose().getRotation())
+);
+
   PathPlannerTrajectory traj1 = PathPlanner.generatePath(
-    new PathConstraints(4, 3), 
+    new PathConstraints(0.25, 0.25), 
     new PathPoint(m_drivetrainSubsystem.getPose().getTranslation(),m_gyroSubsystem.getRotation2d()), // position, heading
-    new PathPoint(newishPath.getInitialPose().getTranslation(), newishPath.getInitialPose().getRotation()) // position, heading
+    new PathPoint(new Translation2d(9.178784,6.749796), new Rotation2d(0)) // position, heading
 );
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -158,9 +173,9 @@ public class RobotContainer {
 
         // m_auxController.leftBumper().onTrue(new getPoseAprilTag(m_drivetrainSubsystem, m_visionSubsystem, m_gyroSubsystem));
 
-        m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem));
+        m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimator));
 
-        m_driverController.y().onTrue(new TrajectoryRunner(m_drivetrainSubsystem, traj1, false));
+        m_driverController.y().onTrue(new TrajectoryRunner(m_drivetrainSubsystem, traj1, true));
   }
   
   /**

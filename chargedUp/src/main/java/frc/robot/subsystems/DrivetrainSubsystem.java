@@ -55,7 +55,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static EncoderSim m_rightSimEncoder;
   private static EncoderSim m_leftSimEncoder;
   
-  public static DifferentialDriveOdometry m_odometry;
+  public DifferentialDriveOdometry m_odometry;
   public static Field2d m_field2d;
   private static GyroSubsystem gyro;
 
@@ -136,10 +136,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (m_field2d != null) {
       setRobotFromFieldPose();
     }
-    // SmartDashboardCalls();
+    SmartDashboardCalls();
   }
   
   public void SmartDashboardCalls() {
+    SmartDashboard.putString("current pose",m_odometry.getPoseMeters().toString());
     SmartDashboard.putNumber("Drivetrain Right", this.getPositionRightLead());
     SmartDashboard.putNumber("Heading", getHeading());
     SmartDashboard.putString("Pose", getPose().toString());
