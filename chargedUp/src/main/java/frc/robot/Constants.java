@@ -176,16 +176,16 @@ public final class Constants {
     public static final double kRotationPositionConversion = 360.0 /kRotationGearing;
 
     // Rotation Arm PID Values (Tune PID Before Feedforward)
-    public static final double kRotationP = 0.003913;
+    public static final double kRotationP = 0.0039973;
     public static final double kRotationI = 0;
     public static final double kRotationD = 0;
     public static final double kRotationTolerance = 0.5;
     
     // Rotation Arm FeedForward
-    public static final double ksVolts = 0.067396;
-    public static final double kgVolts = 0.19635;
-    public static final double kvVoltSecondPerMeter = 0.014856;
-    public static final double kaVoltsSecondsSquaredPerMeter = 0.00085165;
+    public static final double ksVolts = 0.069246;
+    public static final double kgVolts = 0.283;
+    public static final double kvVoltSecondPerMeter = 0.027603;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.0014666;
 
 
     //Trapazoidal Motion Profiling for Rotation Arm

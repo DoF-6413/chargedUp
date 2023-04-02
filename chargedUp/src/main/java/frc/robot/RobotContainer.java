@@ -244,6 +244,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //     m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
     //     .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
+    
     m_auxController.a().onTrue(new RotationPID(m_armSubsystem, 30));
     m_auxController.b().onTrue(new RotationPID(m_armSubsystem, -30));
 

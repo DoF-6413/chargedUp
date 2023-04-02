@@ -36,7 +36,7 @@ public class RotationPID extends ProfiledPIDCommand {
         // This uses the output
         (output, setpoint) -> {
           arm.rotationVoltage(output, Units.degreesToRadians(setpoint.position) , setpoint.velocity);
-          arm.spinRotationMotors(output );
+          // arm.spinRotationMotors(output );
           // Use the output (and setpoint, if desired) here
         });
     // Use addRequirements() here to declare subsystem dependencies.

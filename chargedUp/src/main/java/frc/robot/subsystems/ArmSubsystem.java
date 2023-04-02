@@ -71,6 +71,10 @@ private final ArmFeedforward m_armFeedForward;
   public double getRotationPosition(){
     return m_RotationEncoder.getPosition();
   }
+
+  public double getRotationVelocity(){
+    return m_RotationEncoder.getVelocity();
+  }
   
   public void resetRotationPosition(){
     m_RotationEncoder.setPosition(0);
