@@ -45,20 +45,11 @@ public final class Constants {
     public static final boolean kRightInverted = true;
     public static final boolean kLeftInverted = false;
 
-    // PID Controlls for Forawrds and Backwards
-    public static final double kMoveP = 0.7;
+    // PID Controlls for Forawrds and Backwards (Values from SysID)
+    public static final double kMoveP = 0.0057008;
     public static final double kMoveI = 0;
     public static final double kMoveD = 0;
     public static final double kMoveTolerance = 0.1;
-
-    //FeefForward
-    
-
-    // PID Controlls for Turning
-    public static final double kTurnP = 0;
-    public static final double kTurnI = 0;
-    public static final double kTurnD = 0;
-    public static final double kTurnTolerance = 0;
 
     // Kinematics
     // Distance between centers of right and left wheels on robot
@@ -69,37 +60,49 @@ public final class Constants {
 
     public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
-    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(kMoveI, kMoveD, WHEEL_BASE);
-    // Convert to wheel speeds
-    DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
-    // Left velocity
-    double leftVelocity = wheelSpeeds.leftMetersPerSecond;
-    // Right velocity
-    double rightVelocity = wheelSpeeds.rightMetersPerSecond;
+    // ChassisSpeeds chassisSpeeds = new ChassisSpeeds(kMoveI, kMoveD, WHEEL_BASE);
+    // // Convert to wheel speeds
+    // DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
+    // // Left velocity
+    // double leftVelocity = wheelSpeeds.leftMetersPerSecond;
+    // // Right velocity
+    // double rightVelocity = wheelSpeeds.rightMetersPerSecond;
 
     // Facts about the Drivetrain
     // Number of motors within 1 gearbox (controlling the drivetrain)
     public static final int knumMotors = 3;
-    public static final double kgearing = 6.11;
+    public static final double kgearing = 8.68;
     // Moment of Inertia (aka force felt by robot when following path?)
     public static final double kMOI = 4;
     // Final Mass of Robot including Bumbers and Batteries
     public static final double kMass = 135;
 
     public static final double kwheelRadiusMeters = 3 * 0.0254;
-    public static final int kWheelDiameter = 6;
+    public static final double kWheelDiameter = Units.inchesToMeters(6);
 
     public static final int neoEncoderTicks = 42;
     public static final double kTicksToMetersConversionFactor = 39.3701;
     public static final double kTicksToFeetConversionFactor = 12;
-    public static final double kTicksToMeters = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-        / kTicksToMetersConversionFactor;
-    public static final double kTicksToFeet = 1.0 / neoEncoderTicks * kWheelDiameter * kgearing * Math.PI
-        / kTicksToFeetConversionFactor;
+
+    public static final double kTicksToMeters = 
+    (kWheelDiameter * Math.PI) /kgearing;
+
+
+    public static final double kTicksToFeet = 
+    1.0 / neoEncoderTicks * 
+    kWheelDiameter * kgearing * Math.PI/ kTicksToFeetConversionFactor;
 
     public static double loopPeriodSecs = 0.020;
 
     public static final double kStopMotors = 0;
+
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+    //todo: Updated Values using SysID
+    public static final double ksVolts = 0.15643;
+    public static final double kvVoltSecondPerMeter = 2.2445;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.602247;
   }
 
   public static class VisionConstants {
@@ -127,7 +130,7 @@ public final class Constants {
     }
 
     //Rotation System Facts
-    public static final double kRotationGearing = 303.03;
+    public static final double kRotationGearing = 303.03; //106.06
     public static final int kRotationCurrentLimit = 15;
     //ticks to degrees
     public static final double kRotationPositionConversion = 360.0 /kRotationGearing;

@@ -4,11 +4,15 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class TrajectoryRunner extends CommandBase {
@@ -17,7 +21,7 @@ public class TrajectoryRunner extends CommandBase {
   private Timer m_timer;
   private Trajectory m_trajectory;
   private Boolean m_isFirstPath;
-  private final RamseteController m_ramseteController = new RamseteController();
+  private RamseteCommand m_ramseteCommand;
   
   public TrajectoryRunner(DrivetrainSubsystem drive, Trajectory traj, Boolean isfirstPath) {
     /*Trajectory runner takes a drive subsystem and a trajectory, and a boolean to make the robot follow a certain path. 
@@ -25,38 +29,48 @@ public class TrajectoryRunner extends CommandBase {
     m_drivetrainSubsystem = drive;
     m_trajectory = traj;
     m_isFirstPath = isfirstPath;
+    m_ramseteCommand = new RamseteCommand(
+      m_trajectory, 
+      m_drivetrainSubsystem::getPose, 
+      new RamseteController(
+        DrivetrainConstants.kRamseteB, 
+        DrivetrainConstants.kRamseteZeta), 
+      new SimpleMotorFeedforward(
+        DrivetrainConstants.ksVolts, 
+        DrivetrainConstants.kvVoltSecondPerMeter,
+        DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+        DrivetrainConstants.kinematics, 
+        m_drivetrainSubsystem::getWheelSpeeds, 
+      new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+      new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+      m_drivetrainSubsystem::tankDrive, 
+      m_drivetrainSubsystem);
     addRequirements(drive);
   }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    
     if(m_isFirstPath == true){
-    m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
+      m_drivetrainSubsystem.resetOdometry(m_trajectory.getInitialPose());
     }
     
+    m_drivetrainSubsystem.setRobotFromFieldPose();
+    m_ramseteCommand.schedule();
     m_timer = new Timer();
     m_timer.start();
-
+    
   }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_drivetrainSubsystem.updateOdometry();
-
+    
     // // Update robot position on Field2d.
-    m_drivetrainSubsystem.setRobotFromFieldPose();
+    
 
-      // Get the desired pose from the trajectory.
-      var desiredPose = m_trajectory.sample(m_timer.get());
-
-      // Get the reference chassis speeds from the Ramsete controller.
-      var refChassisSpeeds = m_ramseteController.calculate(m_drivetrainSubsystem.getPose(), desiredPose);
-      // Set the linear and angular speeds.
-
-      m_drivetrainSubsystem.setRaw(refChassisSpeeds.vxMetersPerSecond, refChassisSpeeds.omegaRadiansPerSecond);
     
   }
 

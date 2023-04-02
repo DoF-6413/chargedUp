@@ -15,7 +15,6 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 import frc.robot.commands.ArmControls.RotationPID;
-import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.colorSensor;
@@ -241,6 +240,8 @@ public class RobotContainer {
     m_driverController.rightBumper().onTrue(
       new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+
+      m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
   }
   
   /**
