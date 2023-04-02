@@ -4,58 +4,20 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.TelescoperConstants;
-import frc.robot.Constants.VisionConstants;
-// import frc.robot.commands.targetFinding;
-import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-// import frc.robot.commands.targetFinding;
-// import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-import frc.robot.commands.ArmControls.RotationPID;
-import frc.robot.commands.DrivetrainControls.MovePID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+
 // import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.Constants.VisionConstants;
-// import frc.robot.commands.targetFinding;
-import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-// import frc.robot.commands.targetFinding;
-// import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-import frc.robot.commands.ArmControls.RotationPID;
-import frc.robot.commands.ArmControls.RotationReset;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.colorSensor;
-// import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.commands.*;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
-import frc.robot.subsystems.colorSensor;
-// import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
-import java.util.List;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -63,57 +25,32 @@ import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.getEstimatedPose;
 // import frc.robot.commands.getPoseAprilTag;
 // import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-
 // import frc.robot.subsystems.colorSensor;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmControls.EndEffectorRunner;
-import frc.robot.commands.ArmControls.RotationPID;
+
 // import frc.robot.commands.ArmControls.TelescoperConditional;
-import frc.robot.commands.ArmControls.TelescoperPID;
-import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.commands.ArmControls.WristPID;
-import frc.robot.commands.Autos.BackingOutArm;
+
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
-import frc.robot.commands.Autos.CenterRScoreOutBalance;
-import frc.robot.commands.Autos.G1TRAroundCSBalance;
-import frc.robot.commands.Autos.G3TLAroundCSBalance;
-import frc.robot.commands.Autos.GroundPickUp;
 import frc.robot.commands.Autos.ScoreBalance;
-import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
-import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
-import frc.robot.commands.TeleopAutomations.CubePIckUp;
 // import frc.robot.commands.TeleopAutomations.CubePickUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
 import frc.robot.commands.TeleopAutomations.PlaceHigh;
@@ -121,14 +58,9 @@ import frc.robot.commands.TeleopAutomations.PlaceMid;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+
 import frc.robot.subsystems.WristSubsystem;
 // import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -149,7 +81,6 @@ public class RobotContainer {
  
 
   private final WristSubsystem m_wristSubsystem = new WristSubsystem();
-  private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
@@ -293,18 +224,18 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         m_driverController.y().onTrue(new TrajectoryRunner(m_drivetrainSubsystem, traj1, true));
         //This extends telescoper 
         m_auxController.start().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(0.8)))
+        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
         //This unextends telescoper 
         m_auxController.back().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinTelescopingMotor(-0.8)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.stopTelescopingMotor()));
+        onTrue(new InstantCommand(()-> m_telescoperSubsystem.spinTelescopingMotor(-0.8)))
+        .onFalse(new InstantCommand(()-> m_telescoperSubsystem.stopTelescopingMotor()));
 
         //This runs Endeffector to Collect Cube
         m_auxController.b().
-        onTrue(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.5)))
-        .onFalse(new InstantCommand(()-> m_armSubsystem.spinEndEffector(0.07)));
+        onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
+        .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.07)));
 
         m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
         // m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
@@ -327,7 +258,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         m_auxController.y()
             .onTrue(
               // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
-              new PositionHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+              new PositionHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem))
             .onFalse(
               new PlaceHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
