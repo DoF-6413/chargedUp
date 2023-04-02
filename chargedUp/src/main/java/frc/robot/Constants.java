@@ -156,6 +156,7 @@ public final class Constants {
 
   }
 
+  //Arm Constants fo the Rotation Aspect of the Arm
   public static class ArmConstants { 
     public enum ArmMotor {
       leftRotationMotor(6),
@@ -169,16 +170,23 @@ public final class Constants {
     }
 
     //Rotation System Facts
-    public static final double kRotationGearing = 303.03; //106.06
-    public static final int kRotationCurrentLimit = 15;
+    public static final double kRotationGearing = 79.34; //106.06
+    public static final int kRotationCurrentLimit = 25;
     //ticks to degrees
     public static final double kRotationPositionConversion = 360.0 /kRotationGearing;
 
     // Rotation Arm PID Values (Tune PID Before Feedforward)
-    public static final double kRotationP = 0.25;
+    public static final double kRotationP = 0.003913;
     public static final double kRotationI = 0;
     public static final double kRotationD = 0;
     public static final double kRotationTolerance = 0.5;
+    
+    // Rotation Arm FeedForward
+    public static final double ksVolts = 0.067396;
+    public static final double kgVolts = 0.19635;
+    public static final double kvVoltSecondPerMeter = 0.014856;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.00085165;
+
 
     //Trapazoidal Motion Profiling for Rotation Arm
     public static final double kArmMaxVelocity = 100;

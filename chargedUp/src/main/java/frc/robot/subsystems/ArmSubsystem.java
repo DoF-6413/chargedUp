@@ -37,6 +37,7 @@ private final CANSparkMax m_leftRotationMotor;
 private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
 private final AnalogPotentiometer m_pot;
+private final ArmFeedforward m_armFeedForward;
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
@@ -51,6 +52,8 @@ private final AnalogPotentiometer m_pot;
     
     m_rightRotationMotor.follow(m_leftRotationMotor);
     m_pot = new AnalogPotentiometer(ArmConstants.kpotetiometerPort, ArmConstants.kpotetiometerRange, ArmConstants.kpotentiometerOffset);
+
+    m_armFeedForward = new ArmFeedforward(ArmConstants.ksVolts, ArmConstants.kgVolts, ArmConstants.kvVoltSecondPerMeter, ArmConstants.kaVoltsSecondsSquaredPerMeter);
   }
 
   @Override
@@ -60,7 +63,8 @@ private final AnalogPotentiometer m_pot;
   }
 
   public void SmartDashboardCalls(){
-    SmartDashboard.putNumber("RotationPosition", getRotationPosition());    
+    SmartDashboard.putNumber("RotationPosition", getRotationPosition());  
+    SmartDashboard.putNumber("Arm Current", m_leftRotationMotor.getOutputCurrent()) ; 
     SmartDashboard.putNumber("Potentiometer Reading", m_pot.get());
   }
 
@@ -75,6 +79,11 @@ private final AnalogPotentiometer m_pot;
   public void spinRotationMotors(double speed){
     m_leftRotationMotor.set(speed);
     SmartDashboard.putNumber("Rotation speed", speed);
+  }
+
+  public void rotationVoltage(double output, double Position, double Velocity){
+    double feedForward =  m_armFeedForward.calculate(Position, Velocity);
+    m_leftRotationMotor.setVoltage(output + feedForward);
   }
 
   public void stopRotationMotors(){
