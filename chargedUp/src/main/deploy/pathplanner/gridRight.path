@@ -1,0 +1,58 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 3.348595073258523,
+        "y": 5.047272316766856
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.983181692859112,
+        "y": 5.047272316766856
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Bring Arm Out"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.921199056073326,
+        "y": 5.047272316766856
+      },
+      "prevControl": {
+        "x": 2.161001586960439,
+        "y": 5.047272316766856
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.0,
+      "names": [
+        "armOut"
+      ]
+    }
+  ]
+}

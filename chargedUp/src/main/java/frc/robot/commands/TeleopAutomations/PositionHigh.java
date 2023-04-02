@@ -26,14 +26,14 @@ import frc.robot.subsystems.WristSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PositionHigh extends SequentialCommandGroup {
   /** Creates a new PositionHigh. */
-  public PositionHigh(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector, WristSubsystem wrist) {
+  public PositionHigh(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new RotationPID(arm, -ArmConstants.kHighPeak),
+      new RotationPID(arm, -ArmConstants.kHighPeak)
       // new ConditionalCommand(
-        new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention)
+        // new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention)
       //   new ParallelCommandGroup(new WristPID(wrist, 0), new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention)),
       //   ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
       // )
