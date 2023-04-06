@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -38,6 +39,7 @@ private final CANSparkMax m_rightRotationMotor;
 private final RelativeEncoder m_RotationEncoder;
 private final AnalogPotentiometer m_pot;
 private final ArmFeedforward m_armFeedForward;
+private double m_feedForwardValue;
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
@@ -54,6 +56,7 @@ private final ArmFeedforward m_armFeedForward;
     m_pot = new AnalogPotentiometer(ArmConstants.kpotetiometerPort, ArmConstants.kpotetiometerRange, ArmConstants.kpotentiometerOffset);
 
     m_armFeedForward = new ArmFeedforward(ArmConstants.ksVolts, ArmConstants.kgVolts, ArmConstants.kvVoltSecondPerMeter, ArmConstants.kaVoltsSecondsSquaredPerMeter);
+    m_feedForwardValue = 0;
   }
 
   @Override
@@ -85,9 +88,13 @@ private final ArmFeedforward m_armFeedForward;
     SmartDashboard.putNumber("Rotation speed", speed);
   }
 
-  public void rotationVoltage(double output, double Position, double Velocity){
-    double feedForward =  m_armFeedForward.calculate(Position, Velocity);
-    m_leftRotationMotor.setVoltage(output + feedForward);
+  public void updateFeedForward(double Position, double Velocity){
+    m_feedForwardValue =  m_armFeedForward.calculate(Position, Velocity);
+  }
+  public void rotationVoltage(double output){
+    //maybe set velocity as 0
+    updateFeedForward(Units.degreesToRadians(getRotationPosition() - 90), getRotationVelocity());
+    m_leftRotationMotor.setVoltage(output + m_feedForwardValue);
   }
 
   public void stopRotationMotors(){
