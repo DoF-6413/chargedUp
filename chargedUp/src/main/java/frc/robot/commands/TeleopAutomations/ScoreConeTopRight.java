@@ -35,7 +35,7 @@ public class ScoreConeTopRight extends SequentialCommandGroup {
     PathPlannerTrajectory gridRightTop = PathPlanner.loadPath("gridRight", new PathConstraints(1, 1));
     // addCommands(new FooCommand(), new BarCommand());
     HashMap<String, Command> evenMapGridRight = new HashMap<>();
-    evenMapGridRight.put("armOut", new PositionHigh(arm, telescoper, endeffector));
+    evenMapGridRight.put("armOut", new PositionHigh(arm, telescoper));
     
     PathPlannerTrajectory gridRightTopTraj = PathPlanner.generatePath(
      new PathConstraints(1, 1),

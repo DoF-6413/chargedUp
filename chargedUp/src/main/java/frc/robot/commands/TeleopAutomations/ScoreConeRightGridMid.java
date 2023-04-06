@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -23,18 +24,23 @@ import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
 
+
+
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreConeRightGridMid extends SequentialCommandGroup {
+  public static Command m_eventMapAction;
+  public static int m_superCode;
   /** Creates a new command that scores a cone on the right grid mid right (Blue Alliance) */
-  public ScoreConeRightGridMid(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endeffector, PoseEstimator poseEstimator) {
+  public ScoreConeRightGridMid(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endeffector, PoseEstimator poseEstimator, Command eventMapAction, Command finalAction, Integer supercode) {
     // Add your commands in the addCommands() call, e.g.
     PathPlannerTrajectory gridRightMid = PathPlanner.loadPath("gridRight", new PathConstraints(1, 1));
     // addCommands(new FooCommand(), new BarCommand());
     HashMap<String, Command> eventMapGridRightMid = new HashMap<>();
-    eventMapGridRightMid.put("armout", new PositionMid(telescoper, arm, endeffector));
-
+    eventMapGridRightMid.put("armout", getCommand());
+m_eventMapAction = eventMapAction;
+m_superCode = supercode;
     PathPlannerTrajectory gridRightMidTraj = PathPlanner.generatePath(
       new PathConstraints(1, 1),
       new PathPoint(gridRightMid.getInitialPose().getTranslation(), gridRightMid.getInitialPose().getRotation()),
@@ -49,7 +55,14 @@ public class ScoreConeRightGridMid extends SequentialCommandGroup {
        eventMapGridRightMid
        ),
        //scores and puts arm back in 
-       new PlaceMid(arm, telescoper, endeffector)
+      finalAction
     );
+  }
+
+
+  private static Command getCommand(){
+
+    Command gotCommand = (m_superCode == 01) ? m_eventMapAction  : m_eventMapAction;
+return gotCommand;
   }
 }

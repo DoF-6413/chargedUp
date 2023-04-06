@@ -58,7 +58,7 @@ import frc.robot.commands.TeleopAutomations.PlaceMid;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
-
+import frc.robot.commands.TeleopAutomations.ScoreConeRightGridMid;
 import frc.robot.subsystems.WristSubsystem;
 // import frc.robot.subsystems.VisionSubsystem;
 
@@ -258,7 +258,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         m_auxController.y()
             .onTrue(
               // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
-              new PositionHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem))
+              new PositionHigh(m_armSubsystem, m_telescoperSubsystem))
             .onFalse(
               new PlaceHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
@@ -266,7 +266,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
         m_auxController.x()
             .onTrue(
-              new PositionMid(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
+              new PositionMid(m_telescoperSubsystem, m_armSubsystem))
               .onFalse(
                 new PlaceMid(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
@@ -293,6 +293,8 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     m_driverController.rightBumper().onTrue(
       new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+
+    m_driverController.x().whileTrue( new ScoreConeRightGridMid(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimator,new PositionMid(m_telescoperSubsystem, m_armSubsystem), new PlaceMid(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem),01));
   }
   
   /**
