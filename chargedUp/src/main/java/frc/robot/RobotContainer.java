@@ -266,7 +266,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
         m_auxController.x()
             .onTrue(
-              new PositionMid(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+              new PositionMid(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
               .onFalse(
                 new PlaceMid(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 

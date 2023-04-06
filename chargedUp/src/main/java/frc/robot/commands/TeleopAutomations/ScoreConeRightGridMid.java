@@ -27,7 +27,7 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreConeRightGridMid extends SequentialCommandGroup {
-  /** Creates a new ScoreConeRightGridMid. */
+  /** Creates a new command that scores a cone on the right grid mid right (Blue Alliance) */
   public ScoreConeRightGridMid(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endeffector, PoseEstimator poseEstimator) {
     // Add your commands in the addCommands() call, e.g.
     PathPlannerTrajectory gridRightMid = PathPlanner.loadPath("gridRight", new PathConstraints(1, 1));
@@ -48,7 +48,7 @@ public class ScoreConeRightGridMid extends SequentialCommandGroup {
        gridRightMid.getMarkers(),
        eventMapGridRightMid
        ),
-       //scores and puts arm back in
+       //scores and puts arm back in 
        new PlaceMid(arm, telescoper, endeffector)
     );
   }
