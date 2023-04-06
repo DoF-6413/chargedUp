@@ -32,25 +32,25 @@ public class ScoreConeTopRight extends SequentialCommandGroup {
   /** Creates a new command that scores a cone on the right grid top right (Blue Alliance) */
   public ScoreConeTopRight(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endeffector, PoseEstimator poseEstimator) {
     // Add your commands in the addCommands() call, e.g.
-    PathPlannerTrajectory gridRight = PathPlanner.loadPath("gridRight", new PathConstraints(1, 1));
+    PathPlannerTrajectory gridRightTop = PathPlanner.loadPath("gridRight", new PathConstraints(1, 1));
     // addCommands(new FooCommand(), new BarCommand());
     HashMap<String, Command> evenMapGridRight = new HashMap<>();
     evenMapGridRight.put("armOut", new PositionHigh(arm, telescoper, endeffector));
     
-    PathPlannerTrajectory gridRightTraj = PathPlanner.generatePath(
+    PathPlannerTrajectory gridRightTopTraj = PathPlanner.generatePath(
      new PathConstraints(1, 1),
-     new PathPoint(gridRight.getInitialPose().getTranslation(), gridRight.getInitialPose().getRotation()),
+     new PathPoint(gridRightTop.getInitialPose().getTranslation(), gridRightTop.getInitialPose().getRotation()),
      new PathPoint(new Translation2d(3.35,7), new Rotation2d(1)));
   
     addCommands(
       //on the fly generating
-      new TrajectoryRunner(drive, gridRightTraj.relativeTo(poseEstimator.getcurrentPose()), false),
+      new TrajectoryRunner(drive, gridRightTopTraj.relativeTo(poseEstimator.getcurrentPose()), false),
       //true or false? 
       //follow path with events 
       new FollowPathWithEvents(
-        new TrajectoryRunner(drive, gridRight.relativeTo(poseEstimator.getcurrentPose()), false),
+        new TrajectoryRunner(drive, gridRightTop.relativeTo(poseEstimator.getcurrentPose()), false),
         //true or false? 
-      gridRight.getMarkers(),
+      gridRightTop.getMarkers(),
       evenMapGridRight
       ),
       //scores and puts arm back in

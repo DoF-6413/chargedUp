@@ -25,14 +25,14 @@ import frc.robot.subsystems.WristSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PositionMid extends SequentialCommandGroup {
   /** Creates a new PositionMid. */
-  public PositionMid(TelescoperSubsystem telescoper, ArmSubsystem arm, EndEffectorSubsystem NEfector, WristSubsystem wrist) {
+  public PositionMid(TelescoperSubsystem telescoper, ArmSubsystem arm, EndEffectorSubsystem NEfector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new RotationPID(arm, -ArmConstants.kHPMPHB),
+      new RotationPID(arm, -ArmConstants.kHPMPHB)
       // new ConditionalCommand(
-        new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
+        // new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
       //   new ParallelCommandGroup(
       //     new WristPID(wrist, 0),
       //     new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)),
