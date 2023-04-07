@@ -44,6 +44,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.wpilibj.GenericHID;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -139,6 +140,9 @@ public class RobotContainer {
 
       public final static CommandXboxController m_auxController =
       new CommandXboxController(OperatorConstants.kAuxControllerPort);
+
+      public final GenericHID m_sillies = new GenericHID(OperatorConstants.kJoystickPort);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
@@ -242,6 +246,11 @@ public class RobotContainer {
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
       m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+
+      new JoystickButton(m_sillies, 1).onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
+      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.0)));
+
+      //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
   }
   
   /**
