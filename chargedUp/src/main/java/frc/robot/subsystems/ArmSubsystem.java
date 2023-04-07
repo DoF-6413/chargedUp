@@ -93,8 +93,10 @@ private double m_feedForwardValue;
   }
   public void rotationVoltage(double output){
     //maybe set velocity as 0
-    updateFeedForward(Units.degreesToRadians(getRotationPosition() - 90), getRotationVelocity());
-    m_leftRotationMotor.setVoltage(output + m_feedForwardValue);
+    // updateFeedForward(Units.degreesToRadians(getRotationPosition() - 95), 0);
+    m_leftRotationMotor.setVoltage(output
+    //  + m_feedForwardValue
+     );
   }
 
   public void stopRotationMotors(){
