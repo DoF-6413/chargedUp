@@ -27,11 +27,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DrivetrainConstants.DriveMotor;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.SimulationDevices.SparkMaxWrapper;
+import frc.robot.subsystems.PoseEstimator;
+
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
@@ -55,7 +55,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static EncoderSim m_rightSimEncoder;
   private static EncoderSim m_leftSimEncoder;
   
-  private static DifferentialDriveOdometry m_odometry;
   public static Field2d m_field2d;
   
   private static GyroSubsystem gyro;
@@ -99,9 +98,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     simEncoderLeftRep.setReverseDirection(true);
 
-    m_odometry = new DifferentialDriveOdometry(
-        gyro.getRotation2d(), getPositionLeftLead(), getPositionRightLead());
-
     m_Kinematics = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
 
     if (RobotBase.isSimulation()) {
@@ -133,10 +129,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    updateOdometry();
-    if (m_field2d != null) {
-      setRobotFromFieldPose();
-    }
+    
     SmartDashboardCalls();
   }
   
@@ -191,42 +184,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     encoderRightLead.setPosition(0);
   }
 
-  
-  
-  public void setRobotFromFieldPose() {
-    if (RobotBase.isSimulation()) {
-      setPose(m_odometry.getPoseMeters());
-    }
-  }
-  
-  public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
-  }
-  
-  public void setPose(Pose2d pose) {
-    if (RobotBase.isSimulation()) {
-      // reset the GyroSim to match the driveTrainSim
-      // do it early so that "real" odometry matches this value
-      gyroAngleSim.set(m_drivetrainSimulator.getHeading().getDegrees());
-      m_field2d.setRobotPose(pose);
-    }
-  }
-  
-  public void updateOdometry() {
-    if (RobotBase.isSimulation()) {
-      m_odometry.update(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead());
-    } else {
-      m_odometry.update(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead());
-    }
-  }
-  
-  public void resetOdometry(Pose2d currentPose2d) {
-    m_odometry.resetPosition(gyro.getRotation2d(), getPositionRightLead(), getPositionLeftLead(), currentPose2d);
-  }
-  
-  public double getHeading() {
-    return m_odometry.getPoseMeters().getRotation().getDegrees();
-  }
+
   
   /*
   Note: In the example code, he manually sets one velocity outfut to be negative(inverted)? 

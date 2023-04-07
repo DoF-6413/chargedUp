@@ -13,6 +13,7 @@ import frc.robot.commands.TrajectoryRunner;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
 
 
@@ -24,12 +25,12 @@ public class scoreRun extends SequentialCommandGroup {
   PathPlannerTrajectory kOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.2, .8));
   
   /** Creates a new scoreRun. */
-  public scoreRun(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector) {
+  public scoreRun(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ScoreCone(arm, telescoper, endEffector, drive),
-      new TrajectoryRunner(drive, kOutCommunity.relativeTo(drive.getPose()), true)
+      new TrajectoryRunner(drive, pose, kOutCommunity.relativeTo(pose.getcurrentPose()), true)
     );
   }
 }

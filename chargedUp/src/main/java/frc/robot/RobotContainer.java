@@ -17,7 +17,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.colorSensor;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,15 +34,9 @@ import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.commands.ArmPID;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.RotationReset;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.colorSensor;
-// import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.*;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
-import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,6 +52,7 @@ import java.util.List;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -98,14 +92,25 @@ import frc.robot.commands.TeleopAutomations.PlaceMid;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
+import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.getEstimatedPose;
+// import frc.robot.commands.getPoseAprilTag;
+// import frc.robot.commands.ArmControls.TelescoperConditional;
+import frc.robot.commands.ArmControls.TelescoperPID;
+import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.colorSensor;
+import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+
+// import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -118,21 +123,45 @@ public class RobotContainer {
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem);
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem );
   private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
   private final WristSubsystem m_wristSubsystem = new WristSubsystem();
-  private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  
+  //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
+  // private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  
+  // PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
+  
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final PoseEstimator m_PoseEstimatorSubsystem = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, DrivetrainConstants.kinematics );
+  
+  
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
-  // PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
-  PathPlannerTrajectory runOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.5, 0.8));
-  PathPlannerTrajectory overCSBalance = PathPlanner.loadPath("OverCSBalance", new PathConstraints(1.5, 1.2));
-  
+  PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory newishPath = PathPlanner.loadPath("VisionTest", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
+ PathPlannerTrajectory RightRed2 = PathPlanner.loadPath("RightRed2", new PathConstraints(4, 4));
+ PathPlannerTrajectory runOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.5, 0.8));
+ PathPlannerTrajectory overCSBalance = PathPlanner.loadPath("OverCSBalance", new PathConstraints(1.5, 1.2));
+ 
 
+ 
+ PathPlannerTrajectory RightRed2Traj = PathPlanner.generatePath(
+  new PathConstraints(0.5,0.5), 
+  new PathPoint(m_PoseEstimatorSubsystem.getcurrentPose().getTranslation(),m_gyroSubsystem.getRotation2d()),
+new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPose().getRotation())
+);
+
+  PathPlannerTrajectory traj1 = PathPlanner.generatePath(
+    new PathConstraints(0.25, 0.25), 
+    new PathPoint(new Translation2d(13,6.749796),new Rotation2d(3.14)), // position, he
+   new PathPoint(new Translation2d(14.5,6.749796),new Rotation2d(0))
+    );
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -144,21 +173,25 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     // m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, runOutCommunity.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, overCSBalance.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Score High", new ScoreHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-    m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
 
     SmartDashboard.putData("hahah", m_chooser);
+    m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, getOntoChargingStation.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+      SmartDashboard.putData(m_chooser);
     configureBindings();
     defaultCommands();
       
@@ -242,6 +275,11 @@ public class RobotContainer {
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
       m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+
+      
+      // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
+
+      // m_driverController.y().onTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
   }
   
   /**

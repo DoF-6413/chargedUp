@@ -6,6 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -31,6 +34,7 @@ public class Robot extends TimedRobot {
     if (RobotBase.isSimulation()){
       SmartDashboard.putData("Field", DrivetrainSubsystem.m_field2d);
     }
+    PathPlannerServer.startServer(5811);
   }
 
   /**
