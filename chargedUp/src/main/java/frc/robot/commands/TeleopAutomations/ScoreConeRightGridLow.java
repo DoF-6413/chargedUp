@@ -48,7 +48,7 @@ public class ScoreConeRightGridLow extends SequentialCommandGroup {
         new TrajectoryRunner(drive, gridRightLowTraj.relativeTo(poseEstimator.getcurrentPose()), false),
         gridRightLow.getMarkers(),
         eventMapGridRightLow
-        ),
+        )
       
     );
   }
