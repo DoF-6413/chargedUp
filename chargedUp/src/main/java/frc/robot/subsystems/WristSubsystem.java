@@ -51,7 +51,7 @@ public class WristSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Wrist Position", getPosition());
+    // SmartDashboard.putNumber("Wrist Position", getPosition());
     // SmartDashboard.putNumber("Current", getOutputCurrent());
   }
 }

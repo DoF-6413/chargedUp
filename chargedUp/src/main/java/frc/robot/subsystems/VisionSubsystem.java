@@ -72,11 +72,11 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public void updateSmartDashboard() {
-    SmartDashboard.putBoolean("target?", seeTarget());
-    SmartDashboard.putNumber("Best fiducial ID", getBestFiducialID());
-    SmartDashboard.putNumber("distance X", distanceFinder().getX());
-    SmartDashboard.putNumber("distance Y", distanceFinder().getY());
-    SmartDashboard.putNumber("distance Z", distanceFinder().getZ());
+    // SmartDashboard.putBoolean("target?", seeTarget());
+    // SmartDashboard.putNumber("Best fiducial", getBestFiducial());
+    // SmartDashboard.putNumber("distance X", distanceFinder().getX());
+    // SmartDashboard.putNumber("distance Y", distanceFinder().getY());
+    // SmartDashboard.putNumber("distance Z", distanceFinder().getZ());
   }
 
   public boolean seeTarget() {

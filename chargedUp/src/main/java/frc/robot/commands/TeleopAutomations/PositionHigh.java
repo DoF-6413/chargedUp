@@ -31,9 +31,9 @@ public class PositionHigh extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new RotationPID(arm, -ArmConstants.kHighPeak)
+      new RotationPID(arm, -ArmConstants.kHighPeak),
       // new ConditionalCommand(
-        // new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention)
+        new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention)
       //   new ParallelCommandGroup(new WristPID(wrist, 0), new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention)),
       //   ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
       // )
