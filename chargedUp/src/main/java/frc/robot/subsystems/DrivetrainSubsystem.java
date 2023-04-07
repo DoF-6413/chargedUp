@@ -268,16 +268,6 @@ if (setCoast == true){
 }
   }
 
-  /** */
-  public void switchIdleMode(boolean setCoast){
-if (setCoast == true){
-  Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
-        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kCoast));
-} else if (setCoast ==false){
-  Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
-        .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
-}
-  }
 
   @Override
   public void simulationPeriodic() {

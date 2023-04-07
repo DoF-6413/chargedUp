@@ -27,7 +27,7 @@ public class ScoreMovePickupScore extends SequentialCommandGroup {
   PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1, .8));
   PathPlannerTrajectory kPlace = PathPlanner.loadPath("Place", new PathConstraints(1, .8));
   // PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1, .8));
-  PathPlannerTrajectory kPlace = PathPlanner.loadPath("TestingRamsete", new PathConstraints(2, 4));
+  PathPlannerTrajectory kPlace2 = PathPlanner.loadPath("TestingRamsete", new PathConstraints(2, 4));
   public ScoreMovePickupScore(DrivetrainSubsystem drive, ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
