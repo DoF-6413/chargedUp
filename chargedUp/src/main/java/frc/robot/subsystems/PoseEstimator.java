@@ -115,7 +115,7 @@ public class PoseEstimator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (m_field2d != null) {
+    if (DrivetrainSubsystem.m_field2d != null) {
       this.setRobotFromFieldPose();
     }
 

@@ -21,6 +21,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -35,6 +36,9 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.RotationReset;
 import frc.robot.commands.*;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 // import frc.robot.subsystems.VisionSubsystem;
@@ -158,10 +162,12 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 );
 
   PathPlannerTrajectory traj1 = PathPlanner.generatePath(
-    new PathConstraints(0.25, 0.25), 
-    new PathPoint(new Translation2d(13,6.749796),new Rotation2d(3.14)), // position, he
-   new PathPoint(new Translation2d(14.5,6.749796),new Rotation2d(0))
+    new PathConstraints(0.2, 0.5), 
+    new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
+   new PathPoint(new Translation2d(15.57,7.32),new Rotation2d(3.14))
     );
+
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -190,7 +196,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     SmartDashboard.putData("hahah", m_chooser);
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    m_chooser.addOption("Get Onto Charging Station", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, getOntoChargingStation.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    
       SmartDashboard.putData(m_chooser);
     configureBindings();
     defaultCommands();
@@ -274,12 +280,12 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
-      m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
-
+    
       
-      // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
+      m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
-      // m_driverController.y().onTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
+      m_driverController.y().whileTrue(
+        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
   }
   
   /**
