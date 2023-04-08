@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -82,7 +83,9 @@ public class TrajectoryRunner extends CommandBase {
     m_timer = new Timer();
     m_timer.start();
     // m_ramseteCommand.schedule();
-    // PoseEstimator.m_field2d.getObject("traj").setTrajectory(m_trajectory);
+    if( RobotBase.isReal()){
+    PoseEstimator.m_field2d.getObject("traj").setTrajectory(m_trajectory);
+    }
   }
   
   // Called every time the scheduler runs while the command is scheduled.
@@ -114,7 +117,8 @@ SmartDashboard.putString("get pose", m_PoseEstimator.getcurrentPose().toString()
     boolean terminate = 
     ( Math.abs( m_currX - m_desiredX ) <= 0.5)
     &&( Math.abs( m_currY - m_desiredY ) <= 0.5)
-    &&( Math.abs( m_currRot - m_desiredRot ) <= 0.5);
-    return terminate;
+    &&( Math.abs( m_currRot - m_desiredRot ) <= 0.2);
+    // return terminate;
+    return m_timer.hasElapsed(m_trajectory.getTotalTimeSeconds());
   }
 }

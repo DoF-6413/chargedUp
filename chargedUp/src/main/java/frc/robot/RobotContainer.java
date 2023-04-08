@@ -39,8 +39,10 @@ import frc.robot.commands.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -164,9 +166,19 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   PathPlannerTrajectory traj1 = PathPlanner.generatePath(
     new PathConstraints(0.2, 0.5), 
     new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
-   new PathPoint(new Translation2d(15.57,7.32),new Rotation2d(3.14))
+   new PathPoint(new Translation2d(15.62,7.32),new Rotation2d(-0.35))
     );
 
+    PathPlannerTrajectory CONE = PathPlanner.generatePath(
+    new PathConstraints(0.2, 0.5), 
+    new PathPoint(new Translation2d(14.0, 5.12), new Rotation2d(0)), // position, he
+   new PathPoint(new Translation2d(15.0,5.12),new Rotation2d(0))
+  //  .
+  //  fromCurrentDifferentialState(m_PoseEstimatorSubsystem.getcurrentPose(), new RamseteController().
+  //  calculate(m_PoseEstimatorSubsystem.getcurrentPose(), new State(new Translation2d(15.0,5.12),new Rotation2d(0)) ))
+    );
+
+    
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -282,10 +294,14 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
     
       
-      m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
+      // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
       m_driverController.y().whileTrue(
-        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
+        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  CONE.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
+
+      
+        m_driverController.a().whileTrue(
+          new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
   }
   
   /**

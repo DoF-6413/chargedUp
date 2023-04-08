@@ -55,7 +55,7 @@ public class PoseEstimator extends SubsystemBase {
    * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and
    * radians.
    */
-  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
+  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.0, 1.0, 1.0);
 
   private double previousPipelineTimestamp = 0;
   
