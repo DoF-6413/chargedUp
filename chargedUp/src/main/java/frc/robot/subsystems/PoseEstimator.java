@@ -8,6 +8,7 @@ import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kBlueAll
 import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -151,10 +152,11 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
 
         }
       }
+      getposegg();
     }
 
     
-
+    
     SmartDashboard.putString("final Pose",
     PoseEstimator.poseEstimator.getEstimatedPosition().toString());
   }
@@ -182,6 +184,12 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
       m_drivetrainSubsystem.gyroAngleSim.set(m_drivetrainSubsystem.m_drivetrainSimulator.getHeading().getDegrees());
       DrivetrainSubsystem.m_field2d.setRobotPose(pose);
     }
+  }
+  public void getposegg(){
+  double[] esternocleidomastoideo = {PoseEstimator.poseEstimator.getEstimatedPosition().getX(),
+    PoseEstimator.poseEstimator.getEstimatedPosition().getY(),
+    PoseEstimator.poseEstimator.getEstimatedPosition().getRotation().getDegrees()};
+      SmartDashboard.putNumberArray("akehdkadkhakdhakhdk", esternocleidomastoideo);
   }
 
 
