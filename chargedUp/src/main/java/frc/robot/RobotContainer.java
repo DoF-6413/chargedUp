@@ -4,50 +4,18 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.TelescoperConstants;
-import frc.robot.Constants.VisionConstants;
-// import frc.robot.commands.targetFinding;
-import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-// import frc.robot.commands.targetFinding;
-// import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.Constants.VisionConstants;
-// import frc.robot.commands.targetFinding;
-import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-// import frc.robot.commands.targetFinding;
-// import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-import frc.robot.commands.ArmControls.RotationPID;
-import frc.robot.commands.ArmControls.RotationReset;
-import frc.robot.commands.*;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-// import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
@@ -57,39 +25,17 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmControls.EndEffectorRunner;
-import frc.robot.commands.ArmControls.RotationPID;
-// import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.commands.ArmControls.WristPID;
-import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
-import frc.robot.commands.Autos.CenterRScoreOutBalance;
-import frc.robot.commands.Autos.G1TRAroundCSBalance;
-import frc.robot.commands.Autos.G3TLAroundCSBalance;
-import frc.robot.commands.Autos.GroundPickUp;
 import frc.robot.commands.Autos.ScoreBalance;
-import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
-import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
-import frc.robot.commands.TeleopAutomations.CubePIckUp;
-// import frc.robot.commands.TeleopAutomations.CubePickUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
 import frc.robot.commands.TeleopAutomations.PlaceHigh;
 import frc.robot.commands.TeleopAutomations.PlaceMid;
@@ -97,22 +43,15 @@ import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.getEstimatedPose;
-// import frc.robot.commands.getPoseAprilTag;
-// import frc.robot.commands.ArmControls.TelescoperConditional;
-import frc.robot.commands.ArmControls.TelescoperPID;
-import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.PoseEstimator;
-import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.math.trajectory.*;
+import edu.wpi.first.math.util.Units;
 
 // import frc.robot.subsystems.colorSensor;
 
@@ -166,6 +105,13 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
    new PathPoint(new Translation2d(15.57,7.32),new Rotation2d(3.14))
     );
+
+    Trajectory traj12092007 = TrajectoryGenerator.generateTrajectory(
+      m_PoseEstimatorSubsystem.getcurrentPose(),
+      List.of(new Translation2d(15.57, 7.32)),
+        new Pose2d(new Translation2d(15.57,7.32),new Rotation2d(3.14)),
+          new TrajectoryConfig(Units.feetToMeters(1.0), Units.feetToMeters(1.0)));
+    
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -285,7 +231,8 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
       m_driverController.y().whileTrue(
-        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
+        // new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
+        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, traj12092007.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
   }
   
   /**
