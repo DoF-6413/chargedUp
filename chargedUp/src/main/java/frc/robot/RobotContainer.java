@@ -11,8 +11,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -39,7 +37,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
@@ -133,6 +130,13 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
    new PathPoint(new Translation2d(15.57,7.32),new Rotation2d(3.14))
     );
+
+    Trajectory traj12092007 = TrajectoryGenerator.generateTrajectory(
+      m_PoseEstimatorSubsystem.getcurrentPose(),
+      List.of(new Translation2d(15.57, 7.32)),
+        new Pose2d(new Translation2d(15.57,7.32),new Rotation2d(3.14)),
+          new TrajectoryConfig(Units.feetToMeters(1.0), Units.feetToMeters(1.0)));
+    
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -278,7 +282,8 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
       //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
       m_driverController.y().whileTrue(
-        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
+        // new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
+        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, traj12092007.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
   }
   
   /**
