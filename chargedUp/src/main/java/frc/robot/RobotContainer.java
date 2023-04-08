@@ -23,6 +23,7 @@ import frc.robot.commands.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -37,6 +38,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
@@ -128,7 +130,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   PathPlannerTrajectory traj1 = PathPlanner.generatePath(
     new PathConstraints(0.2, 0.5), 
     new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
-   new PathPoint(new Translation2d(15.57,7.32),new Rotation2d(3.14))
+   new PathPoint(new Translation2d(15.62,7.32),new Rotation2d(-0.35))
     );
 
     Trajectory traj12092007 = TrajectoryGenerator.generateTrajectory(
@@ -267,7 +269,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
     
       
-      m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
+      // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
     //   m_driverController.y().whileTrue(
     // trajGenCommand());
