@@ -37,9 +37,10 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 public class PoseEstimator extends SubsystemBase {
-
+  
+  
   private OriginPosition originPosition = kRedAllianceWallRightSide;
-
+  
   /**
    * Standard deviations of model states. Increase these numbers to trust your
    * model's state estimates less. This
@@ -57,12 +58,12 @@ public class PoseEstimator extends SubsystemBase {
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
 
   private double previousPipelineTimestamp = 0;
-
+  
   VisionSubsystem m_visionSubsystem;
   private static DifferentialDrivePoseEstimator poseEstimator;
   static GyroSubsystem m_gyroSubsystem;
   static DrivetrainSubsystem m_drivetrainSubsystem;
-  Field2d field2d = new Field2d();
+  // Field2d field2d = new Field2d();
   Pose3d visionMeasurement;
   public double resultsTimestamp;
   static SimDouble gyroAngleSim;
@@ -72,7 +73,10 @@ public class PoseEstimator extends SubsystemBase {
 
   /** Creates a new PoseEstimator. */
   public PoseEstimator(GyroSubsystem gyro, DrivetrainSubsystem drive, VisionSubsystem vision,
-      DifferentialDriveKinematics kinematics) {
+  DifferentialDriveKinematics kinematics) {
+
+    m_field2d = new Field2d();
+    SmartDashboard.putData(m_field2d);
 
     m_drivetrainSubsystem = drive;
     m_gyroSubsystem = gyro;
@@ -109,16 +113,21 @@ public class PoseEstimator extends SubsystemBase {
           var newPose = flipAlliance(getcurrentPose());
           poseEstimator.resetPosition(m_gyroSubsystem.getRotation2d(), m_drivetrainSubsystem.getPositionLeftLead(),
               m_drivetrainSubsystem.getPositionRightLead(), newPose);
-        }
-    }
+
+            }
+          }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    
     if (DrivetrainSubsystem.m_field2d != null) {
       this.setRobotFromFieldPose();
-    }
+    } 
+    m_field2d.setRobotPose(getcurrentPose());
+    
 
     poseEstimator.updateWithTime(Timer.getFPGATimestamp(),
         m_gyroSubsystem.getRotation2d(), m_drivetrainSubsystem.getPositionLeftLead(),
@@ -175,6 +184,7 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
     if (RobotBase.isSimulation()) {
       setPose(poseEstimator.getEstimatedPosition());
     }
+    
   }
 
   public static void setPose(Pose2d pose) {
