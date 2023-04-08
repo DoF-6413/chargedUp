@@ -82,7 +82,7 @@ public class TrajectoryRunner extends CommandBase {
     m_timer = new Timer();
     m_timer.start();
     // m_ramseteCommand.schedule();
-    
+    // PoseEstimator.m_field2d.getObject("traj").setTrajectory(m_trajectory);
   }
   
   // Called every time the scheduler runs while the command is scheduled.
