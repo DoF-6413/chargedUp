@@ -248,21 +248,22 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //     .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
     
-    m_auxController.a().onTrue(new RotationPID(m_armSubsystem, 30));
-    m_auxController.b().onTrue(new RotationPID(m_armSubsystem, -30));
+    m_auxController.a().whileTrue(new RunCommand(()-> m_armSubsystem.rotationVoltage(30)));
+    
+    m_auxController.b().onTrue(new InstantCommand(()-> m_armSubsystem.rotationVoltage(-30)));
 
-    m_auxController.y().onTrue(new RotationPID(m_armSubsystem, 60));
-    m_auxController.x().onTrue(new RotationPID(m_armSubsystem, -60));
+    m_auxController.y().onTrue(new InstantCommand(()-> m_armSubsystem.rotationVoltage(60)));
+    m_auxController.x().onTrue(new InstantCommand(()-> m_armSubsystem.rotationVoltage(-60)));
 
-    m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
-    m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
+    // m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
+    // m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
 
-    m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
-    .onFalse(new BackIn(m_telescoperSubsystem, m_armSubsystem));
+    // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
+    // .onFalse(new BackIn(m_telescoperSubsystem, m_armSubsystem));
 
-    m_driverController.rightBumper().onTrue(
-      new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
-      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+    // m_driverController.rightBumper().onTrue(
+    //   new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
+    //   onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
       //if the driver controller 
       // if(m_driverController.a().getAsBoolean() == true){

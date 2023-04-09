@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,6 +41,7 @@ private final RelativeEncoder m_RotationEncoder;
 private final AnalogPotentiometer m_pot;
 private final ArmFeedforward m_armFeedForward;
 private double m_feedForwardValue;
+private final ProfiledPIDController m_profiledPIDController;
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_leftRotationMotor = new CANSparkMax(ArmMotor.leftRotationMotor.CAN_ID, MotorType.kBrushless);
@@ -47,7 +49,7 @@ private double m_feedForwardValue;
     m_rightRotationMotor.follow(m_leftRotationMotor);
     m_leftRotationMotor.setIdleMode(IdleMode.kBrake);
     m_rightRotationMotor.setIdleMode(IdleMode.kBrake);
-    m_leftRotationMotor.setSmartCurrentLimit(ArmConstants.kRotationCurrentLimit);
+    m_leftRotationMotor.setSmartCurrentLimit(100);
     
     m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
@@ -57,6 +59,16 @@ private double m_feedForwardValue;
 
     m_armFeedForward = new ArmFeedforward(ArmConstants.ksVolts, ArmConstants.kgVolts, ArmConstants.kvVoltSecondPerMeter, ArmConstants.kaVoltsSecondsSquaredPerMeter);
     m_feedForwardValue = 0;
+
+    m_profiledPIDController =
+     new ProfiledPIDController(
+      ArmConstants.kRotationP, 
+      ArmConstants.kRotationI, 
+      ArmConstants.kRotationD, 
+      new Constraints(ArmConstants.kArmMaxVelocity, ArmConstants.kArmMaxAcceleration));
+
+      m_profiledPIDController.setTolerance(ArmConstants.kRotationTolerance);
+      m_profiledPIDController.enableContinuousInput(-90, 90);
   }
 
   @Override
@@ -91,12 +103,16 @@ private double m_feedForwardValue;
   public void updateFeedForward(double Position, double Velocity){
     m_feedForwardValue =  m_armFeedForward.calculate(Position, Velocity);
   }
-  public void rotationVoltage(double output){
+  public void rotationVoltage(double setpoint){
     //maybe set velocity as 0
     // updateFeedForward(Units.degreesToRadians(getRotationPosition() - 95), 0);
-    m_leftRotationMotor.setVoltage(output
-    //  + m_feedForwardValue
+    m_profiledPIDController.setGoal(Units.degreesToRadians(setpoint));
+    System.out.println(m_profiledPIDController.calculate(Units.degreesToRadians(getRotationPosition())));
+    m_leftRotationMotor.setVoltage(m_profiledPIDController.calculate(Units.degreesToRadians(getRotationPosition()))
+     +  m_armFeedForward.calculate(m_profiledPIDController.getSetpoint().position, m_profiledPIDController.getSetpoint().velocity)
      );
+
+    // m_leftRotationMotor.setVoltage(setpoint);
   }
 
   public void stopRotationMotors(){
