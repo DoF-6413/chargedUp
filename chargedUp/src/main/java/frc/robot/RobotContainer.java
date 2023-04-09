@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.commands.autoNavChooser;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.commands.ArmControls.RotationPID;
@@ -22,8 +23,6 @@ import frc.robot.commands.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -89,6 +88,7 @@ public class RobotContainer {
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
   private final WristSubsystem m_wristSubsystem = new WristSubsystem();
   
+  
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
   
@@ -97,7 +97,9 @@ public class RobotContainer {
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final PoseEstimator m_PoseEstimatorSubsystem = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, DrivetrainConstants.kinematics );
   
-  
+  private Trajectory m_chosenTraj;
+  private autoNavChooser m_AutoNavChooser;
+  private int grid, col;
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
@@ -246,16 +248,27 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
+      //if the driver controller 
+      if(m_driverController.a().getAsBoolean() == true){
+        grid = 0;
+
+      } if (m_driverController.b().getAsBoolean() == true){
+        col = 0;
+      }
+
+
+    m_driverController.y().onTrue(new autoNavChooser(grid, col));
+
     
       
       // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
-      m_driverController.y().whileTrue(
-    trajGenCommand());
+    //   m_driverController.y().whileTrue(
+    // trajGenCommand());
 
       
-        m_driverController.a().whileTrue(
-          new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
+        m_driverController.start().whileTrue(
+          new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  m_chosenTraj, false));
   }
   
   /**
@@ -270,68 +283,99 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     return m_chooser.getSelected();
   }
 
-  public Command trajGenCommand() {
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                
-            DrivetrainConstants.ksVolts, 
-            DrivetrainConstants.kvVoltSecondPerMeter,
-            DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
-            DrivetrainConstants.kinematics, 
-            10);
+  // public void choosePath(){
+  //   var autoVoltageConstraint =
+  //   new DifferentialDriveVoltageConstraint(
+  //       new SimpleMotorFeedforward(
+            
+  //       DrivetrainConstants.ksVolts, 
+  //       DrivetrainConstants.kvVoltSecondPerMeter,
+  //       DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+  //       DrivetrainConstants.kinematics, 
+  //       10);
+  //   TrajectoryConfig config =
+  //   new TrajectoryConfig(
+  //           0.4,
+  //           0.5)
+  //       // Add kinematics to ensure max speed is actually obeyed
+  //       .setKinematics(DrivetrainConstants.kinematics)
+  //       // Apply the voltage constraint
+  //       .addConstraint(autoVoltageConstraint).setReversed(true);
+  //   Trajectory exampleTrajectory =
+  //   TrajectoryGenerator.generateTrajectory(
+  //       // Start at the origin facing the +X direction
+  //       new Pose2d(new Translation2d(14.4, 4.5),Rotation2d.fromDegrees(180)),
+  //       // Pass through these two interior waypoints, making an 's' curve path
+  //       List.of(new Translation2d(14.5,4.0)),
+  //       // End 3 meters straight ahead of where we started, facing forward
+  //       new Pose2d(new Translation2d(14.6, 3.33),Rotation2d.fromDegrees(180)),
+  //       // Pass config
+  //       config);
+  //   m_chosenTraj = exampleTrajectory;
+  // }
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                0.4,
-                0.5)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DrivetrainConstants.kinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint).setReversed(true);
+  // public Command trajGenCommand() {
+  //   // Create a voltage constraint to ensure we don't accelerate too fast
+  //   var autoVoltageConstraint =
+  //       new DifferentialDriveVoltageConstraint(
+  //           new SimpleMotorFeedforward(
+                
+  //           DrivetrainConstants.ksVolts, 
+  //           DrivetrainConstants.kvVoltSecondPerMeter,
+  //           DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+  //           DrivetrainConstants.kinematics, 
+  //           10);
+
+  //   // Create config for trajectory
+  //   TrajectoryConfig config =
+  //       new TrajectoryConfig(
+  //               0.4,
+  //               0.5)
+  //           // Add kinematics to ensure max speed is actually obeyed
+  //           .setKinematics(DrivetrainConstants.kinematics)
+  //           // Apply the voltage constraint
+  //           .addConstraint(autoVoltageConstraint).setReversed(true);
             
     
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(new Translation2d(14.4, 4.5),Rotation2d.fromDegrees(180)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(14.5,4.0)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(new Translation2d(14.6, 3.33),Rotation2d.fromDegrees(180)),
-            // Pass config
-            config);
+  //   // An example trajectory to follow.  All units in meters.
+   
+  //    Trajectory  leftgridleft = 
+  //     TrajectoryGenerator.generateTrajectory(
+  //       new Pose2d(new Translation2d(13.04,0.63),Rotation2d.fromDegrees(180)),
+  //       //go to next to the wood that is on the ground on the left side of the left side of the fild
+  //        List.of(),
+  //        //dont go to any place 
+  //        new Pose2d(new Translation2d(14.66,0.45),Rotation2d.fromDegrees(180)),
+  //        //go to the first grid of the left side in the left side of the fild
+  //         config);
+  //         //  RamseteCommand ramseteCommand = new RamseteCommand(
+  //         //       exampleTrajectory, 
+  //         //       m_PoseEstimatorSubsystem::getcurrentPose, 
+  //         //     // m_ramseteCommand =
+  //         //       new RamseteController(
+  //         //         DrivetrainConstants.kRamseteB, 
+  //         //         DrivetrainConstants.kRamseteZeta)
+  //         //         // ;
+  //         //         , 
+  //         //       new SimpleMotorFeedforward(
+  //         //         DrivetrainConstants.ksVolts, 
+  //         //         DrivetrainConstants.kvVoltSecondPerMeter,
+  //         //         DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+  //         //         DrivetrainConstants.kinematics, 
+  //         //         m_drivetrainSubsystem::getWheelSpeeds, 
+  //         //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+  //         //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+  //         //       m_drivetrainSubsystem::tankDrive, 
+  //         //       m_drivetrainSubsystem, m_PoseEstimatorSubsystem);
 
-          //  RamseteCommand ramseteCommand = new RamseteCommand(
-          //       exampleTrajectory, 
-          //       m_PoseEstimatorSubsystem::getcurrentPose, 
-          //     // m_ramseteCommand =
-          //       new RamseteController(
-          //         DrivetrainConstants.kRamseteB, 
-          //         DrivetrainConstants.kRamseteZeta)
-          //         // ;
-          //         , 
-          //       new SimpleMotorFeedforward(
-          //         DrivetrainConstants.ksVolts, 
-          //         DrivetrainConstants.kvVoltSecondPerMeter,
-          //         DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
-          //         DrivetrainConstants.kinematics, 
-          //         m_drivetrainSubsystem::getWheelSpeeds, 
-          //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
-          //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
-          //       m_drivetrainSubsystem::tankDrive, 
-          //       m_drivetrainSubsystem, m_PoseEstimatorSubsystem);
-
-    // // Reset odometry to the starting pose of the trajectory.
-    // m_drivetrainSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, exampleTrajectory, false);
-  }
+  //   // // Reset odometry to the starting pose of the trajectory.
+  //   // m_drivetrainSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
+  
+  //   // Run path following command, then stop at the end.
+  //   return new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_chosenTraj, false);
+  
+//  }
 }
 
 
