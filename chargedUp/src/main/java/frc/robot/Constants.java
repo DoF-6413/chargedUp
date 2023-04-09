@@ -133,10 +133,10 @@ public final class Constants {
   //new Pose2d(3,1, new Rotation2d(0)), new Pose2d(5,1, new Rotation2d(0)), new Pose2d(7,1, new Rotation2d(0)), new Pose2d(1,-10, new Rotation2d(0)), new Pose2d(3,-10, new Rotation2d(0)), new Pose2d(5,-10, new Rotation2d(0)), new Pose2d(7,-10, new Rotation2d(0))
   
   
-  // this tells info about where te camera is +on the robot ex: 
+  // this tells info about where te camera is on the robot ex: 
   public static final Transform3d cameraOnRobot = new Transform3d( 
-    new Translation3d(-0.1016, -0.279,-1.1176),
-    new Rotation3d(0,0,2.95));
+    new Translation3d(-0.1016, -0.254,-1.1176),
+    new Rotation3d(0,0,2.79));
     
   public static final double kaprilTagAmbiguityThreshold = 0.2;
   public static final double kfieldLengthMeters = 16.54175;

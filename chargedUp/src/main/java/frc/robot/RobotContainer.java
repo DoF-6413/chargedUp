@@ -32,11 +32,11 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
-import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj.GenericHID;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
@@ -126,22 +126,10 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 );
 
   PathPlannerTrajectory traj1 = PathPlanner.generatePath(
-    new PathConstraints(0.2, 0.5), 
-    new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
-   new PathPoint(new Translation2d(15.62,7.32),new Rotation2d(-0.35))
+    new PathConstraints(0.25, 0.25), 
+    new PathPoint(new Translation2d(13,6.749796),new Rotation2d(3.14)), // position, he
+   new PathPoint(new Translation2d(14.5,6.749796),new Rotation2d(0))
     );
-
-    PathPlannerTrajectory CONE = PathPlanner.generatePath(
-    new PathConstraints(0.2, 0.5), 
-    new PathPoint(new Translation2d(14.0, 5.12), new Rotation2d(0)), // position, he
-   new PathPoint(new Translation2d(15.0,5.12),new Rotation2d(0))
-  //  .
-  //  fromCurrentDifferentialState(m_PoseEstimatorSubsystem.getcurrentPose(), new RamseteController().
-  //  calculate(m_PoseEstimatorSubsystem.getcurrentPose(), new State(new Translation2d(15.0,5.12),new Rotation2d(0)) ))
-    );
-
-    
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
