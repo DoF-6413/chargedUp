@@ -15,6 +15,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -25,12 +26,12 @@ public class G3TLAroundCSBalance extends SequentialCommandGroup {
   PathPlannerTrajectory kAroundCSRightBalance = PathPlanner.loadPath("AroundCSRightBalance", new PathConstraints(1, .5));
 
   /** Creates a new G3TLAroundCSBalance. */
-  public G3TLAroundCSBalance(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro) {
+  public G3TLAroundCSBalance(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ScoreCone(arm, telescoper, endEffector, drive),
-      new TrajectoryRunner(drive, kAroundCSRightBalance.relativeTo(drive.getPose()),true),
+      new TrajectoryRunner(drive, pose, kAroundCSRightBalance.relativeTo(pose.getcurrentPose()),true),
       new gyroBalance(gyro, drive)
     );
   }

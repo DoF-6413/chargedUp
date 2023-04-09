@@ -4,38 +4,71 @@
 
 package frc.robot.subsystems;
 
-import org.photonvision.PhotonCamera;
+import java.io.IOException;
+
+
+import org.photonvision.*;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.VisionConstants;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;;
+
+
 
 public class VisionSubsystem extends SubsystemBase {
-  private static final double CAMERA_HEIGHT_METERS = 1;
-  private static final double CAMERA_PITCH_RADIANS = 0;
-  private static final double TARGET_HEIGHT_METERS = 1;
 
+   static DifferentialDrive poseEstimatorDifferentialDrive;
+   static PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
+  private static PhotonPipelineResult results = new PhotonPipelineResult();
+  public PhotonTrackedTarget target = results.hasTargets() ? results.getBestTarget() : null;
+  public Double yaw;
+  public Double pitch;
+  public Transform3d camToTarget;
+  public static PoseEstimator photonrobotPoseEstimator;
+  
   /** Creates a new VisionSubsystem. */
   public VisionSubsystem() {
 
     PortForwarder.add(5800, "photonvision.local", 5800);
+
+    int aprilTag1 = 1;
+    int aprilTag2 = 2;
+    int aprilTag3 = 3;
+    int aprilTag4 = 4;
+    int aprilTag5 = 5;
+    int aprilTag6 = 6;
+    int aprilTag7 = 7;
+    int aprilTag8 = 8;
+
+;
+
   }
 
+  public static PhotonPipelineResult photonResult(){
+    return camera.getLatestResult();
+  }
+  
+
   // todo: provide portforwaring to connect without radio
-  PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
-  private PhotonPipelineResult results = new PhotonPipelineResult();
-  public PhotonTrackedTarget target;
-  public Double yaw;
-  public Double pitch;
-  public Transform3d camToTarget;
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    results = camera.getLatestResult();
-    updateSmartDashboard();
+    // results = camera.getLatestResult();
+    // updateSmartDashboard();
   }
 
   public void updateSmartDashboard() {
@@ -56,13 +89,23 @@ public class VisionSubsystem extends SubsystemBase {
     return results.hasTargets();
   }
 
-  public int getBestFiducial() {
+  public  int getBestFiducialID() {
     return seeTarget() == true ? results.getBestTarget().getFiducialId() : 0;
   }
 
-  public Transform3d distanceFinder() {
+  public PhotonTrackedTarget getBestFiducial() {
+    return seeTarget() == true ? results.getBestTarget() : new PhotonTrackedTarget();
+  }
+
+  public Translation3d distanceFinder() {
     Transform3d m_default = new Transform3d();
-    return seeTarget() == true ? results.getBestTarget().getBestCameraToTarget() : m_default;
+    return seeTarget() == true ? results.getBestTarget().getBestCameraToTarget().getTranslation() :new Translation3d();
+  }
+
+  public double getTargetYaw(){
+
+    System.out.println(yaw);
+    return( yaw != null) ? yaw : null;
   }
 
   public boolean isHuge() {
@@ -70,5 +113,16 @@ public class VisionSubsystem extends SubsystemBase {
     boolean huge = (this.seeTarget() == true) ? grande : false;
     return huge;
   }
+
+  public double getZ() {
+    if (results.hasTargets() == true) {
+    return target.getYaw();
+    } else {
+      return 1000;
+    }
+  }
+
+
+  
 
 }

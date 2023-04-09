@@ -5,41 +5,30 @@
 package frc.robot;
 
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.TelescoperConstants;
-import frc.robot.Constants.VisionConstants;
-// import frc.robot.commands.targetFinding;
-import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-// import frc.robot.commands.targetFinding;
-// import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.colorSensor;
-// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.Constants.VisionConstants;
-// import frc.robot.commands.targetFinding;
-import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
-// import frc.robot.commands.targetFinding;
-// import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.commands.ArmPID;
+import frc.robot.commands.autoNavChooser;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.commands.ArmControls.RotationPID;
 import frc.robot.commands.ArmControls.RotationReset;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.colorSensor;
-// import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.*;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
@@ -47,66 +36,46 @@ import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj.GenericHID;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmControls.EndEffectorRunner;
-import frc.robot.commands.ArmControls.RotationPID;
-// import frc.robot.commands.ArmControls.TelescoperConditional;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.commands.ArmControls.WristPID;
-import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
-import frc.robot.commands.Autos.CenterRScoreOutBalance;
-import frc.robot.commands.Autos.G1TRAroundCSBalance;
-import frc.robot.commands.Autos.G3TLAroundCSBalance;
-import frc.robot.commands.Autos.GroundPickUp;
 import frc.robot.commands.Autos.ScoreBalance;
-import frc.robot.commands.Autos.ScoreCone;
 import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
-import frc.robot.commands.Autos.ScoreRunRight;
 import frc.robot.commands.Autos.scoreRun;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
-import frc.robot.commands.TeleopAutomations.CubePIckUp;
-// import frc.robot.commands.TeleopAutomations.CubePickUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
 import frc.robot.commands.TeleopAutomations.PlaceHigh;
 import frc.robot.commands.TeleopAutomations.PlaceMid;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.getEstimatedPose;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.colorSensor;
+import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.math.trajectory.*;
+import edu.wpi.first.math.util.Units;
+
+// import frc.robot.subsystems.colorSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -119,20 +88,59 @@ public class RobotContainer {
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem);
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem );
   private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
   private final WristSubsystem m_wristSubsystem = new WristSubsystem();
-  private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  
+  
+  //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
+  // private final colorSensor m_colorSensorSubsystem = new colorSensor();
+  
+  // PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
+  
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final PoseEstimator m_PoseEstimatorSubsystem = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, DrivetrainConstants.kinematics );
+  
+  private Trajectory m_chosenTraj;
+  private autoNavChooser m_AutoNavChooser;
+  private int grid, col;
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
 
-  // PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
-  PathPlannerTrajectory runOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.5, 0.8));
-  PathPlannerTrajectory overCSBalance = PathPlanner.loadPath("OverCSBalance", new PathConstraints(1.5, 1.2));
-  
+  PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory newishPath = PathPlanner.loadPath("VisionTest", new PathConstraints(2, 0.8));
+  PathPlannerTrajectory getOntoChargingStation = PathPlanner.loadPath("GetOntoCSJanky", new PathConstraints(2, 0.8));
+ PathPlannerTrajectory RightRed2 = PathPlanner.loadPath("RightRed2", new PathConstraints(4, 4));
+ PathPlannerTrajectory runOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.5, 0.8));
+ PathPlannerTrajectory overCSBalance = PathPlanner.loadPath("OverCSBalance", new PathConstraints(1.5, 1.2));
+ 
+
+ 
+ PathPlannerTrajectory RightRed2Traj = PathPlanner.generatePath(
+  new PathConstraints(0.5,0.5), 
+  new PathPoint(m_PoseEstimatorSubsystem.getcurrentPose().getTranslation(),m_gyroSubsystem.getRotation2d()),
+new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPose().getRotation())
+);
+
+  PathPlannerTrajectory traj1 = PathPlanner.generatePath(
+    new PathConstraints(0.2, 0.5), 
+    new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
+   new PathPoint(new Translation2d(15.62,7.32),new Rotation2d(-0.35))
+    );
+
+    PathPlannerTrajectory CONE = PathPlanner.generatePath(
+    new PathConstraints(0.2, 0.5), 
+    new PathPoint(new Translation2d(14.0, 5.12), new Rotation2d(0)), // position, he
+   new PathPoint(new Translation2d(15.0,5.12),new Rotation2d(0))
+  //  .
+  //  fromCurrentDifferentialState(m_PoseEstimatorSubsystem.getcurrentPose(), new RamseteController().
+  //  calculate(m_PoseEstimatorSubsystem.getcurrentPose(), new State(new Translation2d(15.0,5.12),new Rotation2d(0)) ))
+    );
+
+    
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -148,21 +156,25 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     // m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, runOutCommunity.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, overCSBalance.relativeTo(m_drivetrainSubsystem.getPose()), true));
+    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Score High", new ScoreHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-    m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
 
     SmartDashboard.putData("hahah", m_chooser);
+    m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    
+      SmartDashboard.putData(m_chooser);
     configureBindings();
     defaultCommands();
       
@@ -245,6 +257,27 @@ public class RobotContainer {
       new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
+      //if the driver controller 
+      if(m_driverController.a().getAsBoolean() == true){
+        grid = 0;
+
+      } if (m_driverController.b().getAsBoolean() == true){
+        col = 0;
+      }
+
+
+    m_driverController.y().onTrue(new autoNavChooser(grid, col));
+
+    
+      
+      // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
+
+    //   m_driverController.y().whileTrue(
+    // trajGenCommand());
+
+      
+        m_driverController.start().whileTrue(
+          new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  m_chosenTraj, false));
       m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
 
       new JoystickButton(m_sillies, 1).onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
@@ -264,4 +297,100 @@ public class RobotContainer {
     
     return m_chooser.getSelected();
   }
+
+  // public void choosePath(){
+  //   var autoVoltageConstraint =
+  //   new DifferentialDriveVoltageConstraint(
+  //       new SimpleMotorFeedforward(
+            
+  //       DrivetrainConstants.ksVolts, 
+  //       DrivetrainConstants.kvVoltSecondPerMeter,
+  //       DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+  //       DrivetrainConstants.kinematics, 
+  //       10);
+  //   TrajectoryConfig config =
+  //   new TrajectoryConfig(
+  //           0.4,
+  //           0.5)
+  //       // Add kinematics to ensure max speed is actually obeyed
+  //       .setKinematics(DrivetrainConstants.kinematics)
+  //       // Apply the voltage constraint
+  //       .addConstraint(autoVoltageConstraint).setReversed(true);
+  //   Trajectory exampleTrajectory =
+  //   TrajectoryGenerator.generateTrajectory(
+  //       // Start at the origin facing the +X direction
+  //       new Pose2d(new Translation2d(14.4, 4.5),Rotation2d.fromDegrees(180)),
+  //       // Pass through these two interior waypoints, making an 's' curve path
+  //       List.of(new Translation2d(14.5,4.0)),
+  //       // End 3 meters straight ahead of where we started, facing forward
+  //       new Pose2d(new Translation2d(14.6, 3.33),Rotation2d.fromDegrees(180)),
+  //       // Pass config
+  //       config);
+  //   m_chosenTraj = exampleTrajectory;
+  // }
+
+  // public Command trajGenCommand() {
+  //   // Create a voltage constraint to ensure we don't accelerate too fast
+  //   var autoVoltageConstraint =
+  //       new DifferentialDriveVoltageConstraint(
+  //           new SimpleMotorFeedforward(
+                
+  //           DrivetrainConstants.ksVolts, 
+  //           DrivetrainConstants.kvVoltSecondPerMeter,
+  //           DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+  //           DrivetrainConstants.kinematics, 
+  //           10);
+
+  //   // Create config for trajectory
+  //   TrajectoryConfig config =
+  //       new TrajectoryConfig(
+  //               0.4,
+  //               0.5)
+  //           // Add kinematics to ensure max speed is actually obeyed
+  //           .setKinematics(DrivetrainConstants.kinematics)
+  //           // Apply the voltage constraint
+  //           .addConstraint(autoVoltageConstraint).setReversed(true);
+            
+    
+
+  //   // An example trajectory to follow.  All units in meters.
+   
+  //    Trajectory  leftgridleft = 
+  //     TrajectoryGenerator.generateTrajectory(
+  //       new Pose2d(new Translation2d(13.04,0.63),Rotation2d.fromDegrees(180)),
+  //       //go to next to the wood that is on the ground on the left side of the left side of the fild
+  //        List.of(),
+  //        //dont go to any place 
+  //        new Pose2d(new Translation2d(14.66,0.45),Rotation2d.fromDegrees(180)),
+  //        //go to the first grid of the left side in the left side of the fild
+  //         config);
+  //         //  RamseteCommand ramseteCommand = new RamseteCommand(
+  //         //       exampleTrajectory, 
+  //         //       m_PoseEstimatorSubsystem::getcurrentPose, 
+  //         //     // m_ramseteCommand =
+  //         //       new RamseteController(
+  //         //         DrivetrainConstants.kRamseteB, 
+  //         //         DrivetrainConstants.kRamseteZeta)
+  //         //         // ;
+  //         //         , 
+  //         //       new SimpleMotorFeedforward(
+  //         //         DrivetrainConstants.ksVolts, 
+  //         //         DrivetrainConstants.kvVoltSecondPerMeter,
+  //         //         DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+  //         //         DrivetrainConstants.kinematics, 
+  //         //         m_drivetrainSubsystem::getWheelSpeeds, 
+  //         //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+  //         //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+  //         //       m_drivetrainSubsystem::tankDrive, 
+  //         //       m_drivetrainSubsystem, m_PoseEstimatorSubsystem);
+
+  //   // // Reset odometry to the starting pose of the trajectory.
+  //   // m_drivetrainSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
+  
+  //   // Run path following command, then stop at the end.
+  //   return new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_chosenTraj, false);
+  
+//  }
 }
+
+
