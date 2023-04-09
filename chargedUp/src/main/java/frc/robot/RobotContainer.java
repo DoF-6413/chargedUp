@@ -29,6 +29,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.colorSensor;
+import edu.wpi.first.wpilibj.GenericHID;
+// import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -142,6 +148,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
       public final static CommandXboxController m_auxController =
       new CommandXboxController(OperatorConstants.kAuxControllerPort);
+
+      public final GenericHID m_sillies = new GenericHID(OperatorConstants.kJoystickPort);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
@@ -269,6 +278,12 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       
         m_driverController.start().whileTrue(
           new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  m_chosenTraj, false));
+      m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+
+      new JoystickButton(m_sillies, 1).onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
+      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.0)));
+
+      //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
   }
   
   /**
