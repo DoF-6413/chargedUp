@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -14,10 +16,23 @@ import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.commands.ArmControls.RotationPID;
+import frc.robot.commands.ArmControls.RotationReset;
+import frc.robot.commands.*;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import java.util.List;
 
@@ -25,6 +40,8 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
@@ -103,16 +120,19 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   PathPlannerTrajectory traj1 = PathPlanner.generatePath(
     new PathConstraints(0.2, 0.5), 
     new PathPoint(new Translation2d(14.5, 7.32), new Rotation2d(0)), // position, he
-   new PathPoint(new Translation2d(15.57,7.32),new Rotation2d(3.14))
+   new PathPoint(new Translation2d(15.62,7.32),new Rotation2d(-0.35))
     );
 
-    Trajectory traj12092007 = TrajectoryGenerator.generateTrajectory(
-      m_PoseEstimatorSubsystem.getcurrentPose(),
-      List.of(new Translation2d(15.57, 7.32)),
-        new Pose2d(new Translation2d(15.57,7.32),new Rotation2d(3.14)),
-          new TrajectoryConfig(Units.feetToMeters(1.0), Units.feetToMeters(1.0)));
-    
+    PathPlannerTrajectory CONE = PathPlanner.generatePath(
+    new PathConstraints(0.2, 0.5), 
+    new PathPoint(new Translation2d(14.0, 5.12), new Rotation2d(0)), // position, he
+   new PathPoint(new Translation2d(15.0,5.12),new Rotation2d(0))
+  //  .
+  //  fromCurrentDifferentialState(m_PoseEstimatorSubsystem.getcurrentPose(), new RamseteController().
+  //  calculate(m_PoseEstimatorSubsystem.getcurrentPose(), new State(new Translation2d(15.0,5.12),new Rotation2d(0)) ))
+    );
 
+    
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -228,11 +248,14 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
     
       
-      m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
+      // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
       m_driverController.y().whileTrue(
-        // new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
-        new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, traj12092007.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
+    trajGenCommand());
+
+      
+        m_driverController.a().whileTrue(
+          new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
   }
   
   /**
@@ -246,4 +269,69 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     
     return m_chooser.getSelected();
   }
+
+  public Command trajGenCommand() {
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(
+                
+            DrivetrainConstants.ksVolts, 
+            DrivetrainConstants.kvVoltSecondPerMeter,
+            DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+            DrivetrainConstants.kinematics, 
+            10);
+
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+                0.4,
+                0.5)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DrivetrainConstants.kinematics)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint).setReversed(true);
+            
+    
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory exampleTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(new Translation2d(14.4, 4.5),Rotation2d.fromDegrees(180)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(14.5,4.0)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(new Translation2d(14.6, 3.33),Rotation2d.fromDegrees(180)),
+            // Pass config
+            config);
+
+          //  RamseteCommand ramseteCommand = new RamseteCommand(
+          //       exampleTrajectory, 
+          //       m_PoseEstimatorSubsystem::getcurrentPose, 
+          //     // m_ramseteCommand =
+          //       new RamseteController(
+          //         DrivetrainConstants.kRamseteB, 
+          //         DrivetrainConstants.kRamseteZeta)
+          //         // ;
+          //         , 
+          //       new SimpleMotorFeedforward(
+          //         DrivetrainConstants.ksVolts, 
+          //         DrivetrainConstants.kvVoltSecondPerMeter,
+          //         DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
+          //         DrivetrainConstants.kinematics, 
+          //         m_drivetrainSubsystem::getWheelSpeeds, 
+          //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+          //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
+          //       m_drivetrainSubsystem::tankDrive, 
+          //       m_drivetrainSubsystem, m_PoseEstimatorSubsystem);
+
+    // // Reset odometry to the starting pose of the trajectory.
+    // m_drivetrainSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    return new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, exampleTrajectory, false);
+  }
 }
+
+

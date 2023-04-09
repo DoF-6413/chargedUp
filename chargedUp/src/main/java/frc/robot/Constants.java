@@ -134,8 +134,8 @@ public final class Constants {
   
   // this tells info about where te camera is +on the robot ex: 
   public static final Transform3d cameraOnRobot = new Transform3d( 
-    new Translation3d(-0.1016, -0.254,-1.1176),
-    new Rotation3d(0,0,2.79));
+    new Translation3d(-0.1016, -0.279,-1.1176),
+    new Rotation3d(0,0,2.95));
     
   public static final double kaprilTagAmbiguityThreshold = 0.2;
   public static final double kfieldLengthMeters = 16.54175;
