@@ -20,10 +20,16 @@ import frc.robot.Constants.DrivetrainConstants;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class autoNavChooser extends SequentialCommandGroup {
+public class autoNavChooser{
   /** Creates a new autoNavChooser. */
+  private int m_grid;
+  private int m_col;
+  Trajectory chosenTraj;
+  TrajectoryConfig config;
   public autoNavChooser(int grid, int col) {
-    Trajectory chosenTraj;
+
+    m_grid = grid;
+    m_col = col;
 
     var autoVoltageConstraint =
     new DifferentialDriveVoltageConstraint(
@@ -35,7 +41,7 @@ public class autoNavChooser extends SequentialCommandGroup {
         DrivetrainConstants.kinematics, 
         10);
     
-    TrajectoryConfig config =
+    config =
         new TrajectoryConfig(
                 0.4,
                 0.5)
@@ -43,11 +49,16 @@ public class autoNavChooser extends SequentialCommandGroup {
             .setKinematics(DrivetrainConstants.kinematics)
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint).setReversed(true);
-            
+  }
     
+public Trajectory choosenTrajectory(int grid, int col){
+  m_grid = grid;
+  m_col = col;
+  chosenTraj = new Trajectory();
+  
 
-    if (grid == 0) {
-      if (col == 0){
+    if (m_grid == 0) {
+      if (m_col == 0){
        //"trajectory that gets us the left most grid left colum";
        chosenTraj =  
        TrajectoryGenerator.generateTrajectory(
@@ -60,7 +71,7 @@ public class autoNavChooser extends SequentialCommandGroup {
            config);
 
 
-      }else if (col == 1){
+      }else if (m_col == 1){
        // "trajectory that gets us the left most grid midle colum";
        chosenTraj = 
        TrajectoryGenerator.generateTrajectory(
@@ -73,7 +84,7 @@ public class autoNavChooser extends SequentialCommandGroup {
            config);
 
 
-      }else if (col == 2){
+      }else if (m_col == 2){
         //"trajectory that gets us the left most grid rigth colum";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
@@ -91,8 +102,8 @@ public class autoNavChooser extends SequentialCommandGroup {
       // left grid
 
       
-    } else if (grid == 1) {
-      if (col == 0 ) {
+    } else if (m_grid == 1) {
+      if (m_col == 0 ) {
        //"trajectory that gets us the midle most grid left colum";
        chosenTraj = 
        TrajectoryGenerator.generateTrajectory(
@@ -104,7 +115,7 @@ public class autoNavChooser extends SequentialCommandGroup {
            // line up in the midle most grid left colum
             config);
 
-      } else if (col == 1){
+      } else if (m_col == 1){
        //"trajectory that gets us the midle most grid middle colum";
        TrajectoryGenerator.generateTrajectory(
         new Pose2d(new Translation2d(12.64,2.80),Rotation2d.fromDegrees(180)),
@@ -115,7 +126,7 @@ public class autoNavChooser extends SequentialCommandGroup {
          // line up in the midle most grid midle colum
           config);
 
-      } else if (col == 2){
+      } else if (m_col == 2){
        //"trajectory that gets us the midle most grid rigth colum";
        chosenTraj = 
        TrajectoryGenerator.generateTrajectory(
@@ -130,10 +141,10 @@ public class autoNavChooser extends SequentialCommandGroup {
       }
       // in this code block we put all the logic for returning trajectories to the
       // middle grid
-    } else if (grid == 2) {
+    } else if (m_grid == 2) {
       // in this code block we put all the logic for returning trajectories to the
       // right grid
-      if (col == 0) {
+      if (m_col == 0) {
         // "trajectory that gets us to the rightmost grid left column";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
@@ -145,7 +156,7 @@ public class autoNavChooser extends SequentialCommandGroup {
          // line up in the rigth most grid left colum
           config);
         
-      } else if (col == 1) {
+      } else if (m_col == 1) {
       //"trajectory that gets us to the rightmost grid middle column";
       chosenTraj = 
       TrajectoryGenerator.generateTrajectory(
@@ -157,7 +168,7 @@ public class autoNavChooser extends SequentialCommandGroup {
          // line up in the rigth most grid left colum
           config);
       
-      } else if (col == 2) {
+      } else if (m_col == 2) {
        // "trajectory that gets us to the rightmost grid right column";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
@@ -170,10 +181,10 @@ public class autoNavChooser extends SequentialCommandGroup {
             config);
       }
 
+      return chosenTraj;
     }
 
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    return chosenTraj;
+    
   }
 }
