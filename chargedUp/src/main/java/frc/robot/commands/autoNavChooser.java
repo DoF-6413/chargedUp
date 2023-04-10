@@ -43,7 +43,7 @@ public class autoNavChooser{
     
     config =
         new TrajectoryConfig(
-                0.4,
+                0.8,
                 0.5)
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DrivetrainConstants.kinematics)
