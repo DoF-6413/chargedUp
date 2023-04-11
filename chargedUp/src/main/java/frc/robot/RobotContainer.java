@@ -74,6 +74,7 @@ import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.math.trajectory.*;
 import edu.wpi.first.math.util.Units;
+import frc.robot.commands.autoNavChooser;
 
 // import frc.robot.subsystems.colorSensor;
 
@@ -103,9 +104,11 @@ public class RobotContainer {
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final PoseEstimator m_PoseEstimatorSubsystem = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, DrivetrainConstants.kinematics );
   
+  
   // private Trajectory m_chosenTraj;
-  private autoNavChooser m_AutoNavChooser = new autoNavChooser(0, 0);
-  private int grid, col;
+  private autoNavChooser m_AutoNavChooser = new autoNavChooser(autoNavChooser.getgrid(),autoNavChooser.getcol());
+
+  
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
   // private final colorSensor m_colorSensorSubsystem = new colorSensor();
@@ -296,6 +299,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       
       new JoystickButton(m_buttonBoard, 12).onTrue(new RunCommand(()-> m_AutoNavChooser.setGrid(2)));
 
+      
       //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
       // m_driverController.y().whileTrue(
       //   // new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));

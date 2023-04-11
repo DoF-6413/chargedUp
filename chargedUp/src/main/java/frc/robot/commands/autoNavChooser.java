@@ -23,8 +23,8 @@ import frc.robot.Constants.DrivetrainConstants;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class autoNavChooser{
   /** Creates a new autoNavChooser. */
-  private int m_grid;
-  private int m_col;
+  private static int m_grid;
+  private static int m_col;
   Trajectory chosenTraj;
   TrajectoryConfig config;
   public autoNavChooser(int grid, int col) {
@@ -102,7 +102,9 @@ public Trajectory choosenTrajectory(){
       // left grid
 
       
-    } else if (m_grid == 1) {
+    } 
+    
+    if (m_grid == 1) {
       if (m_col == 0 ) {
        //"trajectory that gets us the midle most grid left colum";
        chosenTraj = 
@@ -141,7 +143,9 @@ public Trajectory choosenTrajectory(){
       }
       // in this code block we put all the logic for returning trajectories to the
       // middle grid
-    } else if (m_grid == 2) {
+    } 
+    
+    if (m_grid == 2) {
       // in this code block we put all the logic for returning trajectories to the
       // right grid
       if (m_col == 0) {
@@ -190,12 +194,17 @@ public Trajectory choosenTrajectory(){
 
   public void setGrid(int grid){
     m_grid = grid;
-    SmartDashboard.putNumber("grid", grid);
+    SmartDashboard.putNumber("grid", m_grid);
   }
 
   public void setCol(int col){
     m_col = col;
-    
-SmartDashboard.putNumber("col", col);
+SmartDashboard.putNumber("col", m_col);
+  }
+  public static int getcol (){
+return m_col;
+  }
+  public static int getgrid(){
+return m_grid;
   }
 }
