@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DrivetrainConstants;
 
@@ -51,9 +52,8 @@ public class autoNavChooser{
             .addConstraint(autoVoltageConstraint).setReversed(true);
   }
     
-public Trajectory choosenTrajectory(int grid, int col){
-  m_grid = grid;
-  m_col = col;
+public Trajectory choosenTrajectory(){
+
   chosenTraj = new Trajectory();
   
 
@@ -186,5 +186,16 @@ public Trajectory choosenTrajectory(int grid, int col){
 
     return chosenTraj;
     
+  }
+
+  public void setGrid(int grid){
+    m_grid = grid;
+    SmartDashboard.putNumber("grid", grid);
+  }
+
+  public void setCol(int col){
+    m_col = col;
+    
+SmartDashboard.putNumber("col", col);
   }
 }
