@@ -148,7 +148,7 @@ public Trajectory choosenTrajectory(){
         // "trajectory that gets us to the rightmost grid left column";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(new Translation2d(12.30,5.60),Rotation2d.fromDegrees(180)),
+        new Pose2d(new Translation2d(12.70,4.70),Rotation2d.fromDegrees(180)),
         //go to the rigth side of the charge station 
          List.of(),
          //dont go to any place 
@@ -160,7 +160,7 @@ public Trajectory choosenTrajectory(){
       //"trajectory that gets us to the rightmost grid middle column";
       chosenTraj = 
       TrajectoryGenerator.generateTrajectory(
-        new Pose2d(new Translation2d(12.30,5.60),Rotation2d.fromDegrees(180)),
+        new Pose2d(new Translation2d(12.70,4.70),Rotation2d.fromDegrees(180)),
         //go to the rigth side of the charge station 
          List.of(),
          //dont go to any place 
@@ -172,7 +172,7 @@ public Trajectory choosenTrajectory(){
        // "trajectory that gets us to the rightmost grid right column";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(12.30,5.60),Rotation2d.fromDegrees(180)),
+          new Pose2d(new Translation2d(12.70,4.70),Rotation2d.fromDegrees(180)),
           //go to the rigth side of the charge station 
            List.of(),
            //dont go to any place 
