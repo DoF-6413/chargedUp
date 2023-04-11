@@ -66,7 +66,7 @@ public Trajectory choosenTrajectory(){
          //go to next to the wood that is on the ground on the left side of the left side of the fild
           List.of(),
           //dont go to any place 
-          new Pose2d(new Translation2d(14.66,0.45),Rotation2d.fromDegrees(180)),
+          new Pose2d(new Translation2d(14.68,0.5),Rotation2d.fromDegrees(180)),
          // line up in the left most grid left colum
            config);
 
@@ -79,7 +79,7 @@ public Trajectory choosenTrajectory(){
          //go to next to the wood that is on the ground on  the left side of the fild
           List.of(),
           //dont go to any place 
-          new Pose2d(new Translation2d(14.66,1.05),Rotation2d.fromDegrees(180)),
+          new Pose2d(new Translation2d(14.65,1.07),Rotation2d.fromDegrees(180)),
        // line up in the left most grid midle colum
            config);
 
@@ -88,7 +88,7 @@ public Trajectory choosenTrajectory(){
         //"trajectory that gets us the left most grid rigth colum";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(13.54,0.63),Rotation2d.fromDegrees(180)),
+          new Pose2d(new Translation2d(13.04,0.63),Rotation2d.fromDegrees(180)),
           //go to next to the wood that is on the ground on the left side of the left side of the fild
            List.of(),
            //dont go to any place 
@@ -111,7 +111,7 @@ public Trajectory choosenTrajectory(){
           //go next to the charge station 
            List.of(),
            //dont go to any place 
-           new Pose2d(new Translation2d(14.60,2.16),Rotation2d.fromDegrees(180)),
+           new Pose2d(new Translation2d(14.65,2.19),Rotation2d.fromDegrees(180)),
            // line up in the midle most grid left colum
             config);
 
@@ -122,7 +122,7 @@ public Trajectory choosenTrajectory(){
         //go next to the charge station 
          List.of(),
          //dont go to any place 
-         new Pose2d(new Translation2d(14.60,2.74),Rotation2d.fromDegrees(180)),
+         new Pose2d(new Translation2d(14.65,2.74),Rotation2d.fromDegrees(180)),
          // line up in the midle most grid midle colum
           config);
 
@@ -134,7 +134,7 @@ public Trajectory choosenTrajectory(){
         //go next to the charge station 
          List.of(),
          //dont go to any place 
-         new Pose2d(new Translation2d(14.60,3.30),Rotation2d.fromDegrees(180)),
+         new Pose2d(new Translation2d(14.65,3.30),Rotation2d.fromDegrees(180)),
          // line up in the midle most grid rigth colum
           config);
         
@@ -148,11 +148,11 @@ public Trajectory choosenTrajectory(){
         // "trajectory that gets us to the rightmost grid left column";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(new Translation2d(12.30,4.60),Rotation2d.fromDegrees(180)),
+        new Pose2d(new Translation2d(12.30,5.60),Rotation2d.fromDegrees(180)),
         //go to the rigth side of the charge station 
          List.of(),
          //dont go to any place 
-         new Pose2d(new Translation2d(14.60,3.86),Rotation2d.fromDegrees(180)),
+         new Pose2d(new Translation2d(14.63,3.86),Rotation2d.fromDegrees(180)),
          // line up in the rigth most grid left colum
           config);
         
@@ -160,11 +160,11 @@ public Trajectory choosenTrajectory(){
       //"trajectory that gets us to the rightmost grid middle column";
       chosenTraj = 
       TrajectoryGenerator.generateTrajectory(
-        new Pose2d(new Translation2d(12.30,4.60),Rotation2d.fromDegrees(180)),
+        new Pose2d(new Translation2d(12.30,5.60),Rotation2d.fromDegrees(180)),
         //go to the rigth side of the charge station 
          List.of(),
          //dont go to any place 
-         new Pose2d(new Translation2d(14.60,4.40),Rotation2d.fromDegrees(180)),
+         new Pose2d(new Translation2d(14.63,4.42),Rotation2d.fromDegrees(180)),
          // line up in the rigth most grid left colum
           config);
       
@@ -172,11 +172,11 @@ public Trajectory choosenTrajectory(){
        // "trajectory that gets us to the rightmost grid right column";
         chosenTraj = 
         TrajectoryGenerator.generateTrajectory(
-          new Pose2d(new Translation2d(12.30,4.60),Rotation2d.fromDegrees(180)),
+          new Pose2d(new Translation2d(12.30,5.60),Rotation2d.fromDegrees(180)),
           //go to the rigth side of the charge station 
            List.of(),
            //dont go to any place 
-           new Pose2d(new Translation2d(14.60,4.98),Rotation2d.fromDegrees(180)),
+           new Pose2d(new Translation2d(14.63,4.98),Rotation2d.fromDegrees(180)),
            // line up in the rigth most grid left colum
             config);
       }
