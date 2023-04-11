@@ -103,8 +103,8 @@ public class RobotContainer {
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final PoseEstimator m_PoseEstimatorSubsystem = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, DrivetrainConstants.kinematics );
   
-  private Trajectory m_chosenTraj;
-  private autoNavChooser m_AutoNavChooser;
+  // private Trajectory m_chosenTraj;
+  private autoNavChooser m_AutoNavChooser = new autoNavChooser(0, 0);
   private int grid, col;
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
@@ -255,16 +255,17 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
       //if the driver controller 
-      if(m_driverController.a().getAsBoolean() == true){
-        grid = 0;
+      // if(m_driverController.a().getAsBoolean() == true){
+      //   grid = 0;
 
-      } if (m_driverController.b().getAsBoolean() == true){
-        col = 0;
-      }
+      // } if (m_driverController.b().getAsBoolean() == true){
+      //   col = 0;
+      // }
 
 
-    m_driverController.y().onTrue(new autoNavChooser(grid, col));
+    m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(2, 2), false));
 
+    m_driverController.a().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(2, 1), false));
     
       
       // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
@@ -273,9 +274,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // trajGenCommand());
 
       
-        m_driverController.start().whileTrue(
-          new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  m_chosenTraj, false));
-      m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+      //   m_driverController.start().whileTrue(
+      //     new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  m_chosenTraj, false));
+      // m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
 
       new JoystickButton(m_sillies, 1).onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.0)));

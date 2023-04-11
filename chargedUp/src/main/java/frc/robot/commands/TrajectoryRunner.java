@@ -33,7 +33,8 @@ public class TrajectoryRunner extends CommandBase {
   private double m_currX, m_currY, m_currRot;
 
   
-  public TrajectoryRunner(DrivetrainSubsystem drive, PoseEstimator poseEstimator, Trajectory traj, Boolean isfirstPath) {
+  public 
+  TrajectoryRunner(DrivetrainSubsystem drive, PoseEstimator poseEstimator, Trajectory traj, Boolean isfirstPath) {
     /*Trajectory runner takes a drive subsystem and a trajectory, and a boolean to make the robot follow a certain path. 
     If the boolean is set to true, we reset the position*/
     m_drivetrainSubsystem = drive;
