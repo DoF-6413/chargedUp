@@ -32,7 +32,6 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
-// import frc.robot.subsystems.colorSensor;
 import edu.wpi.first.wpilibj.GenericHID;
 // import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -132,16 +131,13 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
    new PathPoint(new Translation2d(15.62,7.32),new Rotation2d(-0.35))
     );
 
-    PathPlannerTrajectory CONE = PathPlanner.generatePath(
-    new PathConstraints(0.2, 0.5), 
-    new PathPoint(new Translation2d(14.0, 5.12), new Rotation2d(0)), // position, he
-   new PathPoint(new Translation2d(15.0,5.12),new Rotation2d(0))
-  //  .
-  //  fromCurrentDifferentialState(m_PoseEstimatorSubsystem.getcurrentPose(), new RamseteController().
-  //  calculate(m_PoseEstimatorSubsystem.getcurrentPose(), new State(new Translation2d(15.0,5.12),new Rotation2d(0)) ))
-    );
-
+    // Trajectory traj12092007 = TrajectoryGenerator.generateTrajectory(
+    //   m_PoseEstimatorSubsystem.getcurrentPose(),
+    //   List.of(new Translation2d(15.57, 7.32)),
+    //     new Pose2d(new Translation2d(15.57,7.32),new Rotation2d(3.14)),
+    //       new TrajectoryConfig(Units.feetToMeters(1.0), Units.feetToMeters(1.0)));
     
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -150,7 +146,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       public final static CommandXboxController m_auxController =
       new CommandXboxController(OperatorConstants.kAuxControllerPort);
 
-      public final GenericHID m_sillies = new GenericHID(OperatorConstants.kJoystickPort);
+      public final GenericHID m_buttonBoard = new GenericHID(OperatorConstants.kJoystickPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -267,26 +263,46 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       // }
 
 
-    m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(2, 2), false));
+    m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
 
-    m_driverController.a().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(2, 1), false));
-    
-      
       // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
     //   m_driverController.y().whileTrue(
     // trajGenCommand());
 
+      new JoystickButton(m_buttonBoard, 1).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
       
-      //   m_driverController.start().whileTrue(
-      //     new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  m_chosenTraj, false));
-      // m_driverController.a().onTrue(new InstantCommand(()-> m_drivetrainSubsystem.resetPosition()));
+      new JoystickButton(m_buttonBoard, 2).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      
+      new JoystickButton(m_buttonBoard, 3).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
+      
+      new JoystickButton(m_buttonBoard, 4).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
+      
+      new JoystickButton(m_buttonBoard, 5).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      
+      new JoystickButton(m_buttonBoard, 6).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
+      
+      new JoystickButton(m_buttonBoard, 7).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
+      
+      new JoystickButton(m_buttonBoard, 8).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      
+      new JoystickButton(m_buttonBoard, 9).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
 
-      new JoystickButton(m_sillies, 1).onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
-      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.0)));
+      //grid setters
+      
+      new JoystickButton(m_buttonBoard, 10).onTrue(new RunCommand(()-> m_AutoNavChooser.setGrid(0)));
+      
+      new JoystickButton(m_buttonBoard, 11).onTrue(new RunCommand(()-> m_AutoNavChooser.setGrid(1)));
+      
+      new JoystickButton(m_buttonBoard, 12).onTrue(new RunCommand(()-> m_AutoNavChooser.setGrid(2)));
 
       //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
+      // m_driverController.y().whileTrue(
+      //   // new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
+      //   new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, traj12092007.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
   }
+
+
   
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
