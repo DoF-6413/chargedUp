@@ -7,22 +7,36 @@ package frc.robot;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.Constants.TelescoperConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.ArmPIDSubsystem;
+// import frc.robot.commands.targetFinding;
+// import frc.robot.commands.ArmPID;
+// import frc.robot.commands.targetFinding;
+// import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.commands.autoNavChooser;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.commands.ArmControls.RotationPID;
-import frc.robot.commands.ArmControls.RotationReset;
+// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.Constants.VisionConstants;
+// import frc.robot.commands.targetFinding;
+// import frc.robot.commands.ArmPID;
+// import frc.robot.commands.targetFinding;
+// import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.commands.ArmPID;
+import frc.robot.subsystems.DrivetrainSubsystem;
+// import frc.robot.subsystems.colorSensor;
+// import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -86,7 +100,10 @@ import edu.wpi.first.math.util.Units;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+
+
+  private final ArmPIDSubsystem m_ArmPIDSubsystem = new ArmPIDSubsystem();
+
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem );
   private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
@@ -153,19 +170,19 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   public RobotContainer() {
     // Configure the trigger bindings
     // m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
     m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    m_chooser.addOption("Score High", new ScoreHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("Score and Balance", new ScoreBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
-    m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
-    m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score High", new ScoreHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+    m_chooser.addOption("Score and Balance", new ScoreBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
 
     SmartDashboard.putData("hahah", m_chooser);
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
@@ -181,12 +198,6 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()*0.75), m_drivetrainSubsystem));
 
-     m_armSubsystem.setDefaultCommand(new RunCommand(()
-    //  -> m_armSubsystem.rotationVoltage(-m_auxController.getLeftY()), m_armSubsystem));
-      -> m_armSubsystem.spinRotationMotors(-m_auxController.getLeftY()), m_armSubsystem));
-    //  alongWith(new RunCommand(() 
-    //  m_telescoperSubsystem.setDefaultCommand(new TelescoperPID(m_telescoperSubsystem, 0));
-    // m_telescoperSubsystem.setDefaultCommand(new TelescoperReset(m_telescoperSubsystem));
   }
   
   /**
@@ -202,7 +213,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
         m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
         // m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
-        m_auxController.start().onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
+        m_auxController.start().onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
         //This runs Endeffector to Collect Cone
         // m_auxController.a().
         // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
@@ -247,14 +258,60 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //     m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
     //     .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
-    
-    m_auxController.a().whileTrue(new RunCommand(()-> m_armSubsystem.rotationVoltage(30)));
-    
-    m_auxController.b().onTrue(new InstantCommand(()-> m_armSubsystem.rotationVoltage(-30)));
+    m_auxController.a().onTrue(
+        Commands.runOnce(
+            () -> {
+              m_endEffectorSubsystem.spinEndEffector(-1);
+             
+            },
+            m_ArmPIDSubsystem)).onFalse(
+        Commands.runOnce(
+              () -> {
+                m_endEffectorSubsystem.spinEndEffector(0);
+               
+              },
+              m_ArmPIDSubsystem));
 
-    m_auxController.y().onTrue(new InstantCommand(()-> m_armSubsystem.rotationVoltage(60)));
-    m_auxController.x().onTrue(new InstantCommand(()-> m_armSubsystem.rotationVoltage(-60)));
+    m_auxController.b().onTrue(
+        Commands.runOnce(
+            () -> {
+              m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-130));
+              m_ArmPIDSubsystem.enable();
+            },
+            m_ArmPIDSubsystem));
 
+    m_auxController.x().onTrue(
+        Commands.runOnce(
+            () -> {
+              m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-150));
+              m_ArmPIDSubsystem.enable();
+            },
+            m_ArmPIDSubsystem));
+
+    
+    m_auxController.y().onTrue(
+        Commands.runOnce(
+            () -> {
+              m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-90));
+              m_ArmPIDSubsystem.enable();
+            },
+            m_ArmPIDSubsystem));
+
+            m_auxController.rightBumper().onTrue(
+              Commands.runOnce(
+                  () -> {
+                    m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(0));
+                    m_ArmPIDSubsystem.enable();
+                  },
+                  m_ArmPIDSubsystem));
+
+                  m_auxController.leftBumper().onTrue(
+                    Commands.runOnce(
+                        () -> {
+                          m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-180));
+                          m_ArmPIDSubsystem.enable();
+                        },
+                        m_ArmPIDSubsystem));
     // m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
     // m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
 
@@ -320,6 +377,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
    *
    * @return the command to run in autonomous
    */
+  public void disablePIDSubsystems() {
+    m_ArmPIDSubsystem.disable();
+  }
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous

@@ -5,7 +5,7 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
@@ -15,7 +15,7 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreHigh extends SequentialCommandGroup {
   /** Creates a new ScoreHigh. */
-  public ScoreHigh(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, DrivetrainSubsystem drive) {
+  public ScoreHigh(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, DrivetrainSubsystem drive) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

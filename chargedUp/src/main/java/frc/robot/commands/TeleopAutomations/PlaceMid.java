@@ -4,12 +4,14 @@
 
 package frc.robot.commands.TeleopAutomations;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.EndEffectorConstants;
-import frc.robot.commands.ArmControls.RotationPID;
+
 import frc.robot.commands.Autos.BackingOutArm;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 
@@ -18,11 +20,16 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PlaceMid extends SequentialCommandGroup {
   /** Creates a new PlaceMid. */
-  public PlaceMid(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEFector) {
+  public PlaceMid(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEFector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new RotationPID(arm, -ArmConstants.kMidBottom),
+      Commands.runOnce(
+            () -> {
+              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube-ArmConstants.kArmOffsetRads));
+              arm.enable();
+            },
+            arm),
       new BackingOutArm(arm, telescoper, NEFector)
     );
   }

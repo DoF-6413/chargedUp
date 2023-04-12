@@ -5,12 +5,12 @@
 package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmPIDSubsystem;
 
 public class RotationReset extends CommandBase {
   /** Creates a new RotationReset. */
-  private static ArmSubsystem m_armSubsystem;
-  public RotationReset(ArmSubsystem arm) {
+  private static ArmPIDSubsystem m_armSubsystem;
+  public RotationReset(ArmPIDSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_armSubsystem = arm;
   }
@@ -18,7 +18,7 @@ public class RotationReset extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

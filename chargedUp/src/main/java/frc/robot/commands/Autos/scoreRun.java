@@ -10,7 +10,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TrajectoryRunner;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PoseEstimator;
@@ -25,7 +25,7 @@ public class scoreRun extends SequentialCommandGroup {
   PathPlannerTrajectory kOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.2, .8));
   
   /** Creates a new scoreRun. */
-  public scoreRun(ArmSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, PoseEstimator pose) {
+  public scoreRun(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

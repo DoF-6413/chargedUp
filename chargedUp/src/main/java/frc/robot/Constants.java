@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -175,12 +176,12 @@ public final class Constants {
     // 90.91;
     public static final int kRotationCurrentLimit = 25;
     //ticks to degrees
-    public static final double kRotationPositionConversion = 360.0 /kRotationGearing;
+    public static final double kRotationPositionConversion = Units.degreesToRadians(360.0 /kRotationGearing);
 
     // Rotation Arm PID Values (Tune PID Before Feedforward)
-    public static final double kRotationP = 6.1087;
+    public static final double kRotationP = 65;
     public static final double kRotationI = 0;
-    public static final double kRotationD = 1.5321;
+    public static final double kRotationD = 0;
     public static final double kRotationTolerance = 5;
     
     // Rotation Arm FeedForward
@@ -191,8 +192,10 @@ public final class Constants {
 
 
     //Trapazoidal Motion Profiling for Rotation Arm
-    public static final double kArmMaxVelocity = 0.1;
-    public static final double kArmMaxAcceleration = 0.05;
+    //Physical max is 7.16 rad/s
+    public static final double kArmMaxVelocity = 7.16;
+    //Physical Max is 3.5 rad/s^2
+    public static final double kArmMaxAcceleration = 16;
 
     public static final int kpotetiometerPort = 1;
     public static final double kpotetiometerRange = 180;
@@ -205,6 +208,8 @@ public final class Constants {
     /**Human Player, Mid Cone Peak, High Cone Bottom Value */
     public static final double kHPMPHB = 87;
     public static final double kfloorCube = 35;
+    
+    public static final double kArmOffsetRads = Units.degreesToRadians(-90);
   }
 
   public static class TelescoperConstants{
