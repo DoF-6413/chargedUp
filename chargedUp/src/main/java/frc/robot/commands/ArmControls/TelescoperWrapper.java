@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.PlaceHigh;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 
@@ -21,10 +21,10 @@ import frc.robot.subsystems.TelescoperSubsystem;
 public class TelescoperWrapper extends PIDCommand {
   /** Creates a new TelescoperWrapper. */
   private TelescoperSubsystem m_telescoperSubsystem;
-  private ArmSubsystem m_armSubsystem;
+  private ArmPIDSubsystem m_armSubsystem;
   private EndEffectorSubsystem m_endEffectorSubsystem;
 
-  public TelescoperWrapper(TelescoperSubsystem telescope, ArmSubsystem arm, EndEffectorSubsystem NEfector, double setpoint) {
+  public TelescoperWrapper(TelescoperSubsystem telescope, ArmPIDSubsystem arm, EndEffectorSubsystem NEfector, double setpoint) {
     super(
         // The controller that the command will use
         new PIDController(TelescoperConstants.kTelescoperP, TelescoperConstants.kTelescoperI, TelescoperConstants.kTelescoperD),

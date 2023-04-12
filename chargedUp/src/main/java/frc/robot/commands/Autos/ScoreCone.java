@@ -8,16 +8,18 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
-import frc.robot.commands.ArmControls.RotationPID;
+
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
@@ -27,22 +29,37 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreCone extends SequentialCommandGroup {
   /** Creates a new ScoreCone. */
-  public ScoreCone(ArmSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
+  public ScoreCone(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
     // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new RotationPID(arm, -ArmConstants.kHighPeak),
+      Commands.runOnce(
+            () -> {
+              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighPeak -ArmConstants.kArmOffsetRads));
+              arm.enable();
+            },
+            arm),
       new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),
-      new RotationPID(arm, -ArmConstants.kHPMPHB)
+      Commands.runOnce(
+            () -> {
+              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB-ArmConstants.kArmOffsetRads));
+              arm.enable();
+            },
+            arm),
 
       //make the following a follow path with events to change time
       // new ParallelCommandGroup(
       //   new EndEffectorRunner(NEfctr, -0.8, 0.5),
       //   new TelescoperPID(telescoper, 1)
       //   ),
-      // new RotationPID(arm, 0)
+      Commands.runOnce(
+            () -> {
+              arm.setGoal(Units.degreesToRadians(0-ArmConstants.kArmOffsetRads));
+              arm.enable();
+            },
+            arm)
       // new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
     );
   }
