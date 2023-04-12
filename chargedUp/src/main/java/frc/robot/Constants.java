@@ -221,6 +221,17 @@ public final class Constants {
     public static final double kTelescoperD = 0;
     public static final double kTelescoperTolerance = 2;
 
+    // Telescoper FeedForward
+    public static final double ksVolts = 0;
+    public static final double kvVoltSecondPerMeter = 0;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0;
+
+//Trapazoidal Motion Profiling for Telescoper
+    //Physical max is 
+    public static final double kTelescoperMaxVelocity = 0;
+    //Physical Max is 
+    public static final double kTelescoperMaxAcceleration = 0;
+
     //Telescoper Current Limit
     public static final boolean kIsTelescoperCurrentLimitEnabled = true;
     public static final double kTelescoperContinuousCurrent = 25;
@@ -238,10 +249,6 @@ public final class Constants {
     public static final double kMCGB = 16;
     public static final double kGroundCone = 30;
 
-        // Telescoper FeedForward
-        public static final double ksVolts = 0;
-        public static final double kvVoltSecondPerMeter = 0;
-        public static final double kaVoltsSecondsSquaredPerMeter = 0;
   }
 
   public static class EndEffectorConstants{
