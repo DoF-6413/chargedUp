@@ -12,6 +12,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.TrajectoryRunner;
@@ -35,6 +36,7 @@ public class ScoreCone extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
+      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighPeak )+ArmConstants.kArmOffsetRads);
@@ -42,12 +44,14 @@ public class ScoreCone extends SequentialCommandGroup {
             },
             arm),
       new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),
+      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
+      new WaitUntilCommand(()-> arm.atGoal()),
 
       //make the following a follow path with events to change time
       // new ParallelCommandGroup(

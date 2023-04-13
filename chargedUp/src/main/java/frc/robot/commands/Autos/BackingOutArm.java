@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.TelescoperPID;
@@ -29,6 +30,7 @@ public class BackingOutArm extends SequentialCommandGroup {
         new EndEffectorRunner(NEfctr, -0.8, 0.5),
         new TelescoperPID(telescoper, 1)
       ),
+      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);

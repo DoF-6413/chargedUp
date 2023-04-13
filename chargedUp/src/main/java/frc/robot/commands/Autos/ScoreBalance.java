@@ -5,6 +5,7 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,6 +55,7 @@ public class ScoreBalance extends SequentialCommandGroup {
       eventCenterLScoreOutBalanceMap
       ),
       new ParallelCommandGroup(
+        new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
