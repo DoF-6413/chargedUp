@@ -25,13 +25,14 @@ public class PlaceMid extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
+              arm.setGoal(Units.degreesToRadians(-ArmConstants.kMidBottom)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
+            new WaitUntilCommand(()-> arm.atGoal()),
+      
       new BackingOutArm(arm, telescoper, NEFector)
     );
   }

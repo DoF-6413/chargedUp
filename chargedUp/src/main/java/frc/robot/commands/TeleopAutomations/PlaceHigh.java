@@ -25,7 +25,6 @@ public class PlaceHigh extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);

@@ -34,7 +34,6 @@ public class PositionHigh extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighPeak)+ArmConstants.kArmOffsetRads);

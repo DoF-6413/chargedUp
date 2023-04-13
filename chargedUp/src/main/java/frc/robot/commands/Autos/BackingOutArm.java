@@ -30,14 +30,14 @@ public class BackingOutArm extends SequentialCommandGroup {
         new EndEffectorRunner(NEfctr, -0.8, 0.5),
         new TelescoperPID(telescoper, 1)
       ),
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
           arm.enable();
         },
-        arm)
-            
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal())
+        
     );
   }
 }

@@ -33,13 +33,13 @@ public class PositionMid extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
+        () -> {
+          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
       // new ConditionalCommand(
         new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
       //   new ParallelCommandGroup(

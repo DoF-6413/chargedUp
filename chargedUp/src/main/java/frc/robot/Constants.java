@@ -179,7 +179,7 @@ public final class Constants {
     public static final double kRotationPositionConversion = Units.degreesToRadians(360.0 /kRotationGearing);
 
     // Rotation Arm PID Values (Tune PID Before Feedforward)
-    public static final double kRotationP = 60;
+    public static final double kRotationP = 40;
     public static final double kRotationI = 0;
     public static final double kRotationD = 0;
     public static final double kRotationTolerance = 1.0;
@@ -193,10 +193,10 @@ public final class Constants {
 
     //Trapazoidal Motion Profiling for Rotation Arm
     //Physical max is 7.16 rad/s
-    public static final double kArmMaxVelocity = 6;
+    public static final double kArmMaxVelocity = 3;
     //Physical Max is 16 rad/s^2
     //Acceleration Should Normally be 10 rad/s^2
-    public static final double kArmMaxAcceleration = 10;
+    public static final double kArmMaxAcceleration = 3;
 
     public static final int kpotetiometerPort = 1;
     public static final double kpotetiometerRange = 180;

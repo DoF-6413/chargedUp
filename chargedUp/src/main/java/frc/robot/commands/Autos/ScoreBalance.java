@@ -55,14 +55,14 @@ public class ScoreBalance extends SequentialCommandGroup {
       eventCenterLScoreOutBalanceMap
       ),
       new ParallelCommandGroup(
-        new WaitUntilCommand(()-> arm.atGoal()),
-      Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
-      new gyroBalance(gyro, drive)
+        Commands.runOnce(
+          () -> {
+            arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+            arm.enable();
+          },
+          arm),
+          new WaitUntilCommand(()-> arm.atGoal()),
+          new gyroBalance(gyro, drive)
       )
     );
   }

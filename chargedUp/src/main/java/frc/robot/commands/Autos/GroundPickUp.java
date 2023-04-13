@@ -30,34 +30,34 @@ public class GroundPickUp extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telscoper),
-      new WaitUntilCommand(()-> arm.atGoal()),
-              Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
+      Commands.runOnce(
+        () -> {
+          arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
 
       new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfector, 0.5, 1),
         new TelescoperPID(telscoper, TelescoperConstants.kGroundCone)),
-        new WaitUntilCommand(()-> arm.atGoal()),
-              Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
+        Commands.runOnce(
+          () -> {
+            arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
+            arm.enable();
+          },
+          arm),
+          new WaitUntilCommand(()-> arm.atGoal()),
       new TelescoperPID(telscoper, 0),
-      new WaitUntilCommand(()-> arm.atGoal()),
-              Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm)
-
+      Commands.runOnce(
+        () -> {
+          arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal())
+        
     );
   }
 }

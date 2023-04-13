@@ -215,8 +215,10 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         // m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem));
         m_auxController.start().onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
         //This runs Endeffector to Collect Cone
-        // m_auxController.a().
-        // onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
+
+
+        m_auxController.a().
+        onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
         m_auxController.leftTrigger().
         onTrue(new PickupCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
         onFalse (
@@ -225,9 +227,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
           new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
           // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
         
-        // m_auxController.rightTrigger().onTrue(
-        //   new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
-        //   onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+        m_auxController.rightTrigger().onTrue(
+          new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
+          onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
         m_auxController.y()
             .onTrue(
@@ -238,25 +240,27 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
       
 
-        // m_auxController.x()
-        //     .onTrue(
-        //       new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
-        //       .onFalse(
-        //         new PlaceMid(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+        m_auxController.x()
+            .onTrue(
+              new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+              .onFalse(
+                new PlaceMid(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
-        // m_auxController.a().onTrue(
-        //   new TelescoperPID(m_telescoperSubsystem, 50)).
-        //   onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+        m_auxController.a().onTrue(
+          new TelescoperPID(m_telescoperSubsystem, 50)).
+          onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
-        //   m_auxController.b().onTrue(
-        //     new TelescoperPID(m_telescoperSubsystem, 16)).
-        //     onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+          m_auxController.b().onTrue(
+            new TelescoperPID(m_telescoperSubsystem, 16)).
+            onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
-        // m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
-        // .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
-        // m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
-        // .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+        m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+
+      
 
 
     // m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
@@ -269,13 +273,13 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //   new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
     //   onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
-      //if the driver controller 
-      // if(m_driverController.a().getAsBoolean() == true){
-      //   grid = 0;
+    //   if the driver controller 
+    //   if(m_driverController.a().getAsBoolean() == true){
+    //     grid = 0;
 
-      // } if (m_driverController.b().getAsBoolean() == true){
-      //   col = 0;
-      // }
+    //   } if (m_driverController.b().getAsBoolean() == true){
+    //     col = 0;
+    //   }
 
 
     m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));

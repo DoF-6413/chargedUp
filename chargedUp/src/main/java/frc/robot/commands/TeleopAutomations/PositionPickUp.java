@@ -31,14 +31,14 @@ public class PositionPickUp extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telscoper),
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
-      new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
+        () -> {
+          arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
+        new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfector, 0.5, 20),
         new TelescoperWrapper(telscoper, arm, NEfector, TelescoperConstants.kGroundCone))

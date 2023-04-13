@@ -28,21 +28,21 @@ public class BackIn extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
+        () -> {
+          arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
       new TelescoperReset(telscoper),
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm)
+        () -> {
+          arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal())
     );
   }
 }

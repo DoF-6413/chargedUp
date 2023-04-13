@@ -36,35 +36,35 @@ public class ScoreCone extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighPeak )+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
+        () -> {
+          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighPeak )+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
       new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),
-      new WaitUntilCommand(()-> arm.atGoal()),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
-      new WaitUntilCommand(()-> arm.atGoal()),
-
-      //make the following a follow path with events to change time
-      // new ParallelCommandGroup(
-      //   new EndEffectorRunner(NEfctr, -0.8, 0.5),
-      //   new TelescoperPID(telescoper, 1)
-      //   ),
-      Commands.runOnce(
+        () -> {
+          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
+        
+        //make the following a follow path with events to change time
+        // new ParallelCommandGroup(
+          //   new EndEffectorRunner(NEfctr, -0.8, 0.5),
+          //   new TelescoperPID(telescoper, 1)
+          //   ),
+          Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
-            arm)
-      // new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
+            arm),
+            new WaitUntilCommand(()-> arm.atGoal())
+            // new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
     );
   }
 }

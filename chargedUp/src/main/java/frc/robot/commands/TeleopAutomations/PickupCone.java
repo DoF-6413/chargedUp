@@ -28,13 +28,13 @@ public class PickupCone extends SequentialCommandGroup {
     addCommands(
       
     new TelescoperReset(telescoper),
-    new WaitUntilCommand(()-> arm.atGoal()),
-      Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm),
+    Commands.runOnce(
+      () -> {
+        arm.setGoal(Units.degreesToRadians(ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
+        arm.enable();
+      },
+      arm),
+      new WaitUntilCommand(()-> arm.atGoal()),
       new EndEffectorRunner(NEffector, 0.5, 5)
     );
   }

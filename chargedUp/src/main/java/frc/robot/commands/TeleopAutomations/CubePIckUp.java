@@ -29,13 +29,13 @@ public class CubePIckUp extends SequentialCommandGroup {
         new WristPID(wrist, -90 ),
         new TelescoperPID(telescoper, 0)
         ),
-        new WaitUntilCommand(()-> arm.atGoal()),
         Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
-              arm.enable();
-            },
-            arm)
+          () -> {
+            arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+            arm.enable();
+          },
+          arm),
+          new WaitUntilCommand(()-> arm.atGoal())
     );
   }
 }
