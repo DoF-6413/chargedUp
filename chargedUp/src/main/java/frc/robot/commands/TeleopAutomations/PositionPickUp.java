@@ -32,7 +32,7 @@ public class PositionPickUp extends SequentialCommandGroup {
       new TelescoperReset(telscoper),
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube-ArmConstants.kArmOffsetRads));
+              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),

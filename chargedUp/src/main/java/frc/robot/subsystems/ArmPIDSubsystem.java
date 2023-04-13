@@ -64,7 +64,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
       ArmConstants.kaVoltsSecondsSquaredPerMeter
     );
 
-    
+    m_controller.setTolerance(ArmConstants.kRotationTolerance);
     setGoal(ArmConstants.kArmOffsetRads);
   }
 
@@ -81,7 +81,6 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     double feedforward = m_armFeedForward.calculate(setpoint.position, setpoint.velocity);
     // Add the feedforward to the PID output to get the motor output
     m_leftRotationMotor.setVoltage(output + feedforward);
-    SmartDashboard.putNumber("Arm Position", Units.radiansToDegrees( getMeasurement()));
 
   }
   
@@ -91,5 +90,9 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
   public double getPotentiometer(){
     return m_pot.get();
+  }
+
+  public boolean atGoal(){
+    return m_controller.atGoal();
   }
 }

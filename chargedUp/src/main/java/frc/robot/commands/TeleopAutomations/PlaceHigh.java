@@ -6,7 +6,9 @@ package frc.robot.commands.TeleopAutomations;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 
 import frc.robot.commands.Autos.BackingOutArm;
@@ -25,11 +27,13 @@ public class PlaceHigh extends SequentialCommandGroup {
     addCommands(
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB-ArmConstants.kArmOffsetRads));
+              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
-      new BackingOutArm(arm, telescoper, NEFector)
+           new WaitUntilCommand(()-> arm.atGoal()),
+           new BackingOutArm(arm, telescoper, NEFector)
+              
     );
   }
 }

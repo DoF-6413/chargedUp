@@ -29,14 +29,14 @@ public class BackIn extends SequentialCommandGroup {
     addCommands(
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(40-ArmConstants.kArmOffsetRads));
+              arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
       new TelescoperReset(telscoper),
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(0-ArmConstants.kArmOffsetRads));
+              arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm)

@@ -26,7 +26,7 @@ public class PlaceMid extends SequentialCommandGroup {
     addCommands(
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube-ArmConstants.kArmOffsetRads));
+              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),

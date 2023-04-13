@@ -49,14 +49,14 @@ public class ScoreBalance extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ScoreCone(arm, telescoper, endEffector, drive),
-      new FollowPathWithEvents(new TrajectoryRunner(drive, pose, kBackToBalance.relativeTo(pose.getcurrentPose()), true),
+      new FollowPathWithEvents(new TrajectoryRunner(drive, pose, ()->kBackToBalance.relativeTo(pose.getcurrentPose()), true),
       kBackToBalance.getMarkers(),
       eventCenterLScoreOutBalanceMap
       ),
       new ParallelCommandGroup(
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(0- ArmConstants.kArmOffsetRads));
+              arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),

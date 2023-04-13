@@ -30,7 +30,7 @@ public class CubePIckUp extends SequentialCommandGroup {
         ),
         Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(0-ArmConstants.kArmOffsetRads));
+              arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm)
