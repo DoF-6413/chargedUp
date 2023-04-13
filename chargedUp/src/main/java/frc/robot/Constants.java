@@ -196,7 +196,7 @@ public final class Constants {
     public static final double kArmMaxVelocity = 3;
     //Physical Max is 16 rad/s^2
     //Acceleration Should Normally be 10 rad/s^2
-    public static final double kArmMaxAcceleration = 3;
+    public static final double kArmMaxAcceleration = 7;
 
     public static final int kpotetiometerPort = 1;
     public static final double kpotetiometerRange = 180;
