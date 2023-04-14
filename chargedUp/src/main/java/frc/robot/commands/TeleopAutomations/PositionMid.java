@@ -40,13 +40,13 @@ public class PositionMid extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-      // new ConditionalCommand(
-        new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
+      new ConditionalCommand(
+        // new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
       //   new ParallelCommandGroup(
-      //     new WristPID(wrist, 0),
-      //     new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)),
-      //   ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
-      // )
+          new WristPID(wrist, 0),
+          new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB),
+        ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
+      )
     );
   }
 }

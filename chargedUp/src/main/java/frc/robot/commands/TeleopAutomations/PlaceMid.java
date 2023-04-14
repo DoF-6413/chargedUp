@@ -27,13 +27,18 @@ public class PlaceMid extends SequentialCommandGroup {
     addCommands(
       Commands.runOnce(
             () -> {
+              arm.updateAcceleration(3);
               arm.setGoal(Units.degreesToRadians(-ArmConstants.kMidBottom)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
             new WaitUntilCommand(()-> arm.atGoal()),
       
-      new BackingOutArm(arm, telescoper, NEFector)
+      new BackingOutArm(arm, telescoper, NEFector),
+      Commands.runOnce(
+        () -> {
+          arm.updateAcceleration(7);
+        } )
     );
   }
 }
