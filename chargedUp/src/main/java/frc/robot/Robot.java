@@ -52,6 +52,9 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("Arm Position", Units.radiansToDegrees(m_robotContainer.m_ArmPIDSubsystem.getMeasurement()));
+    SmartDashboard.putNumber("Potentiometer", m_robotContainer.m_ArmPIDSubsystem.getPotentiometer());
+    SmartDashboard.putNumber("Left Motor", m_robotContainer.m_ArmPIDSubsystem.leftCurrent());
+    SmartDashboard.putNumber("Right Motor", m_robotContainer.m_ArmPIDSubsystem.rightCurrent());
   
     
   }

@@ -81,7 +81,14 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     double feedforward = m_armFeedForward.calculate(setpoint.position, setpoint.velocity);
     // Add the feedforward to the PID output to get the motor output
     m_leftRotationMotor.setVoltage(output + feedforward);
+  }
 
+  public void updateGoal(double increment){
+    setGoal(m_controller.getGoal().position + increment);
+  }
+
+  public void setVoltage(double voltage){
+    m_leftRotationMotor.setVoltage(voltage);
   }
   
   public void resetRotationPosition(){
@@ -89,10 +96,21 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
   }
 
   public double getPotentiometer(){
+    
     return m_pot.get();
   }
 
   public boolean atGoal(){
     return m_controller.atGoal();
   }
+
+  public double leftCurrent(){
+    return m_leftRotationMotor.getOutputCurrent();
+  }
+
+  public double rightCurrent(){
+    return m_rightRotationMotor.getOutputCurrent();
+  }
+
+
 }

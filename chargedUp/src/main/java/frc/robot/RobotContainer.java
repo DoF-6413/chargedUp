@@ -62,6 +62,7 @@ import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.ArmControls.RotationReset;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
@@ -213,54 +214,85 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
         m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
         // m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem));
-        m_auxController.start().onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
+        // m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
         //This runs Endeffector to Collect Cone
 
 
-        m_auxController.a().
-        onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
-        m_auxController.leftTrigger().
-        onTrue(new PickupCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
-        onFalse (
-          // new ConditionalCommand(
-          // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
-          new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
-          // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
+        // m_auxController.a().
+        // onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
+        // m_auxController.leftTrigger().
+        // onTrue(new PickupCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
+        // onFalse (
+        //   // new ConditionalCommand(
+        //   // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
+        //   new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
+        //   // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
         
-        m_auxController.rightTrigger().onTrue(
-          new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
-          onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+        // m_auxController.rightTrigger().onTrue(
+        //   new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
+        //   onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
-        m_auxController.y()
-            .onTrue(
-              // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
-              new PositionHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
-            .onFalse(
-              new PlaceHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-
-      
-
-        m_auxController.x()
-            .onTrue(
-              new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
-              .onFalse(
-                new PlaceMid(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-
-        m_auxController.a().onTrue(
-          new TelescoperPID(m_telescoperSubsystem, 50)).
-          onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
-
-          m_auxController.b().onTrue(
-            new TelescoperPID(m_telescoperSubsystem, 16)).
-            onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
-
-        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
-        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
-
-        m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
-        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+        // m_auxController.y()
+        //     .onTrue(
+        //       // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+        //       new PositionHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+        //     .onFalse(
+        //       new PlaceHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
       
+
+        // m_auxController.x()
+        //     .onTrue(
+        //       new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+        //       .onFalse(
+        //         new PlaceMid(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+
+        // m_auxController.a().onTrue(
+        //   new TelescoperPID(m_telescoperSubsystem, 50)).
+        //   onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+
+        //   m_auxController.b().onTrue(
+        //     new TelescoperPID(m_telescoperSubsystem, 16)).
+        //     onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+
+        // m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
+        // .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+
+        // m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
+        // .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+
+      m_auxController.a().onTrue( 
+        Commands.runOnce(
+        () -> {
+          m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+          m_ArmPIDSubsystem.enable();
+        },
+        m_ArmPIDSubsystem));
+
+        // m_auxController.b().onTrue( 
+        //   Commands.runOnce(
+        //   () -> {
+        //     m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-45)+ArmConstants.kArmOffsetRads);
+        //     m_ArmPIDSubsystem.enable();
+        //   },
+        //   m_ArmPIDSubsystem));
+
+          m_auxController.y().onTrue( 
+            Commands.runOnce(
+            () -> {
+              m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(90)+ArmConstants.kArmOffsetRads);
+              m_ArmPIDSubsystem.enable();
+            },
+            m_ArmPIDSubsystem));
+    
+            m_auxController.x().onTrue( 
+              Commands.runOnce(
+              () -> {
+                m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-90)+ArmConstants.kArmOffsetRads);
+                m_ArmPIDSubsystem.enable();
+              },
+              m_ArmPIDSubsystem));
+
 
 
     // m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
@@ -269,9 +301,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
     // .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
 
-    // m_driverController.rightBumper().onTrue(
-    //   new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
-    //   onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+    m_driverController.rightBumper().onTrue(
+      new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
+      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
     //   if the driver controller 
     //   if(m_driverController.a().getAsBoolean() == true){

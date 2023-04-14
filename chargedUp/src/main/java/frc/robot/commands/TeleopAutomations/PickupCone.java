@@ -35,7 +35,7 @@ public class PickupCone extends SequentialCommandGroup {
       },
       arm),
       new WaitUntilCommand(()-> arm.atGoal()),
-      new EndEffectorRunner(NEffector, 0.5, 5)
+      new EndEffectorRunner(NEffector, 0.5, 10)
     );
   }
 }

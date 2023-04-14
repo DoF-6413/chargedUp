@@ -53,10 +53,10 @@ public class ScoreCone extends SequentialCommandGroup {
         new WaitUntilCommand(()-> arm.atGoal()),
         
         //make the following a follow path with events to change time
-        // new ParallelCommandGroup(
-          //   new EndEffectorRunner(NEfctr, -0.8, 0.5),
-          //   new TelescoperPID(telescoper, 1)
-          //   ),
+        new ParallelCommandGroup(
+            new EndEffectorRunner(NEfctr, -0.8, 0.5),
+            new TelescoperPID(telescoper, 1)
+            ),
           Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
