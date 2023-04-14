@@ -4,7 +4,10 @@
 
 package frc.robot.commands.ArmControls;
 
+import javax.lang.model.util.ElementScanner14;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmPIDSubsystem;
@@ -30,18 +33,21 @@ public class RotationReset extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("Running");
     if (m_armSubsystem.getPotentiometer() > 1){
       m_armSubsystem.setVoltage(-1);
     } else if (m_armSubsystem.getPotentiometer() < -1){
       m_armSubsystem.setVoltage(1);
+    } else{
+      m_armSubsystem.setVoltage(0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_armSubsystem.resetRotationPosition();
-    m_armSubsystem.enable();
+    m_armSubsystem.resetRotationPosition(Units.degreesToRadians(m_armSubsystem.getPotentiometer()));
+    // m_armSubsystem.enable();
     
   }
 

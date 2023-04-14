@@ -91,8 +91,8 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     m_leftRotationMotor.setVoltage(voltage);
   }
   
-  public void resetRotationPosition(){
-    m_RotationEncoder.setPosition(0);
+  public void resetRotationPosition(double resetValue){
+    m_RotationEncoder.setPosition(resetValue);
   }
 
   public double getPotentiometer(){
