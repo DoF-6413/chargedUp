@@ -203,11 +203,11 @@ public final class Constants {
     public static final double kpotentiometerOffset = -153;
     //Arm Values
     public static final double kRotationZeroValue = 0;
-    public static final double kHighPeak = 105;
+    public static final double kHighPeak = 110;
     public static final double kMidBottom= 75;
 
     /**Human Player, Mid Cone Peak, High Cone Bottom Value */
-    public static final double kHPMPHB = 87;
+    public static final double kHPMPHB = 90;
     public static final double kfloorCube = 35;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);
