@@ -27,12 +27,17 @@ public class PlaceHigh extends SequentialCommandGroup {
     addCommands(
       Commands.runOnce(
             () -> {
+              arm.updateAcceleration(3);
               arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
-           new WaitUntilCommand(()-> arm.atGoal()),
-           new BackingOutArm(arm, telescoper, NEFector)
+            new BackingOutArm(arm, telescoper, NEFector),
+            new WaitUntilCommand(()-> arm.atGoal()),
+            Commands.runOnce(
+             () -> {
+               arm.updateAcceleration(7);
+             } )
               
     );
   }

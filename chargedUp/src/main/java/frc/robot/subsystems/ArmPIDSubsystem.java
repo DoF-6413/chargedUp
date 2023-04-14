@@ -112,5 +112,8 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     return m_rightRotationMotor.getOutputCurrent();
   }
 
+  public void updateAcceleration(double accel){
+    m_controller.setConstraints(new TrapezoidProfile.Constraints(ArmConstants.kArmMaxVelocity, accel));
+  }
 
 }
