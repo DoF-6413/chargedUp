@@ -86,6 +86,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     gyro = m_gyro;
     diffDrive = new DifferentialDrive(leftLead, rightLead);
+
+    leftLead.setOpenLoopRampRate(0.3);
+    rightLead.setOpenLoopRampRate(0.3);
     
     // Todo: Find out what this does
     diffDrive.setSafetyEnabled(false);
