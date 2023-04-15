@@ -107,8 +107,8 @@ public class RobotContainer {
 
   public final ArmPIDSubsystem m_ArmPIDSubsystem = new ArmPIDSubsystem();
 
-  private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
-  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem );
+  public final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
+  public final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem );
   private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
   private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
@@ -120,11 +120,11 @@ public class RobotContainer {
   
   // PathPlannerTrajectory testPath = PathPlanner.loadPath("TestPath", new PathConstraints(2, 0.8));
   
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final PoseEstimator m_PoseEstimatorSubsystem = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, DrivetrainConstants.kinematics );
+public final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  public final PoseEstimator m_PoseEstimatorSubsystem = new PoseEstimator(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, DrivetrainConstants.kinematics );
   
   // private Trajectory m_chosenTraj;
-  private autoNavChooser m_AutoNavChooser = new autoNavChooser(0, 0);
+  public autoNavChooser m_AutoNavChooser = new autoNavChooser(0, 0);
   private int grid, col;
 
   //warning means not used, but its here so it calls the periodic for the subsystem DO NOT REMOVE
@@ -160,7 +160,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final static CommandXboxController m_driverController =
+  public final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
       public final static CommandXboxController m_auxController =
@@ -180,16 +180,16 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
     // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()-> runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Score High", new ScoreHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
     m_chooser.addOption("Score and Balance", new ScoreBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
 
     SmartDashboard.putData("hahah", m_chooser);
-    m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()->newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     
       SmartDashboard.putData(m_chooser);
     configureBindings();
@@ -266,8 +266,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //   }
 
 
-    m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
-
+ 
       // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
     //   m_driverController.y().whileTrue(
@@ -331,6 +330,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       //   new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, traj12092007.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), false));
   }
 
+  
 
   
   /**
@@ -341,6 +341,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   public void disablePIDSubsystems() {
     m_ArmPIDSubsystem.disable();
   }
+
+
+
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous

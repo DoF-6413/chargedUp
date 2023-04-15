@@ -42,7 +42,7 @@ public class CenterLScoreOutBalance extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ScoreCone(arm, telescoper, endEffector, drive),
-      new FollowPathWithEvents(new TrajectoryRunner(drive,pose, ()-> kOverCSBalance.relativeTo(pose.getcurrentPose()), true),
+      new FollowPathWithEvents(new TrajectoryRunner(drive,pose,  kOverCSBalance.relativeTo(pose.getcurrentPose()), true),
       kOverCSBalance.getMarkers(),
       eventCenterLScoreOutBalanceMap
       ),

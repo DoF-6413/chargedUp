@@ -17,17 +17,23 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class autoNavChooser{
+public class autoNavChooser extends SubsystemBase{
   /** Creates a new autoNavChooser. */
   private int m_grid = 2;
   private int m_col = 0;
   Trajectory chosenTraj;
   TrajectoryConfig config;
+  int prevCol;
+  int currCol;
+  int prevGrid;
+  int currGrid;
+  Trajectory finalTraj = new Trajectory();
   public autoNavChooser(int grid, int col) {
 
     m_grid = grid;
@@ -180,8 +186,6 @@ public Supplier<Trajectory> choosenTrajectory(){
            // line up in the rigth most grid left colum
             config);
       }
-
-      return () -> chosenTraj;
     }
     return () -> chosenTraj;
     
@@ -189,12 +193,33 @@ public Supplier<Trajectory> choosenTrajectory(){
 
   public void setGrid(int grid){
     m_grid = grid;
-    SmartDashboard.putNumber("grid", grid);
+    SmartDashboard.putNumber("grid", m_grid);
   }
 
   public void setCol(int col){
     m_col = col;
     
-SmartDashboard.putNumber("col", col);
+SmartDashboard.putNumber("col", m_col);
+  }
+
+  
+  @Override
+  public void periodic() {
+
+    if (currCol != prevCol){
+finalTraj = new autoNavChooser(currGrid, currCol).chosenTraj;
+SmartDashboard.putString("finalmente", finalTraj.toString());
+prevCol = currCol;
+    } else if (currGrid != prevGrid){
+      finalTraj = new autoNavChooser(currGrid, currCol).chosenTraj;
+      SmartDashboard.putString("finalmente2", finalTraj.toString());
+      prevGrid = currGrid;
+    }
+    // This method will be called once per scheduler run
+  }
+
+  public Trajectory getTraj(){
+    SmartDashboard.putString("gettrajectyory plllease", finalTraj.toString());
+    return finalTraj;
   }
 }

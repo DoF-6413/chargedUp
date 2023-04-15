@@ -31,7 +31,7 @@ public class G3TLAroundCSBalance extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ScoreCone(arm, telescoper, endEffector, drive),
-      new TrajectoryRunner(drive, pose, ()->kAroundCSRightBalance.relativeTo(pose.getcurrentPose()),true),
+      new TrajectoryRunner(drive, pose, kAroundCSRightBalance.relativeTo(pose.getcurrentPose()),true),
       new gyroBalance(gyro, drive)
     );
   }

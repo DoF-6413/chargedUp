@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.commands.TrajectoryRunner;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,7 +30,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer = new RobotContainer();
-  
   @Override
   public void robotInit() {
     if (RobotBase.isSimulation()){
@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+
   }
 
   @Override
