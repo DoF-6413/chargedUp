@@ -23,7 +23,7 @@ public class PlaceCube extends SequentialCommandGroup {
     addCommands(
       Commands.runOnce(
             () -> {
-              arm.updateAcceleration(3);
+              arm.updateAcceleration(4);
             },
             arm),
             new BackingOutArm(arm, telescoper, NEfector),

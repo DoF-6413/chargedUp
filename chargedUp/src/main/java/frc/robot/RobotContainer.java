@@ -266,7 +266,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //   }
 
 
-    m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
+    // m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
 
       // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
