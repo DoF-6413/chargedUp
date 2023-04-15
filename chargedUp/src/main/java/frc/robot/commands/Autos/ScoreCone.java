@@ -38,7 +38,7 @@ public class ScoreCone extends SequentialCommandGroup {
       new TelescoperReset(telescoper),
       Commands.runOnce(
         () -> {
-          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighPeak )+ArmConstants.kArmOffsetRads);
+          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreInitial )+ArmConstants.kArmOffsetRads);
           arm.enable();
         },
         arm),
@@ -46,7 +46,7 @@ public class ScoreCone extends SequentialCommandGroup {
       new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),
       Commands.runOnce(
         () -> {
-          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
+          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreFinal)+ArmConstants.kArmOffsetRads);
           arm.enable();
         },
         arm),

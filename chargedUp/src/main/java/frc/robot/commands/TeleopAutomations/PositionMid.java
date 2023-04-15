@@ -35,7 +35,7 @@ public class PositionMid extends SequentialCommandGroup {
       new TelescoperReset(telescoper),
       Commands.runOnce(
         () -> {
-          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
+          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMP)+ArmConstants.kArmOffsetRads);
           arm.enable();
         },
         arm),

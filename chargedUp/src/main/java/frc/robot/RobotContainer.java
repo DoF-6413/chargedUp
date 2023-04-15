@@ -75,6 +75,7 @@ import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
 import frc.robot.commands.TeleopAutomations.CubePIckUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
+import frc.robot.commands.TeleopAutomations.PlaceCube;
 import frc.robot.commands.TeleopAutomations.PlaceHighCone;
 import frc.robot.commands.TeleopAutomations.PlaceMidCone;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
@@ -294,7 +295,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       onTrue(
         new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
         .onFalse(
-          new PlaceMidCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+          new PlaceCube(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
       
       new JoystickButton(m_buttonBoard, 6).            
       onTrue(
@@ -304,7 +305,12 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       
       new JoystickButton(m_buttonBoard, 7).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
       
-      new JoystickButton(m_buttonBoard, 8).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      // new JoystickButton(m_buttonBoard, 8).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      new JoystickButton(m_buttonBoard, 8).onTrue(
+        // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+        new PositionHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+      .onFalse(
+        new PlaceCube(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
       
       new JoystickButton(m_buttonBoard, 9)            .onTrue(
         // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
@@ -314,7 +320,6 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
       //grid setters
       
-      new JoystickButton(m_buttonBoard, 10).onTrue(new InstantCommand(()-> m_AutoNavChooser.setGrid(0)));
       
       new JoystickButton(m_buttonBoard, 11).onTrue(new InstantCommand(()-> m_AutoNavChooser.setGrid(1)));
       

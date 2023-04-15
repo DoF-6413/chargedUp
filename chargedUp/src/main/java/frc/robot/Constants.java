@@ -193,21 +193,23 @@ public final class Constants {
 
     //Trapazoidal Motion Profiling for Rotation Arm
     //Physical max is 7.16 rad/s
-    public static final double kArmMaxVelocity = 7.6;
+    public static final double kArmMaxVelocity = 5;
     //Physical Max is 16 rad/s^2
     //Acceleration Should Normally be 10 rad/s^2
     public static final double kArmMaxAcceleration = 7;
 
     public static final int kpotetiometerPort = 1;
     public static final double kpotetiometerRange = 360;
-    public static final double kpotentiometerOffset = -173;
+    public static final double kpotentiometerOffset = -170;
     //Arm Values
     public static final double kRotationZeroValue = 0;
-    public static final double kHighPeak = 110;
-    public static final double kMidBottom= 75;
+    public static final double kHighScoreInitial = 110;
+    public static final double kMidScoreFinal= 75;
 
-    /**Human Player, Mid Cone Peak, High Cone Bottom Value */
-    public static final double kHPMPHB = 90;
+    /**Human Player, Mid Cone Initial */
+    public static final double kHPMP = 91;
+
+    public static final double kHighScoreFinal = 90;
     public static final double kfloorCube = 35;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);

@@ -34,10 +34,10 @@ public class RotationReset extends CommandBase {
   @Override
   public void execute() {
     System.out.println("Running");
-    if (m_armSubsystem.getPotentiometer() > 1){
+    if (m_armSubsystem.getPotentiometer() > 0.5){
       m_armSubsystem.setVoltage(-1);
     } else if (m_armSubsystem.getPotentiometer() < -1){
-      m_armSubsystem.setVoltage(1);
+      m_armSubsystem.setVoltage(0.5);
     } else{
       m_armSubsystem.setVoltage(0);
     }
@@ -48,12 +48,13 @@ public class RotationReset extends CommandBase {
   public void end(boolean interrupted) {
     m_armSubsystem.resetRotationPosition(Units.degreesToRadians(m_armSubsystem.getPotentiometer()));
     // m_armSubsystem.enable();
+    m_armSubsystem.setVoltage(0);
     
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((Math.abs(m_armSubsystem.getPotentiometer()) < 1 ) == true) ? true : false;
+    return ((Math.abs(m_armSubsystem.getPotentiometer()) < 0.5 ) == true) ? true : false;
   }
 }

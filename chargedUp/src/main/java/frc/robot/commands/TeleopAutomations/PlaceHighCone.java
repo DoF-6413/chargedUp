@@ -19,16 +19,16 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class PlaceHigh extends SequentialCommandGroup {
+public class PlaceHighCone extends SequentialCommandGroup {
   /** Creates a new PlaceHigh. */
-  public PlaceHigh(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEFector) {
+  public PlaceHighCone(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEFector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       Commands.runOnce(
             () -> {
               arm.updateAcceleration(3);
-              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB)+ArmConstants.kArmOffsetRads);
+              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreFinal)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
