@@ -62,6 +62,7 @@ import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.ArmControls.RotationReset;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
@@ -72,9 +73,11 @@ import frc.robot.commands.Autos.ScoreMovePickupScore;
 import frc.robot.commands.Autos.scoreRun;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
+import frc.robot.commands.TeleopAutomations.CubePIckUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
-import frc.robot.commands.TeleopAutomations.PlaceHigh;
-import frc.robot.commands.TeleopAutomations.PlaceMid;
+import frc.robot.commands.TeleopAutomations.PlaceCube;
+import frc.robot.commands.TeleopAutomations.PlaceHighCone;
+import frc.robot.commands.TeleopAutomations.PlaceMidCone;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
@@ -102,7 +105,7 @@ public class RobotContainer {
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
 
-  private final ArmPIDSubsystem m_ArmPIDSubsystem = new ArmPIDSubsystem();
+  public final ArmPIDSubsystem m_ArmPIDSubsystem = new ArmPIDSubsystem();
 
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem );
@@ -171,22 +174,22 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // Configure the trigger bindings
     // m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
-    // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
-    // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_armSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-    // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
-    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
+    // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
+    m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()-> runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Score High", new ScoreHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
     m_chooser.addOption("Score and Balance", new ScoreBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
 
     SmartDashboard.putData("hahah", m_chooser);
-    m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
+    m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()->newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     
       SmartDashboard.putData(m_chooser);
     configureBindings();
@@ -212,123 +215,55 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   private void configureBindings() {
 
         m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
-        // m_auxController.start().onTrue(new RotationReset(m_armSubsystem));
-        m_auxController.start().onTrue(new InstantCommand(()-> m_ArmPIDSubsystem.resetRotationPosition()));
+        m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
+        // m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
         //This runs Endeffector to Collect Cone
-        // m_auxController.a().
-        // onTrue(new InstantCommand(()-> m_armSubsystem.resetRotationPosition()));
-        // m_auxController.leftTrigger().
-        // onTrue(new PickupCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
-        // onFalse (
-        //   // new ConditionalCommand(
-        //   // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
-        //   new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_armSubsystem));
-        //   // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
-        
-        // m_auxController.rightTrigger().onTrue(
-        //   new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
-        //   onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
-        // m_auxController.y()
-        //     .onTrue(
-        //       // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
-        //       new PositionHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
-        //     .onFalse(
-        //       new PlaceHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+
+  
+          // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
+        
+        m_auxController.rightTrigger().onTrue(
+          new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
+          onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+
+
+
+        m_auxController.a().onTrue(
+          new TelescoperPID(m_telescoperSubsystem, 50)).
+          onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+
+          m_auxController.b().onTrue(
+            new TelescoperPID(m_telescoperSubsystem, 16)).
+            onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+
+        m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+
+        m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
+        .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
       
 
-        // m_auxController.x()
-        //     .onTrue(
-        //       new PositionMid(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
-        //       .onFalse(
-        //         new PlaceMid(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
-        // m_auxController.a().onTrue(
-        //   new TelescoperPID(m_telescoperSubsystem, 50)).
-        //   onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
-        //   m_auxController.b().onTrue(
-        //     new TelescoperPID(m_telescoperSubsystem, 16)).
-        //     onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
-
-    //     m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
-    //     .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
-
-    //     m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
-    //     .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
-
-    m_auxController.a().onTrue(
-        Commands.runOnce(
-            () -> {
-              m_endEffectorSubsystem.spinEndEffector(-1);
-             
-            },
-            m_ArmPIDSubsystem)).onFalse(
-        Commands.runOnce(
-              () -> {
-                m_endEffectorSubsystem.spinEndEffector(0);
-               
-              },
-              m_ArmPIDSubsystem));
-
-    m_auxController.b().onTrue(
-        Commands.runOnce(
-            () -> {
-              m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-130));
-              m_ArmPIDSubsystem.enable();
-            },
-            m_ArmPIDSubsystem));
-
-    m_auxController.x().onTrue(
-        Commands.runOnce(
-            () -> {
-              m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-150));
-              m_ArmPIDSubsystem.enable();
-            },
-            m_ArmPIDSubsystem));
-
-    
-    m_auxController.y().onTrue(
-        Commands.runOnce(
-            () -> {
-              m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-90));
-              m_ArmPIDSubsystem.enable();
-            },
-            m_ArmPIDSubsystem));
-
-            m_auxController.rightBumper().onTrue(
-              Commands.runOnce(
-                  () -> {
-                    m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(0));
-                    m_ArmPIDSubsystem.enable();
-                  },
-                  m_ArmPIDSubsystem));
-
-                  m_auxController.leftBumper().onTrue(
-                    Commands.runOnce(
-                        () -> {
-                          m_ArmPIDSubsystem.setGoal(Units.degreesToRadians(-180));
-                          m_ArmPIDSubsystem.enable();
-                        },
-                        m_ArmPIDSubsystem));
     // m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
     // m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
 
-    // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_armSubsystem, m_endEffectorSubsystem))
-    // .onFalse(new BackIn(m_telescoperSubsystem, m_armSubsystem));
+    // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
+    // .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
 
-    // m_driverController.rightBumper().onTrue(
-    //   new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
-    //   onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+    m_driverController.rightBumper().onTrue(
+      new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
+      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
-      //if the driver controller 
-      // if(m_driverController.a().getAsBoolean() == true){
-      //   grid = 0;
+    //   if the driver controller 
+    //   if(m_driverController.a().getAsBoolean() == true){
+    //     grid = 0;
 
-      // } if (m_driverController.b().getAsBoolean() == true){
-      //   col = 0;
-      // }
+    //   } if (m_driverController.b().getAsBoolean() == true){
+    //     col = 0;
+    //   }
 
 
     m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
@@ -338,31 +273,57 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //   m_driverController.y().whileTrue(
     // trajGenCommand());
 
-      new JoystickButton(m_buttonBoard, 1).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
+      new JoystickButton(m_buttonBoard, 1).      
+      onTrue(new PickupCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
+      onFalse (new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
+        // new ConditionalCommand(
+        // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
+        
       
-      new JoystickButton(m_buttonBoard, 2).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      new JoystickButton(m_buttonBoard, 2).
+      onTrue(new PickupCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
+      onFalse (new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
+        // new ConditionalCommand(
+        // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
+        
       
-      new JoystickButton(m_buttonBoard, 3).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
+      // new JoystickButton(m_buttonBoard, 3).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
       
-      new JoystickButton(m_buttonBoard, 4).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
+      // new JoystickButton(m_buttonBoard, 4).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
       
-      new JoystickButton(m_buttonBoard, 5).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      new JoystickButton(m_buttonBoard, 5).            
+      onTrue(
+        new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+        .onFalse(
+          new PlaceCube(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
       
-      new JoystickButton(m_buttonBoard, 6).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
+      new JoystickButton(m_buttonBoard, 6).            
+      onTrue(
+        new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+        .onFalse(
+          new PlaceMidCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
       
       new JoystickButton(m_buttonBoard, 7).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
       
-      new JoystickButton(m_buttonBoard, 8).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      // new JoystickButton(m_buttonBoard, 8).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
+      new JoystickButton(m_buttonBoard, 8).onTrue(
+        // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+        new PositionHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+      .onFalse(
+        new PlaceCube(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
       
-      new JoystickButton(m_buttonBoard, 9).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
+      new JoystickButton(m_buttonBoard, 9)            .onTrue(
+        // new TelescoperPID(m_telescoperSubsystem, TelescoperConstants.kMaxExtention))
+        new PositionHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
+      .onFalse(
+        new PlaceHighCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
 
       //grid setters
       
-      new JoystickButton(m_buttonBoard, 10).onTrue(new RunCommand(()-> m_AutoNavChooser.setGrid(0)));
       
-      new JoystickButton(m_buttonBoard, 11).onTrue(new RunCommand(()-> m_AutoNavChooser.setGrid(1)));
+      new JoystickButton(m_buttonBoard, 11).onTrue(new InstantCommand(()-> m_AutoNavChooser.setGrid(1)));
       
-      new JoystickButton(m_buttonBoard, 12).onTrue(new RunCommand(()-> m_AutoNavChooser.setGrid(2)));
+      new JoystickButton(m_buttonBoard, 12).onTrue(new InstantCommand(()-> m_AutoNavChooser.setGrid(2)));
 
       //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
       // m_driverController.y().whileTrue(

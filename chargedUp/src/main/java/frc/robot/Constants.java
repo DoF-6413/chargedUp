@@ -174,39 +174,42 @@ public final class Constants {
     public static final double kRotationGearing = 
     83.33;
     // 90.91;
-    public static final int kRotationCurrentLimit = 25;
+    public static final int kRotationCurrentLimit = 100;
     //ticks to degrees
     public static final double kRotationPositionConversion = Units.degreesToRadians(360.0 /kRotationGearing);
 
     // Rotation Arm PID Values (Tune PID Before Feedforward)
-    public static final double kRotationP = 65;
+    public static final double kRotationP = 51.2;//40;
     public static final double kRotationI = 0;
     public static final double kRotationD = 0;
-    public static final double kRotationTolerance = 5;
+    public static final double kRotationTolerance = 1.0;
     
     // Rotation Arm FeedForward
-    public static final double ksVolts = 0.05997;
-    public static final double kgVolts = 0.24899;
-    public static final double kvVoltSecondPerMeter = 1.827;
-    public static final double kaVoltsSecondsSquaredPerMeter = 0.072416;
+    public static final double ksVolts = 0.11842;//0.05997;
+    public static final double kgVolts = 0.5527;//0.24899;
+    public static final double kvVoltSecondPerMeter = 1.6552;//1.827;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.078011;//0.072416;
 
 
     //Trapazoidal Motion Profiling for Rotation Arm
     //Physical max is 7.16 rad/s
-    public static final double kArmMaxVelocity = 7.16;
-    //Physical Max is 3.5 rad/s^2
-    public static final double kArmMaxAcceleration = 16;
+    public static final double kArmMaxVelocity = 5;
+    //Physical Max is 16 rad/s^2
+    //Acceleration Should Normally be 10 rad/s^2
+    public static final double kArmMaxAcceleration = 7;
 
     public static final int kpotetiometerPort = 1;
-    public static final double kpotetiometerRange = 180;
-    public static final double kpotentiometerOffset = -92;
+    public static final double kpotetiometerRange = 360;
+    public static final double kpotentiometerOffset = -170;
     //Arm Values
     public static final double kRotationZeroValue = 0;
-    public static final double kHighPeak = 105;
-    public static final double kMidBottom= 75;
+    public static final double kHighScoreInitial = 110;
+    public static final double kMidScoreFinal= 75;
 
-    /**Human Player, Mid Cone Peak, High Cone Bottom Value */
-    public static final double kHPMPHB = 87;
+    /**Human Player, Mid Cone Initial */
+    public static final double kHPMP = 91;
+
+    public static final double kHighScoreFinal = 90;
     public static final double kfloorCube = 35;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);
@@ -244,7 +247,7 @@ public final class Constants {
     public static final double kMaxTelescoperSpeed = 0.75;
 
     //Arm Values
-    public static final double kMaxExtention = 50;
+    public static final double kMaxExtention = 53;
     /** Telescoper for Mid Cone, Ground Block, and  */
     public static final double kMCGB = 16;
     public static final double kGroundCone = 30;

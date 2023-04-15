@@ -5,6 +5,7 @@
 package frc.robot.commands.TeleopAutomations;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -31,12 +32,13 @@ public class PositionPickUp extends SequentialCommandGroup {
     addCommands(
       new TelescoperReset(telscoper),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm),
-      new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
+        () -> {
+          arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
+        new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfector, 0.5, 20),
         new TelescoperWrapper(telscoper, arm, NEfector, TelescoperConstants.kGroundCone))

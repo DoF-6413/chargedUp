@@ -5,6 +5,7 @@
 package frc.robot.commands.TeleopAutomations;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -28,18 +29,20 @@ public class BackIn extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(40-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm),
+        () -> {
+          arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
       new TelescoperReset(telscoper),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm)
+        () -> {
+          arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal())
     );
   }
 }

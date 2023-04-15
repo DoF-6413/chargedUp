@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.TeleopAutomations.BackIn;
-import frc.robot.commands.TeleopAutomations.PlaceHigh;
+import frc.robot.commands.TeleopAutomations.PlaceHighCone;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
@@ -48,7 +48,7 @@ public class TelescoperWrapper extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return CommandScheduler.getInstance().isScheduled(new PlaceHigh(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)) || 
+    return CommandScheduler.getInstance().isScheduled(new PlaceHighCone(m_armSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)) || 
     CommandScheduler.getInstance().isScheduled(new BackIn(m_telescoperSubsystem, m_armSubsystem));
     // return false;
   }

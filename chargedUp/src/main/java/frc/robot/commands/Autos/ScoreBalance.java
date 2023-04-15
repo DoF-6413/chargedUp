@@ -5,6 +5,7 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,18 +50,19 @@ public class ScoreBalance extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ScoreCone(arm, telescoper, endEffector, drive),
-      new FollowPathWithEvents(new TrajectoryRunner(drive, pose, kBackToBalance.relativeTo(pose.getcurrentPose()), true),
+      new FollowPathWithEvents(new TrajectoryRunner(drive, pose, ()->kBackToBalance.relativeTo(pose.getcurrentPose()), true),
       kBackToBalance.getMarkers(),
       eventCenterLScoreOutBalanceMap
       ),
       new ParallelCommandGroup(
-      Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0- ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm),
-      new gyroBalance(gyro, drive)
+        Commands.runOnce(
+          () -> {
+            arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+            arm.enable();
+          },
+          arm),
+          new WaitUntilCommand(()-> arm.atGoal()),
+          new gyroBalance(gyro, drive)
       )
     );
   }
