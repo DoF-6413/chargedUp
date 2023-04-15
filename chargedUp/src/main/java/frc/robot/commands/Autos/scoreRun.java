@@ -29,7 +29,7 @@ public class scoreRun extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreCone(arm, telescoper, endEffector, drive),
+      new ScoreConehigh(arm, telescoper, endEffector, drive),
       new TrajectoryRunner(drive, pose, ()->kOutCommunity.relativeTo(pose.getcurrentPose()), true)
     );
   }

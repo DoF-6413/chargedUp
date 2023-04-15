@@ -19,7 +19,7 @@ public class ScoreHigh extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreCone(arm, telescoper, endEffector, drive),
+      new ScoreConehigh(arm, telescoper, endEffector, drive),
       new BackingOutArm(arm, telescoper, endEffector)
 
     );

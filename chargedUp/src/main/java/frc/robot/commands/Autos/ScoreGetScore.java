@@ -41,7 +41,7 @@ public class ScoreGetScore extends SequentialCommandGroup {
   eventBringArmIn.put("positionPickUp", new PositionPickUp(telescoper, arm, NEfector));
   eventBringArmIn.put("PICKUP", new BackIn(telescoper, arm));
     addCommands(
-      new ScoreCone(arm, telescoper, NEfector, drive),
+      new ScoreConehigh(arm, telescoper, NEfector, drive),
     new FollowPathWithEvents(
       new TrajectoryRunner(drive, pose, ()->kPickUp.relativeTo(pose.getcurrentPose()), true),
       kPickUp.getMarkers(),

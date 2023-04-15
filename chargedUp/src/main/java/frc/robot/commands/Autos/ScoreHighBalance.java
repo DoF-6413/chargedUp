@@ -35,21 +35,21 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreBalance extends SequentialCommandGroup {
+public class ScoreHighBalance extends SequentialCommandGroup {
   /** Creates a new ScoreBalance. */
     
   PathPlannerTrajectory kBackToBalance = PathPlanner.loadPath("BackToBalance", new PathConstraints(1.5, 1.2));
   
   
   /** Creates a new CenterLScoreOutBalance. */
-  public ScoreBalance(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
+  public ScoreHighBalance(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
     
     HashMap<String, Command> eventCenterLScoreOutBalanceMap = new HashMap<>();
     eventCenterLScoreOutBalanceMap.put("BackOutArm", new BackingOutArm(arm, telescoper, endEffector));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreCone(arm, telescoper, endEffector, drive),
+      new ScoreConehigh(arm, telescoper, endEffector, drive),
       new FollowPathWithEvents(new TrajectoryRunner(drive, pose, ()->kBackToBalance.relativeTo(pose.getcurrentPose()), true),
       kBackToBalance.getMarkers(),
       eventCenterLScoreOutBalanceMap
