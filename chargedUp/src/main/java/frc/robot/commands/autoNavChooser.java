@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,8 +24,8 @@ import frc.robot.Constants.DrivetrainConstants;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class autoNavChooser{
   /** Creates a new autoNavChooser. */
-  private int m_grid;
-  private int m_col;
+  private int m_grid = 2;
+  private int m_col = 0;
   Trajectory chosenTraj;
   TrajectoryConfig config;
   public autoNavChooser(int grid, int col) {
@@ -52,10 +53,9 @@ public class autoNavChooser{
             .addConstraint(autoVoltageConstraint).setReversed(true);
   }
     
-public Trajectory choosenTrajectory(){
+public Supplier<Trajectory> choosenTrajectory(){
 
   chosenTraj = new Trajectory();
-  
 
     if (m_grid == 0) {
       if (m_col == 0){
@@ -181,10 +181,9 @@ public Trajectory choosenTrajectory(){
             config);
       }
 
-      return chosenTraj;
+      return () -> chosenTraj;
     }
-
-    return chosenTraj;
+    return () -> chosenTraj;
     
   }
 

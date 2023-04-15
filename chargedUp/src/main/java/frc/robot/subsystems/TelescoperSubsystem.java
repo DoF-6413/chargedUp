@@ -38,7 +38,7 @@ private final TalonFX m_telescopingMotor;
   }
 
   public void SmartDashboardCalls(){
-    // SmartDashboard.putNumber("TelescoperPosition", getTelescoperPosition());
+    SmartDashboard.putNumber("TelescoperPosition", getTelescoperPosition());
     
     // SmartDashboard.putNumber("TelescoperCurrent", telecoperCurrent());
     

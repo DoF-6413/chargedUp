@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
@@ -29,32 +30,34 @@ public class GroundPickUp extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telscoper),
-              Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm),
+      Commands.runOnce(
+        () -> {
+          arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
 
       new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfector, 0.5, 1),
         new TelescoperPID(telscoper, TelescoperConstants.kGroundCone)),
-
-              Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(40 -ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm),
+        Commands.runOnce(
+          () -> {
+            arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
+            arm.enable();
+          },
+          arm),
+          new WaitUntilCommand(()-> arm.atGoal()),
       new TelescoperPID(telscoper, 0),
-              Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm)
-
+      Commands.runOnce(
+        () -> {
+          arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal())
+        
     );
   }
 }

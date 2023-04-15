@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.WristPID;
@@ -34,11 +35,12 @@ public class ConePickUp extends SequentialCommandGroup {
         new TelescoperPID(telerescoper, 0)
       ),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(0-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm)
+        () -> {
+          arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal())
     );
   }
 }

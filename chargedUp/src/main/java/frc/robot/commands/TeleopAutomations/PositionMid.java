@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.TelescoperConstants;
@@ -33,18 +34,19 @@ public class PositionMid extends SequentialCommandGroup {
     addCommands(
       new TelescoperReset(telescoper),
       Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMPHB-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm),
-      // new ConditionalCommand(
-        new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
+        () -> {
+          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMP)+ArmConstants.kArmOffsetRads);
+          arm.enable();
+        },
+        arm),
+        new WaitUntilCommand(()-> arm.atGoal()),
+      new ConditionalCommand(
+        // new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
       //   new ParallelCommandGroup(
-      //     new WristPID(wrist, 0),
-      //     new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)),
-      //   ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
-      // )
+          new WristPID(wrist, 0),
+          new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB),
+        ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
+      )
     );
   }
 }

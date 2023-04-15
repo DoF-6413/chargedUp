@@ -7,6 +7,7 @@ package frc.robot.commands.TeleopAutomations;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 
@@ -27,13 +28,14 @@ public class PickupCone extends SequentialCommandGroup {
     addCommands(
       
     new TelescoperReset(telescoper),
-      Commands.runOnce(
-            () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kHPMPHB-ArmConstants.kArmOffsetRads));
-              arm.enable();
-            },
-            arm),
-      new EndEffectorRunner(NEffector, 0.5, 5)
+    Commands.runOnce(
+      () -> {
+        arm.setGoal(Units.degreesToRadians(ArmConstants.kHPMP)+ArmConstants.kArmOffsetRads);
+        arm.enable();
+      },
+      arm),
+      new WaitUntilCommand(()-> arm.atGoal()),
+      new EndEffectorRunner(NEffector, 0.5, 10)
     );
   }
 }

@@ -5,6 +5,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+
+import java.util.function.Supplier;
+
 import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.math.controller.RamseteController;
@@ -34,11 +37,11 @@ public class TrajectoryRunner extends CommandBase {
 
   
   public 
-  TrajectoryRunner(DrivetrainSubsystem drive, PoseEstimator poseEstimator, Trajectory traj, Boolean isfirstPath) {
+  TrajectoryRunner(DrivetrainSubsystem drive, PoseEstimator poseEstimator, Supplier<Trajectory> traj, Boolean isfirstPath) {
     /*Trajectory runner takes a drive subsystem and a trajectory, and a boolean to make the robot follow a certain path. 
     If the boolean is set to true, we reset the position*/
     m_drivetrainSubsystem = drive;
-    m_trajectory = traj;
+    m_trajectory = traj.get();
     m_isFirstPath = isfirstPath;
     // m_ramseteCommand = new RamseteCommand(
     //   m_trajectory, 

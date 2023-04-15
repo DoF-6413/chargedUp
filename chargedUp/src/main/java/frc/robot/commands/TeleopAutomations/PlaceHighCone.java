@@ -6,9 +6,10 @@ package frc.robot.commands.TeleopAutomations;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.EndEffectorConstants;
 
 import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.subsystems.ArmPIDSubsystem;
@@ -18,19 +19,26 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class PlaceMid extends SequentialCommandGroup {
-  /** Creates a new PlaceMid. */
-  public PlaceMid(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEFector) {
+public class PlaceHighCone extends SequentialCommandGroup {
+  /** Creates a new PlaceHigh. */
+  public PlaceHighCone(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEFector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube-ArmConstants.kArmOffsetRads));
+              arm.updateAcceleration(3);
+              arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreFinal)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
-      new BackingOutArm(arm, telescoper, NEFector)
+            new WaitUntilCommand(()-> arm.atGoal()),
+            new BackingOutArm(arm, telescoper, NEFector),
+            Commands.runOnce(
+             () -> {
+               arm.updateAcceleration(7);
+             } )
+              
     );
   }
 }
