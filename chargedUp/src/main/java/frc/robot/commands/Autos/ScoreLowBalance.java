@@ -31,20 +31,20 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreMidBalance extends SequentialCommandGroup {
+public class ScoreLowBalance extends SequentialCommandGroup {
   /** Creates a new ScoreMidBalance. */
 
   PathPlannerTrajectory kBackToBalance = PathPlanner.loadPath("BackToBalance", new PathConstraints(1.5, 1.2));
  
 
-  public ScoreMidBalance(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
+  public ScoreLowBalance(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
    
     HashMap<String, Command> eventCenterLScoreOutBalanceMap = new HashMap<>();
     eventCenterLScoreOutBalanceMap.put("BackOutArm", new BackingOutArm(arm, telescoper, endEffector));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreConeMid(arm, telescoper, endEffector, drive),
+      new ScoreConeLow(arm, telescoper, endEffector, drive),
       new FollowPathWithEvents(new TrajectoryRunner(drive, pose, ()->kBackToBalance.relativeTo(pose.getcurrentPose()), true),
       kBackToBalance.getMarkers(),
       eventCenterLScoreOutBalanceMap

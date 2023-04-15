@@ -16,21 +16,20 @@ import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
 
-
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class scoreRun extends SequentialCommandGroup {
+public class ScoreMidRunRight extends SequentialCommandGroup {
 
-  PathPlannerTrajectory kOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.2, .8));
-  
-  /** Creates a new scoreRun. */
-  public scoreRun(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, PoseEstimator pose) {
+PathPlannerTrajectory kOutCommunityRight = PathPlanner.loadPath("OutCommunityRight", new PathConstraints(.8, .5));
+
+  /** Creates a new ScoreRunRight. */
+  public ScoreMidRunRight(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector ,PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreConehigh(arm, telescoper, endEffector, drive),
-      new TrajectoryRunner(drive, pose, ()->kOutCommunity.relativeTo(pose.getcurrentPose()), true)
+      new ScoreConeMid(arm, telescoper, endEffector, drive),
+      new TrajectoryRunner(drive,pose, ()->kOutCommunityRight.relativeTo(pose.getcurrentPose()), true)
     );
   }
 }

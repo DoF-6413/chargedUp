@@ -30,7 +30,7 @@ public class G1TRAroundCSBalance extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreConehigh(arm, telescoper, endEffector, drive),
+      new ScoreConeHigh(arm, telescoper, endEffector, drive),
       new TrajectoryRunner(drive, pose, ()->kAroundCSLeftBalance.relativeTo(pose.getcurrentPose()), true),
       new gyroBalance(gyro, drive)
     );

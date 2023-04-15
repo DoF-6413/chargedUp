@@ -49,7 +49,7 @@ public class ScoreHighBalance extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreConehigh(arm, telescoper, endEffector, drive),
+      new ScoreConeHigh(arm, telescoper, endEffector, drive),
       new FollowPathWithEvents(new TrajectoryRunner(drive, pose, ()->kBackToBalance.relativeTo(pose.getcurrentPose()), true),
       kBackToBalance.getMarkers(),
       eventCenterLScoreOutBalanceMap

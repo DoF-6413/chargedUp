@@ -28,9 +28,9 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreConehigh extends SequentialCommandGroup {
+public class ScoreConeHigh extends SequentialCommandGroup {
   /** Creates a new ScoreCone. */
-  public ScoreConehigh(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
+  public ScoreConeHigh(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
     // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

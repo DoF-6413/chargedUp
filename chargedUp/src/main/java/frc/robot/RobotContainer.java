@@ -70,7 +70,7 @@ import frc.robot.commands.Autos.ScoreHighBalance;
 import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
-import frc.robot.commands.Autos.scoreRun;
+import frc.robot.commands.Autos.scoreHighRun;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
 import frc.robot.commands.TeleopAutomations.CubePIckUp;
@@ -173,7 +173,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   public RobotContainer() {
     // Configure the trigger bindings
     // m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
-    m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("Score Grid1 TL Run", new scoreHighRun(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
     // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));

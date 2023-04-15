@@ -10,29 +10,27 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TrajectoryRunner;
-import frc.robot.commands.gyroBalance;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
+
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class G3TLAroundCSBalance extends SequentialCommandGroup {
+public class scoreLowRun extends SequentialCommandGroup {
 
-  PathPlannerTrajectory kAroundCSRightBalance = PathPlanner.loadPath("AroundCSRightBalance", new PathConstraints(1, .5));
-
-  /** Creates a new G3TLAroundCSBalance. */
-  public G3TLAroundCSBalance(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
+  PathPlannerTrajectory kOutCommunity = PathPlanner.loadPath("OutCommunity", new PathConstraints(1.2, .8));
+  
+  /** Creates a new scoreRun. */
+  public scoreLowRun(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreConeHigh(arm, telescoper, endEffector, drive),
-      new TrajectoryRunner(drive, pose, ()->kAroundCSRightBalance.relativeTo(pose.getcurrentPose()),true),
-      new gyroBalance(gyro, drive)
+      new ScoreConeLow(arm, telescoper, endEffector, drive),
+      new TrajectoryRunner(drive, pose, ()->kOutCommunity.relativeTo(pose.getcurrentPose()), true)
     );
   }
 }

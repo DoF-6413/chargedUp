@@ -4,32 +4,24 @@
 
 package frc.robot.commands.Autos;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.TrajectoryRunner;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.TelescoperSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreRunRight extends SequentialCommandGroup {
-
-PathPlannerTrajectory kOutCommunityRight = PathPlanner.loadPath("OutCommunityRight", new PathConstraints(.8, .5));
-
-  /** Creates a new ScoreRunRight. */
-  public ScoreRunRight(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector ,PoseEstimator pose) {
+public class ScoreLow extends SequentialCommandGroup {
+  /** Creates a new ScoreHigh. */
+  public ScoreLow(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, DrivetrainSubsystem drive) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreConehigh(arm, telescoper, endEffector, drive),
-      new TrajectoryRunner(drive,pose, ()->kOutCommunityRight.relativeTo(pose.getcurrentPose()), true)
+      new ScoreConeLow(arm, telescoper, endEffector, drive),
+      new BackingOutArm(arm, telescoper, endEffector)
+
     );
   }
 }
