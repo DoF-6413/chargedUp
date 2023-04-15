@@ -116,4 +116,10 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     m_controller.setConstraints(new TrapezoidProfile.Constraints(ArmConstants.kArmMaxVelocity, accel));
   }
 
+  public void updatePercentOutput(double percent){
+    m_leftRotationMotor.set(percent);
+  }
+
+
+
 }

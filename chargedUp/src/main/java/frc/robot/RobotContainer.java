@@ -201,7 +201,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
      m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()*0.75), m_drivetrainSubsystem));
 
-  }
+    }
   
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -214,8 +214,17 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
    */
   private void configureBindings() {
 
-        m_auxController.back().onTrue(new TelescoperReset(m_telescoperSubsystem));
-        m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
+        m_auxController.back().onTrue(
+          Commands.runOnce(
+          () -> {
+            m_ArmPIDSubsystem.updateGoal(-1);
+          },
+          m_ArmPIDSubsystem));
+        m_auxController.start().onTrue(          Commands.runOnce(
+          () -> {
+            m_ArmPIDSubsystem.updateGoal(1);
+          },
+          m_ArmPIDSubsystem));
         // m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
         //This runs Endeffector to Collect Cone
 
@@ -229,21 +238,26 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
 
 
-        m_auxController.a().onTrue(
-          new TelescoperPID(m_telescoperSubsystem, 50)).
-          onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+        // m_auxController.a().onTrue(
+        //   new TelescoperPID(m_telescoperSubsystem, 50)).
+        //   onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
-          m_auxController.b().onTrue(
-            new TelescoperPID(m_telescoperSubsystem, 16)).
-            onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+        
 
         m_auxController.leftBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
 
         m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
+        
+        m_auxController.x().onTrue(new TelescoperPID(m_telescoperSubsystem,25)).
+        onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
 
-      
+        m_auxController.y().onTrue(new TelescoperPID(m_telescoperSubsystem, 50)).
+        onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+
+          m_auxController.leftTrigger().onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
+          .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.0)));
 
 
 
@@ -257,6 +271,8 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
       onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
+      
+
     //   if the driver controller 
     //   if(m_driverController.a().getAsBoolean() == true){
     //     grid = 0;
@@ -266,7 +282,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     //   }
 
 
-    m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
+    // m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
 
       // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
 
@@ -321,9 +337,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       //grid setters
       
       
-      new JoystickButton(m_buttonBoard, 11).onTrue(new InstantCommand(()-> m_AutoNavChooser.setGrid(1)));
+      new JoystickButton(m_buttonBoard, 11).onTrue(new TelescoperReset(m_telescoperSubsystem));
       
-      new JoystickButton(m_buttonBoard, 12).onTrue(new InstantCommand(()-> m_AutoNavChooser.setGrid(2)));
+      new JoystickButton(m_buttonBoard, 12).onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
 
       //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
       // m_driverController.y().whileTrue(
