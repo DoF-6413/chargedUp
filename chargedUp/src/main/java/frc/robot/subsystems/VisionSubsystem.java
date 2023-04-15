@@ -33,6 +33,7 @@ public class VisionSubsystem extends SubsystemBase {
 
    static DifferentialDrive poseEstimatorDifferentialDrive;
    static PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
+   static PhotonCamera camera2 = new PhotonCamera("cam 2 change this when you have the real name gg **************");
   private static PhotonPipelineResult results = new PhotonPipelineResult();
   public PhotonTrackedTarget target = results.hasTargets() ? results.getBestTarget() : null;
   public Double yaw;
@@ -58,9 +59,13 @@ public class VisionSubsystem extends SubsystemBase {
 
   }
 
-  public static PhotonPipelineResult photonResult(){
+  public static PhotonPipelineResult BackCamPhotonResult(){
     return camera.getLatestResult();
   }
+  public static PhotonPipelineResult FrontCamPhotonResult(){
+    return camera2.getLatestResult();
+  }
+  
   
 
   // todo: provide portforwaring to connect without radio

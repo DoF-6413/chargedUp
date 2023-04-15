@@ -65,11 +65,13 @@ public class PoseEstimator extends SubsystemBase {
   static DrivetrainSubsystem m_drivetrainSubsystem;
   // Field2d field2d = new Field2d();
   Pose3d visionMeasurement;
-  public double resultsTimestamp;
+  public double resultsTimestampCam1;
+  public double resultsTimestampCam2;
   static SimDouble gyroAngleSim;
   public static DifferentialDrivetrainSim m_drivetrainSimulator;
   public static Field2d m_field2d;
-  public PhotonPipelineResult PhotonPipelineResult;
+  public PhotonPipelineResult PhotonPipelineResultCam1;
+  public PhotonPipelineResult PhotonPipelineResultCam2;
 
   /** Creates a new PoseEstimator. */
   public PoseEstimator(GyroSubsystem gyro, DrivetrainSubsystem drive, VisionSubsystem vision,
@@ -133,13 +135,21 @@ public class PoseEstimator extends SubsystemBase {
         m_gyroSubsystem.getRotation2d(), m_drivetrainSubsystem.getPositionLeftLead(),
         m_drivetrainSubsystem.getPositionRightLead());
 
-    PhotonPipelineResult = VisionSubsystem.camera.getLatestResult();
-    resultsTimestamp = PhotonPipelineResult.getTimestampSeconds();
-SmartDashboard.putNumber("photonTime", PhotonPipelineResult.getTimestampSeconds());
-SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
-    if (resultsTimestamp != previousPipelineTimestamp && PhotonPipelineResult.hasTargets()) {
-      previousPipelineTimestamp = resultsTimestamp;
-      var target = PhotonPipelineResult.getBestTarget();
+    PhotonPipelineResultCam1 =  VisionSubsystem.camera.getLatestResult();
+    
+    PhotonPipelineResultCam2 =  VisionSubsystem.camera2.getLatestResult();
+
+    resultsTimestampCam1 = PhotonPipelineResultCam1.getTimestampSeconds();
+
+    resultsTimestampCam2 = PhotonPipelineResultCam2.getTimestampSeconds();
+SmartDashboard.putNumber("photonTime Cam 1", PhotonPipelineResultCam1.getTimestampSeconds());
+
+SmartDashboard.putNumber("photonTime Cam 2", PhotonPipelineResultCam2.getTimestampSeconds());
+
+SmartDashboard.putNumber("FPGA TIme ", Timer.getFPGATimestamp());
+    if (resultsTimestampCam1 != previousPipelineTimestamp && (PhotonPipelineResultCam1.hasTargets())) {
+      previousPipelineTimestamp = resultsTimestampCam1;
+      var target = PhotonPipelineResultCam1.getBestTarget();
       var fiducialid = target.getFiducialId();
       if (target.getPoseAmbiguity() <= 0.2 && fiducialid >= 0 && fiducialid < 9) {
 
@@ -150,9 +160,9 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
           Pose3d targetPose = atfl.getTagPose(fiducialid).get();
           Transform3d camToTarget = target.getBestCameraToTarget();
           Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
-          visionMeasurement = camPose.transformBy(VisionConstants.cameraOnRobot);
+          visionMeasurement = camPose.transformBy(VisionConstants.cam1OnRobot);
           SmartDashboard.putString("visionmeasure", visionMeasurement.toPose2d().toString());
-          SmartDashboard.putNumber("timestamp", resultsTimestamp);
+          SmartDashboard.putNumber("timestamp", resultsTimestampCam1);
           PoseEstimator.poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), Timer.getFPGATimestamp(),
               visionMeasurementStdDevs);
         } catch (IOException e) {
@@ -162,6 +172,34 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
         }
       }
       getposegg();
+    }//the new camera ************************************************************************* 
+    if (resultsTimestampCam2 != previousPipelineTimestamp && (PhotonPipelineResultCam2.hasTargets())){
+      previousPipelineTimestamp = resultsTimestampCam2;
+      var target = PhotonPipelineResultCam2.getBestTarget();
+      var fiducialid = target.getFiducialId();
+      if (target.getPoseAmbiguity() <= 0.2 && fiducialid >= 0 && fiducialid < 9) {
+
+        AprilTagFieldLayout atfl;
+        try {
+          atfl = new AprilTagFieldLayout(AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField().getTags(), 16.4592,
+              8.2296);
+          Pose3d targetPose = atfl.getTagPose(fiducialid).get();
+          Transform3d camToTarget = target.getBestCameraToTarget();
+          Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
+          visionMeasurement = camPose.transformBy(VisionConstants.cam2OnRobot);
+          SmartDashboard.putString("visionmeasure", visionMeasurement.toPose2d().toString());
+          SmartDashboard.putNumber("timestamp", resultsTimestampCam2);
+          PoseEstimator.poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), Timer.getFPGATimestamp(),
+              visionMeasurementStdDevs);
+        } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+
+        }
+      }
+      getposegg();
+
+
     }
 
     
@@ -202,6 +240,5 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
       SmartDashboard.putNumberArray("akehdkadkhakdhakhdk", esternocleidomastoideo);
   }
 
-
-
+//listoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 }
