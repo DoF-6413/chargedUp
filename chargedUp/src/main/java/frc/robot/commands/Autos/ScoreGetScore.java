@@ -33,7 +33,7 @@ public class ScoreGetScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
-  PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1.5, 1.5));
+  PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1.5, 2));
   PathPlannerTrajectory kPlace = PathPlanner.loadPath("Place", new PathConstraints(1, .8));
   
   HashMap<String, Command> eventBringArmIn = new HashMap<>();
