@@ -43,10 +43,12 @@ public class ScoreCube extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-      new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),        
+        //In order to score in time for auto we will not extend and score mid
+        
+      // new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),        
         //make the following a follow path with events to change time
         new ParallelCommandGroup(
-            new EndEffectorRunner(NEfctr, -0.8, 0.5),
+            new EndEffectorRunner(NEfctr, -0.8, 0.2),
             new TelescoperPID(telescoper, 1)
             ),
           Commands.runOnce(
