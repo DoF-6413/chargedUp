@@ -43,12 +43,12 @@ public class ScoreGetScore extends SequentialCommandGroup {
     addCommands(
       new ScoreCone(arm, telescoper, NEfector, drive),
     new FollowPathWithEvents(
-      new TrajectoryRunner(drive, pose, ()->kPickUp.relativeTo(pose.getcurrentPose()), true),
+      new TrajectoryRunner(drive, pose, ()-> kPickUp, true),
       kPickUp.getMarkers(),
       eventBringArmIn
       ),
    
-    new ScoreHigh(arm, telescoper, NEfector, drive)
+    new ScoreCube(arm, telescoper, NEfector, drive)
     );
   }
 }

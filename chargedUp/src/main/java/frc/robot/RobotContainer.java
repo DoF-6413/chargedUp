@@ -66,6 +66,7 @@ import frc.robot.commands.ArmControls.RotationReset;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
+import frc.robot.commands.Autos.GroundPickUp;
 import frc.robot.commands.Autos.ScoreBalance;
 import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
@@ -77,8 +78,10 @@ import frc.robot.commands.TeleopAutomations.CubePIckUp;
 import frc.robot.commands.TeleopAutomations.PickupCone;
 import frc.robot.commands.TeleopAutomations.PlaceCube;
 import frc.robot.commands.TeleopAutomations.PlaceHighCone;
+import frc.robot.commands.TeleopAutomations.PlaceLow;
 import frc.robot.commands.TeleopAutomations.PlaceMidCone;
 import frc.robot.commands.TeleopAutomations.PositionHigh;
+import frc.robot.commands.TeleopAutomations.PositionLow;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
 import frc.robot.Constants.DrivetrainConstants;
@@ -186,12 +189,10 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     m_chooser.addOption("Score and Balance", new ScoreBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.addOption("Score Pickup Score", new ScoreMovePickupScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
-
-    SmartDashboard.putData("hahah", m_chooser);
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()->newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     
-      SmartDashboard.putData(m_chooser);
+      SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();
       
@@ -214,25 +215,27 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
    */
   private void configureBindings() {
 
-        m_auxController.back().onTrue(
-          Commands.runOnce(
+    new JoystickButton(m_buttonBoard, 3).whileTrue(
+          new RunCommand(
           () -> {
-            m_ArmPIDSubsystem.updateGoal(-1);
-          },
-          m_ArmPIDSubsystem));
-        m_auxController.start().onTrue(          Commands.runOnce(
+            m_ArmPIDSubsystem.updateGoal(Units.degreesToRadians(-0.5));
+          }));
+          new JoystickButton(m_buttonBoard, 7).whileTrue(new RunCommand(
           () -> {
-            m_ArmPIDSubsystem.updateGoal(1);
-          },
-          m_ArmPIDSubsystem));
+            m_ArmPIDSubsystem.updateGoal(Units.degreesToRadians(0.5));
+          }));
         // m_auxController.start().onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
         //This runs Endeffector to Collect Cone
 
-
-  
+        new JoystickButton(m_buttonBoard, 10).onTrue(
+          new PositionLow(m_ArmPIDSubsystem, m_telescoperSubsystem)).
+          onFalse(new PlaceLow(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+    
+          new JoystickButton(m_buttonBoard, 4).onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
+          .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
           // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
         
-        m_auxController.rightTrigger().onTrue(
+          m_auxController.rightBumper().onTrue(
           new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
           onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
@@ -267,10 +270,11 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
     // .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
 
-    m_driverController.rightBumper().onTrue(
-      new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5))).
-      onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
+    m_driverController.rightBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, 0.3)));//.
+    // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
 
+    m_driverController.leftBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, -0.3)));//.
+    // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
       
 
     //   if the driver controller 
@@ -318,8 +322,6 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         new PositionMid(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem, m_wristSubsystem))
         .onFalse(
           new PlaceMidCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-      
-      new JoystickButton(m_buttonBoard, 7).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
       
       // new JoystickButton(m_buttonBoard, 8).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(1)));
       new JoystickButton(m_buttonBoard, 8).onTrue(

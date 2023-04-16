@@ -7,45 +7,34 @@ package frc.robot.commands.TeleopAutomations;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.TelescoperConstants;
-
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.commands.ArmControls.TelescoperWrapper;
 import frc.robot.commands.ArmControls.WristPID;
+import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class PositionMid extends SequentialCommandGroup {
-  /** Creates a new PositionMid. */
-  public PositionMid(TelescoperSubsystem telescoper, ArmPIDSubsystem arm, EndEffectorSubsystem NEfector, WristSubsystem wrist) {
+public class PositionLow extends SequentialCommandGroup {
+  /** Creates a new PositionLow. */
+  public PositionLow(ArmPIDSubsystem arm, TelescoperSubsystem telescoper) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TelescoperReset(telescoper),
       Commands.runOnce(
         () -> {
-          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMP)+ArmConstants.kArmOffsetRads);
+          arm.setGoal(Units.degreesToRadians(-45)+ArmConstants.kArmOffsetRads);
           arm.enable();
         },
         arm),
-        new WaitUntilCommand(()-> arm.atGoal()),
-      new ConditionalCommand(
-        // new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMCGB)
-      //   new ParallelCommandGroup(
-          new WristPID(wrist, 0),
-          new TelescoperWrapper(telescoper, arm, NEfector, 30),
-        ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
+        new WaitUntilCommand(()-> arm.atGoal()
       )
     );
   }

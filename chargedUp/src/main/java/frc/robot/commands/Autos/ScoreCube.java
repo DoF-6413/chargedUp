@@ -28,9 +28,9 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreCone extends SequentialCommandGroup {
+public class ScoreCube extends SequentialCommandGroup {
   /** Creates a new ScoreCone. */
-  public ScoreCone(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
+  public ScoreCube(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
     // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -43,15 +43,7 @@ public class ScoreCone extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-      new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),
-      Commands.runOnce(
-        () -> {
-          arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreFinal)+ArmConstants.kArmOffsetRads);
-          arm.enable();
-        },
-        arm),
-        new WaitUntilCommand(()-> arm.atGoal()),
-        
+      new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),        
         //make the following a follow path with events to change time
         new ParallelCommandGroup(
             new EndEffectorRunner(NEfctr, -0.8, 0.5),
@@ -59,11 +51,17 @@ public class ScoreCone extends SequentialCommandGroup {
             ),
           Commands.runOnce(
             () -> {
+              arm.updateAcceleration(4);
               arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
               arm.enable();
             },
             arm),
-            new WaitUntilCommand(()-> arm.atGoal())
+            new WaitUntilCommand(()-> arm.atGoal()),
+            Commands.runOnce(
+              () -> {
+                arm.updateAcceleration(7);
+              },
+              arm)
             // new TrajectoryRunner(drive, m_backUpRed.relativeTo(drive.getPose()), true)
     );
   }

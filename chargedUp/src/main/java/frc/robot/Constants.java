@@ -210,7 +210,7 @@ public final class Constants {
     public static final double kHPMP = 91;
 
     public static final double kHighScoreFinal = 90;
-    public static final double kfloorCube = 35;
+    public static final double kfloorCube = 39;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);
   }
@@ -226,7 +226,7 @@ public final class Constants {
 
     //Telescoper Current Limit
     public static final boolean kIsTelescoperCurrentLimitEnabled = true;
-    public static final double kTelescoperContinuousCurrent = 25;
+    public static final double kTelescoperContinuousCurrent = 40;
     public static final double kTelescoperPeakCurrent = 60;
     public static final double kTelescoperMaxTimeAtPeak = 5.0;
 
@@ -238,7 +238,7 @@ public final class Constants {
     //Arm Values
     public static final double kMaxExtention = 53;
     /** Telescoper for Mid Cone, Ground Block, and  */
-    public static final double kMCGB = 16;
+    public static final double kMCGB = 26;
     public static final double kGroundCone = 30;
 
         // Telescoper FeedForward
