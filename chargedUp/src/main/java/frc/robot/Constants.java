@@ -209,7 +209,7 @@ public final class Constants {
     /**Human Player, Mid Cone Initial */
     public static final double kHPMP = 91;
 
-    public static final double kHighScoreFinal = 90;
+    public static final double kHighScoreFinal = 95;
     public static final double kfloorCube = 39;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);

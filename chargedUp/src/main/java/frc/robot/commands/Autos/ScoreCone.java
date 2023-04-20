@@ -55,7 +55,7 @@ public class ScoreCone extends SequentialCommandGroup {
         //make the following a follow path with events to change time
         new ParallelCommandGroup(
             new EndEffectorRunner(NEfctr, -0.8, 0.5),
-            new TelescoperPID(telescoper, 1)
+            new TelescoperReset(telescoper)
             ),
           Commands.runOnce(
             () -> {

@@ -27,7 +27,7 @@ public class BackingOutArm extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
-        new EndEffectorRunner(NEfctr, -0.5, 0.25),
+        new EndEffectorRunner(NEfctr, -0.3, 0.25),
         new TelescoperPID(telescoper, 1)
       ),
       Commands.runOnce(
