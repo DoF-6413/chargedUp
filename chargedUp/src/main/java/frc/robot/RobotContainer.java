@@ -235,7 +235,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
           .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
           // ()-> m_colorSensorSubsystem.getColor() == m_colorSensorSubsystem.kpurple));
         
-          m_auxController.rightBumper().onTrue(
+          m_auxController.rightTrigger().onTrue(
           new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(-0.3))).
           onFalse(new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector()));
 
