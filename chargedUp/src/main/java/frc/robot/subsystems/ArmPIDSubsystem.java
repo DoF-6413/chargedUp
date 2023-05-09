@@ -48,7 +48,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     m_rightRotationMotor.follow(m_leftRotationMotor);
     m_leftRotationMotor.setIdleMode(IdleMode.kBrake);
     m_rightRotationMotor.setIdleMode(IdleMode.kBrake);
-    m_leftRotationMotor.setSmartCurrentLimit(100);
+    m_leftRotationMotor.setSmartCurrentLimit(60);
     m_RotationEncoder = m_leftRotationMotor.getEncoder();
     m_RotationEncoder.setPositionConversionFactor(ArmConstants.kRotationPositionConversion);
     m_pot = new AnalogPotentiometer(
