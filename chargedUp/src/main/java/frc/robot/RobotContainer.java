@@ -339,6 +339,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       //grid setters
       
       
+      
       new JoystickButton(m_buttonBoard, 11).onTrue(new TelescoperReset(m_telescoperSubsystem));
       
       new JoystickButton(m_buttonBoard, 12).onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));

@@ -40,7 +40,7 @@ public class PositionMid extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-          new TelescoperWrapper(telescoper, arm, NEfector, 30)
+          new TelescoperWrapper(telescoper, arm, NEfector, 25)
     );
   }
 }
