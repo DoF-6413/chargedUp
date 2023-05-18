@@ -209,7 +209,7 @@ public final class Constants {
     /**Human Player, Mid Cone Initial */
     public static final double kHPMP = 91;
 
-    public static final double kHighScoreFinal = 95;
+    public static final double kHighScoreFinal = 93;
     public static final double kfloorCube = 39;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);
@@ -249,6 +249,11 @@ public final class Constants {
 
   public static class EndEffectorConstants{
     public static final int kEndEffectorCANID = 9;
+        //Endeffector Current Limit
+        public static final boolean kIsEndEffectorCurrentLimitEnabled = true;
+        public static final double kEndEffectorContinuousCurrent = 30;
+        public static final double kEndEffectorPeakCurrent = 35;
+        public static final double kEndEffectorMaxTimeAtPeak = 3.0;
   }
 
   public static class WristConstants{
