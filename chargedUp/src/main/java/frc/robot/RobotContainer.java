@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.timerAuto;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -67,6 +68,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return new InstantCommand(() -> m_drivetrainSubsystem.setRaw(0.25,0));
+    return new timerAuto(m_drivetrainSubsystem);
   }
 }
