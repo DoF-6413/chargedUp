@@ -67,6 +67,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return null;
+    return new InstantCommand(() -> m_drivetrainSubsystem.setRaw(0.25,0));
   }
 }
