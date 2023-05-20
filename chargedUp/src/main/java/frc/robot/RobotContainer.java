@@ -8,12 +8,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.drivetotag;
-import frc.robot.commands.locateCube;
-import frc.robot.commands.targetFinding;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -33,10 +29,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
-  private final Command m_driveToTag = 
-  new drivetotag(m_drivetrainSubsystem, m_visionSubsystem ); 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController =
       new XboxController(OperatorConstants.kDriverControllerPort);
@@ -52,8 +45,6 @@ public class RobotContainer {
      m_drivetrainSubsystem.setRaw(m_driverController.getLeftY(),- m_driverController.getRightX()), m_drivetrainSubsystem));
     configureBindings();
 
-
-    m_chooser.setDefaultOption("Drive to Tag", m_driveToTag);
   }
 
   /**
@@ -67,10 +58,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //Spins Motor if April Tags are Recognized for 20 Ticks
-    new JoystickButton(m_driverController, XboxController.Button.kA.value).onTrue(new targetFinding(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value).onTrue(new drivetotag(m_drivetrainSubsystem, m_visionSubsystem));
-    new JoystickButton(m_driverController, XboxController.Button.kY.value).onTrue(new locateCube(m_drivetrainSubsystem, m_visionSubsystem));
-  }
+   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -80,6 +68,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     
-    return m_chooser.getSelected();
+    return null;
   }
 }
