@@ -34,7 +34,7 @@ public class timerAuto extends CommandBase {
   @Override
   public void execute() {
 
-    m_DrivetrainSubsystem.setRaw(0.25, 0);
+    m_DrivetrainSubsystem.setRaw(-0.60, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -46,6 +46,6 @@ public class timerAuto extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() >=5 ;
+    return timer.get() >=0.8  ;
   }
 }

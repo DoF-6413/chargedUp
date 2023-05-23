@@ -11,6 +11,7 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -36,6 +37,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFollower.follow(rightLead);
 
     //invert one of the leads :)
+    // leftLead.configSelectedFeedbackCoefficient(Units.inchesToMeters(6) /);
 
     diffDrive = new DifferentialDrive(rightLead,leftLead);
   }
@@ -43,13 +45,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
    
   public void setRaw(double driveValue, double turnValue){
-    diffDrive.arcadeDrive(driveValue*.5, turnValue*.5);
+    diffDrive.arcadeDrive(driveValue, turnValue);
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public double getLeftPose(){
+    return leftLead.getSelectedSensorPosition();
   }
   
 }
