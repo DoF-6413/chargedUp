@@ -200,7 +200,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
   public void defaultCommands(){
     m_drivetrainSubsystem.setDefaultCommand(new RunCommand(() ->
-     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY(), -m_driverController.getRightX()*0.75), m_drivetrainSubsystem));
+     m_drivetrainSubsystem.setRaw(-m_driverController.getLeftY() * 0.5, -m_driverController.getRightX()*0.75 *0.5), m_drivetrainSubsystem));
 
     }
   
