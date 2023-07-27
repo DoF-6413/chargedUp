@@ -200,7 +200,7 @@ public final class Constants {
 
     public static final int kpotetiometerPort = 1;
     public static final double kpotetiometerRange = 360;
-    public static final double kpotentiometerOffset = -20;
+    public static final double kpotentiometerOffset = -110;
     //Arm Values
     public static final double kRotationZeroValue = 0;
     public static final double kHighScoreInitial = 110;
@@ -251,8 +251,8 @@ public final class Constants {
     public static final int kEndEffectorCANID = 9;
         //Endeffector Current Limit
         public static final boolean kIsEndEffectorCurrentLimitEnabled = true;
-        public static final double kEndEffectorContinuousCurrent = 30;
-        public static final double kEndEffectorPeakCurrent = 35;
+        public static final double kEndEffectorContinuousCurrent = 60;
+        public static final double kEndEffectorPeakCurrent = 60;
         public static final double kEndEffectorMaxTimeAtPeak = 3.0;
   }
 
