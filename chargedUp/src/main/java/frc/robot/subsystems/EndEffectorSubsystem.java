@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -22,7 +23,14 @@ private final TalonFX m_endEffectorMotor;
     m_endEffectorMotor = new TalonFX(EndEffectorConstants.kEndEffectorCANID);
     m_endEffectorMotor.setNeutralMode(NeutralMode.Brake);
     m_endEffectorMotor.setInverted(true);
-    
+    StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
+          EndEffectorConstants.kIsEndEffectorCurrentLimitEnabled, //Is enabled?
+          EndEffectorConstants.kEndEffectorContinuousCurrent, //Continuous Current Limit
+          EndEffectorConstants.kEndEffectorPeakCurrent, //Peak Current Limit
+          EndEffectorConstants.kEndEffectorMaxTimeAtPeak); //Time Allowed to be at Peak Current Limit
+          m_endEffectorMotor.configStatorCurrentLimit(m_currentLimitConfig);
+          //Position Conversion Factor
+    // m_endEffectorMotor.configSelectedFeedbackCoefficient(EndEffectorConstants.kTelescopePositionConversionFactor);
   }
 
   @Override

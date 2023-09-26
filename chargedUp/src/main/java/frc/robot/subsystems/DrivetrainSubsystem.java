@@ -147,6 +147,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Right Lead", rightLead.get());
     // SmartDashboard.putNumber("Pose X", m_odometry.getPoseMeters().getX());
     // SmartDashboard.putNumber("Pose Y", m_odometry.getPoseMeters().getY());
+
+    SmartDashboard.putNumber("CANID4 Current", leftLead.getOutputCurrent());
+    
+    SmartDashboard.putNumber("CANID2 Current", rightLead.getOutputCurrent());
+    
+    SmartDashboard.putNumber("CANID5 Current", leftFollower1.getOutputCurrent());
+    
+    SmartDashboard.putNumber("CANID3 Current", rightFollower1.getOutputCurrent());
+    
     SmartDashboard.putNumber("Left position", getPositionLeftLead());
     SmartDashboard.putNumber("Right position", getPositionRightLead());
   }

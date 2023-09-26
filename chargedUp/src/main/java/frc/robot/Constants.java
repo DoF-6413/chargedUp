@@ -200,7 +200,7 @@ public final class Constants {
 
     public static final int kpotetiometerPort = 1;
     public static final double kpotetiometerRange = 360;
-    public static final double kpotentiometerOffset = -170;
+    public static final double kpotentiometerOffset = -110;
     //Arm Values
     public static final double kRotationZeroValue = 0;
     public static final double kHighScoreInitial = 110;
@@ -209,8 +209,8 @@ public final class Constants {
     /**Human Player, Mid Cone Initial */
     public static final double kHPMP = 91;
 
-    public static final double kHighScoreFinal = 90;
-    public static final double kfloorCube = 35;
+    public static final double kHighScoreFinal = 93;
+    public static final double kfloorCube = 39;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);
   }
@@ -226,7 +226,7 @@ public final class Constants {
 
     //Telescoper Current Limit
     public static final boolean kIsTelescoperCurrentLimitEnabled = true;
-    public static final double kTelescoperContinuousCurrent = 25;
+    public static final double kTelescoperContinuousCurrent = 40;
     public static final double kTelescoperPeakCurrent = 60;
     public static final double kTelescoperMaxTimeAtPeak = 5.0;
 
@@ -238,7 +238,7 @@ public final class Constants {
     //Arm Values
     public static final double kMaxExtention = 53;
     /** Telescoper for Mid Cone, Ground Block, and  */
-    public static final double kMCGB = 20;
+    public static final double kMCGB = 26;
     public static final double kGroundCone = 30;
 
         // Telescoper FeedForward
@@ -249,6 +249,11 @@ public final class Constants {
 
   public static class EndEffectorConstants{
     public static final int kEndEffectorCANID = 9;
+        //Endeffector Current Limit
+        public static final boolean kIsEndEffectorCurrentLimitEnabled = true;
+        public static final double kEndEffectorContinuousCurrent = 60;
+        public static final double kEndEffectorPeakCurrent = 60;
+        public static final double kEndEffectorMaxTimeAtPeak = 3.0;
   }
 
   public static class WristConstants{

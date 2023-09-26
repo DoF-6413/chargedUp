@@ -20,7 +20,7 @@ public class TelescoperReset extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_telescoperSubsystem.telescoperCurrentLimit(20, 40);
+    m_telescoperSubsystem.telescoperCurrentLimit(30, 40);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +40,6 @@ public class TelescoperReset extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_telescoperSubsystem.telecoperCurrent() >= 20;
+    return m_telescoperSubsystem.telecoperCurrent() >= 30;
   }
 }
