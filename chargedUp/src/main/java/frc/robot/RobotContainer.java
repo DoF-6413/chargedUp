@@ -84,9 +84,9 @@ import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionLow;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
+import frc.robot.commands.TeleopAutomations.ShooterBackIn;
+import frc.robot.commands.TeleopAutomations.ThrowCubes;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.commands.TrajectoryRunner;
-import frc.robot.commands.getEstimatedPose;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -344,6 +344,14 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
       
       new JoystickButton(m_buttonBoard, 12).onTrue(new RotationReset(m_ArmPIDSubsystem, m_telescoperSubsystem));
 
+          
+    m_driverController.rightTrigger().onTrue(
+      new ThrowCubes(m_ArmPIDSubsystem, m_endEffectorSubsystem, m_telescoperSubsystem, m_wristSubsystem)).
+    onFalse(new ShooterBackIn(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
+
+    
+    m_driverController.leftTrigger().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
+    .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
       //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
       // m_driverController.y().whileTrue(
       //   // new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
