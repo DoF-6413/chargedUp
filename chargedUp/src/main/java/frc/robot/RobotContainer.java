@@ -84,6 +84,7 @@ import frc.robot.commands.TeleopAutomations.PositionHigh;
 import frc.robot.commands.TeleopAutomations.PositionLow;
 import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
+import frc.robot.commands.TeleopAutomations.PositionPickUpBack;
 import frc.robot.commands.TeleopAutomations.ShooterBackIn;
 import frc.robot.commands.TeleopAutomations.ThrowCubes;
 import frc.robot.Constants.DrivetrainConstants;
@@ -220,7 +221,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
           () -> {
             m_ArmPIDSubsystem.updateGoal(Units.degreesToRadians(-0.5));
           }));
-          new JoystickButton(m_buttonBoard, 7).whileTrue(new RunCommand(
+    new JoystickButton(m_buttonBoard, 7).whileTrue(new RunCommand(
           () -> {
             m_ArmPIDSubsystem.updateGoal(Units.degreesToRadians(0.5));
           }));
@@ -352,6 +353,12 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     
     m_driverController.leftTrigger().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
     .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
+    m_driverController.a().onTrue(new PositionPickUpBack(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
+    .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
+
+    m_driverController.b().onTrue(new RunCommand(()-> { new TelescoperPID(m_telescoperSubsystem, 0.5);}));
+    m_driverController.y().onTrue(new RunCommand(()-> {new TelescoperPID(m_telescoperSubsystem, -0.5);}));
+
       //else{new InstantCommand(()-> m_endEffectorSubsystem.stopEndEffector());}
       // m_driverController.y().whileTrue(
       //   // new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,  traj1, false));
