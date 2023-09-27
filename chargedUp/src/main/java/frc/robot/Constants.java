@@ -81,7 +81,7 @@ public final class Constants {
     // Facts about the Drivetrain
     // Number of motors within 1 gearbox (controlling the drivetrain)
     public static final int knumMotors = 3;
-    public static final double kgearing = 8.68;
+    public static final double kgearing = 9.47; 
     // Moment of Inertia (aka force felt by robot when following path?)
     public static final double kMOI = 4;
     // Final Mass of Robot including Bumbers and Batteries
