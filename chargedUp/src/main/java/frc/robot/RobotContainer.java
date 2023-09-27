@@ -270,10 +270,10 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
     // .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
 
-    m_driverController.rightBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, 0.3)));//.
+    m_driverController.rightBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, 0.45)));//.
     // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
 
-    m_driverController.leftBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, -0.3)));//.
+    m_driverController.leftBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, -0.45)));//.
     // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
       
 
