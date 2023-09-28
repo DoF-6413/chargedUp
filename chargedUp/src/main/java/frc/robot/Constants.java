@@ -230,10 +230,17 @@ public final class Constants {
     public static final double kTelescoperPeakCurrent = 60;
     public static final double kTelescoperMaxTimeAtPeak = 5.0;
 
+    public static final double kTelescoperMaxVelocity = 5;
+    //Physical Max is 16 rad/s^2
+    //Acceleration Should Normally be 10 rad/s^2
+    public static final double kTelescoperMaxAcceleration = 7;
+
     public static final boolean kIsTelescoperInverted = false;
     public static final double kFalconTicks = 2048;
     public static final double kTelescopePositionConversionFactor = 1/kFalconTicks;
     public static final double kMaxTelescoperSpeed = 0.75;
+
+    public static final double kTelescoperOffset = 0.0; //TODO: get values?
 
     //Arm Values
     public static final double kMaxExtention = 53;

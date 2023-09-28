@@ -75,5 +75,6 @@ private final TalonFX m_telescopingMotor;
 
   public double telecoperCurrent(){
     return m_telescopingMotor.getStatorCurrent();
+    
   }
 }

@@ -122,7 +122,4 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
   public void updatePercentOutput(double percent){
     m_leftRotationMotor.set(percent);
   }
-
-
-
 }
