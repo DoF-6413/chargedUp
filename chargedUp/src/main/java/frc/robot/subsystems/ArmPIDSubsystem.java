@@ -28,7 +28,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
   private final CANSparkMax m_rightRotationMotor;
   private final RelativeEncoder m_RotationEncoder;
   private final AnalogPotentiometer m_pot;
-  private final ArmFeedforward m_armFeedForward;
+  // private final ArmFeedforward m_armFeedForward;
 
   public ArmPIDSubsystem() {
     super(
@@ -58,12 +58,12 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
       ArmConstants.kpotentiometerOffset
       );
 
-    m_armFeedForward = new ArmFeedforward(
-      ArmConstants.ksVolts, 
-      ArmConstants.kgVolts, 
-      ArmConstants.kvVoltSecondPerMeter,
-      ArmConstants.kaVoltsSecondsSquaredPerMeter
-    );
+    // m_armFeedForward = new ArmFeedforward(
+    //   ArmConstants.ksVolts, //static gain
+    //   ArmConstants.kgVolts, //gravity gain
+    //   ArmConstants.kvVoltSecondPerMeter,//velocity gain
+    //   ArmConstants.kaVoltsSecondsSquaredPerMeter//acceleration gain
+    // );
 
     m_controller.setTolerance(ArmConstants.kRotationTolerance);
     setGoal(ArmConstants.kArmOffsetRads);
@@ -79,9 +79,11 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
   @Override
   protected void useOutput(double output, State setpoint) {
     // TODO Auto-generated method stub
-    double feedforward = m_armFeedForward.calculate(setpoint.position, setpoint.velocity);
+    // double feedforward = m_armFeedForward.calculate(setpoint.position, setpoint.velocity);
     // Add the feedforward to the PID output to get the motor output
-    m_leftRotationMotor.setVoltage(output + feedforward);
+    m_leftRotationMotor.setVoltage(output
+    //  + feedforward
+    );
   }
 
   public void updateGoal(double increment){
