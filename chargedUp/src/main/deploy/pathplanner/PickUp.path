@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.8983607197983627,
-        "y": 5.0815298211793
+        "x": 14.607894856815355,
+        "y": 5.115787325591746
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.503576631084886,
-        "y": 5.070110653041819
+        "x": 12.997792149430452,
+        "y": 5.172883166279153
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -24,16 +24,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.12,
-        "y": 4.55
+        "x": 10.005970097410282,
+        "y": 4.990176476079449
       },
       "prevControl": {
-        "x": 5.514784088713478,
-        "y": 4.664191681374816
+        "x": 10.805311867033993,
+        "y": 4.990176476079449
       },
       "nextControl": {
-        "x": 5.514784088713478,
-        "y": 4.664191681374816
+        "x": 10.805311867033993,
+        "y": 4.990176476079449
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -49,12 +49,37 @@
     },
     {
       "anchorPoint": {
-        "x": 2.4,
-        "y": 4.6
+        "x": 13.146241335217715,
+        "y": 4.716116440779891
       },
       "prevControl": {
-        "x": 2.8339283892242992,
-        "y": 4.611419168137481
+        "x": 12.27205820507576,
+        "y": 5.060491613260055
+      },
+      "nextControl": {
+        "x": 13.8999064322915,
+        "y": 4.419218069205369
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 14.65357152936528,
+        "y": 4.122319697630848
+      },
+      "prevControl": {
+        "x": 14.265319812690901,
+        "y": 4.122319697630848
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -87,7 +112,7 @@
       ]
     },
     {
-      "position": 1.24,
+      "position": 0.06545454545454174,
       "names": [
         "PICKUP"
       ]

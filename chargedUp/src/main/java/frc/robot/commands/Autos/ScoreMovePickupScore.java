@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TrajectoryRunner;
+import frc.robot.commands.TeleopAutomations.PositionPickUp;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -25,25 +26,25 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreMovePickupScore extends SequentialCommandGroup {
   /** Creates a new ScoreMovePickupScore. */
-  // PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1, .8));
-  PathPlannerTrajectory kPlace = PathPlanner.loadPath("TestingRamsete", new PathConstraints(2, 4));
+  PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(3, 1.7));
   public ScoreMovePickupScore(DrivetrainSubsystem drive, ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
-    // HashMap<String, Command> eventBringArmIn = new HashMap<>();
+    HashMap<String, Command> eventBringArmIn = new HashMap<>();
     // eventBringArmIn.put("BringInArm", new BackingOutArm(arm, telescoper, NEfector));
     
+    eventBringArmIn.put("PICKUP", new GroundPickUp(telescoper, arm, NEfector));
+    
     addCommands(
-    // new ScoreCone(arm, telescoper, NEfector, drive),
-    // new FollowPathWithEvents(
-    //   new TrajectoryRunner(drive, kPickUp.relativeTo(drive.getPose()), true),
-    //   kPickUp.getMarkers(),
-    //   eventBringArmIn
-    //   ),
-    // new GroundPickUp(telescoper, arm, NEfector),
-    new TrajectoryRunner(drive, pose, ()->kPlace.relativeTo(pose.getcurrentPose()), true)
-    // new ScoreHigh(arm, telescoper, NEfector, drive)
+    new ScoreCone(arm, telescoper, NEfector, drive),
+    new FollowPathWithEvents(
+      new TrajectoryRunner(drive, pose, ()-> kPickUp.relativeTo(pose.getcurrentPose()), true),
+      kPickUp.getMarkers(),
+      eventBringArmIn
+      ),
+    new ScoreHigh(arm, telescoper, NEfector, drive)
+
     );
   }
 }
