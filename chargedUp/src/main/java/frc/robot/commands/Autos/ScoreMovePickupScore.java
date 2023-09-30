@@ -26,7 +26,7 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreMovePickupScore extends SequentialCommandGroup {
   /** Creates a new ScoreMovePickupScore. */
-  PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(3, 1.7));
+  PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1.5, 0.8));
   public ScoreMovePickupScore(DrivetrainSubsystem drive, ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -37,7 +37,7 @@ public class ScoreMovePickupScore extends SequentialCommandGroup {
     eventBringArmIn.put("PICKUP", new GroundPickUp(telescoper, arm, NEfector));
     
     addCommands(
-    new ScoreCone(arm, telescoper, NEfector, drive),
+    // new ScoreCone(arm, telescoper, NEfector, drive),
     new FollowPathWithEvents(
       new TrajectoryRunner(drive, pose, ()-> kPickUp.relativeTo(pose.getcurrentPose()), true),
       kPickUp.getMarkers(),

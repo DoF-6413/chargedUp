@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
@@ -37,7 +38,7 @@ public class GroundPickUp extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-
+        new WaitCommand(0.5),
       new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfector, 0.5, 1),
