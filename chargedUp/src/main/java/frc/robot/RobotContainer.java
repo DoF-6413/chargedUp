@@ -66,12 +66,14 @@ import frc.robot.commands.ArmControls.RotationReset;
 import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.commands.Autos.CenterLScoreOutBalance;
-import frc.robot.commands.Autos.GroundPickUp;
 import frc.robot.commands.Autos.ScoreBalance;
 import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
 import frc.robot.commands.Autos.scoreRun;
+import frc.robot.commands.MultiPieceAuto.GroundPickUp;
+import frc.robot.commands.MultiPieceAuto.OneAndAHalf;
+import frc.robot.commands.MultiPieceAuto.TwoPiece;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
 import frc.robot.commands.TeleopAutomations.CubePIckUp;
@@ -191,7 +193,9 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()->newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    
+    m_chooser.addOption("OneHalfPiece", new OneAndAHalf(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
+    m_chooser.addOption("TwoPiece", new TwoPiece(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_wristSubsystem, m_PoseEstimatorSubsystem));
+
       SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();

@@ -8,12 +8,14 @@ import edu.wpi.first.math.controller.PIDController;
 
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,17 +46,17 @@ public class TrajectoryRunner extends CommandBase {
     m_trajectory = traj.get();
     m_isFirstPath = isfirstPath;
     // m_ramseteCommand = new RamseteCommand(
-    //   m_trajectory, 
+      //   m_trajectory, 
     //   poseEstimator::getcurrentPose, 
     m_ramseteCommand =
-      new RamseteController(
-        DrivetrainConstants.kRamseteB, 
-        DrivetrainConstants.kRamseteZeta)
+    new RamseteController(
+      DrivetrainConstants.kRamseteB, 
+      DrivetrainConstants.kRamseteZeta)
         ;
         // , 
-      // new SimpleMotorFeedforward(
-      //   DrivetrainConstants.ksVolts, 
-      //   DrivetrainConstants.kvVoltSecondPerMeter,
+        // new SimpleMotorFeedforward(
+          //   DrivetrainConstants.ksVolts, 
+          //   DrivetrainConstants.kvVoltSecondPerMeter,
       //   DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
       //   DrivetrainConstants.kinematics, 
       //   m_drivetrainSubsystem::getWheelSpeeds, 
@@ -62,16 +64,15 @@ public class TrajectoryRunner extends CommandBase {
       // new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
       // m_drivetrainSubsystem::tankDrive, 
       // m_drivetrainSubsystem, poseEstimator);
-    addRequirements(drive, poseEstimator);
-
-    m_PoseEstimator = poseEstimator;
-    m_desiredX = m_trajectory.sample(m_trajectory.getTotalTimeSeconds()).poseMeters.getX();
-    m_desiredY = m_trajectory.sample(m_trajectory.getTotalTimeSeconds()).poseMeters.getY();
-    m_desiredRot = m_trajectory.sample(m_trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
-    m_currX = m_PoseEstimator.getcurrentPose().getX();
-    m_currY = m_PoseEstimator.getcurrentPose().getY();
-    m_currRot = m_PoseEstimator.getcurrentPose().getRotation().getDegrees();
-
+      addRequirements(drive, poseEstimator);
+      m_PoseEstimator = poseEstimator;
+      m_desiredX = m_trajectory.sample(m_trajectory.getTotalTimeSeconds()).poseMeters.getX();
+      m_desiredY = m_trajectory.sample(m_trajectory.getTotalTimeSeconds()).poseMeters.getY();
+      m_desiredRot = m_trajectory.sample(m_trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
+      m_currX = m_PoseEstimator.getcurrentPose().getX();
+      m_currY = m_PoseEstimator.getcurrentPose().getY();
+      m_currRot = m_PoseEstimator.getcurrentPose().getRotation().getDegrees();
+      
 
   }
   
