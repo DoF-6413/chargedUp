@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 public class RotationReset extends CommandBase {
   /** Creates a new RotationReset. */
   private static ArmPIDSubsystem m_armSubsystem;
-  private static TelescoperSubsystem m_telescoperSubsystem;
-  public RotationReset(ArmPIDSubsystem arm, TelescoperSubsystem telescoper) {
+  private static TelescoperPIDSubsystem m_telescoperSubsystem;
+  public RotationReset(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_armSubsystem = arm;
     m_telescoperSubsystem = telescoper;

@@ -5,13 +5,13 @@
 package frc.robot.commands.ArmControls;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 import frc.robot.Constants.TelescoperConstants;
 
 public class TelescoperReset extends CommandBase {
   /** Creates a new TelescoperReset. */
-  TelescoperSubsystem m_telescoperSubsystem;
-  public TelescoperReset(TelescoperSubsystem telescope) {
+  TelescoperPIDSubsystem m_telescoperSubsystem;
+  public TelescoperReset(TelescoperPIDSubsystem telescope) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_telescoperSubsystem = telescope;
     addRequirements(m_telescoperSubsystem);
