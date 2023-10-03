@@ -210,7 +210,7 @@ public final class Constants {
     public static final double kHPMP = 91;
 
     public static final double kHighScoreFinal = 93;
-    public static final double kfloorCube = 39;
+    public static final double kfloorCube = 38.0;
     
     public static final double kArmOffsetRads = Units.degreesToRadians(-90);
   }

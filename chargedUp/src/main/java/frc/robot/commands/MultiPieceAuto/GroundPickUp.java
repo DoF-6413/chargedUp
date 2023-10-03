@@ -33,7 +33,7 @@ public class GroundPickUp extends SequentialCommandGroup {
         new TelescoperReset(telscoper),
         Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube) + ArmConstants.kArmOffsetRads);
+              arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube) + ArmConstants.kArmOffsetRads); //ArmConstants.kfloorCube
               arm.enable();
               System.out.println("GroundPickUp");
             },
@@ -46,7 +46,7 @@ public class GroundPickUp extends SequentialCommandGroup {
             new TelescoperPID(telscoper, TelescoperConstants.kGroundCone)),
         Commands.runOnce(
             () -> {
-              arm.setGoal(Units.degreesToRadians(40) + ArmConstants.kArmOffsetRads);
+              arm.setGoal(Units.degreesToRadians(40) + ArmConstants.kArmOffsetRads); //40
               arm.enable();
             },
             arm),

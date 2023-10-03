@@ -47,7 +47,7 @@ public class OneAndAHalf extends SequentialCommandGroup {
 
     
     addCommands(
-        // new ScoreLeaveArm(arm, telescoper, NEfector, drive),
+        new ScoreLeaveArm(arm, telescoper, NEfector, drive),
         new FollowPathWithEvents(
             new TrajectoryRunner(drive, pose, () -> kPickUp.relativeTo(pose.getcurrentPose()), true),
             kPickUp.getMarkers(),
