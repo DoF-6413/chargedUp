@@ -40,6 +40,7 @@ public class TelescoperPIDSubsystem extends ProfiledPIDSubsystem {
             TelescoperConstants.kTelescoperPeakCurrent,
             TelescoperConstants.kTelescoperMaxTimeAtPeak);
         telescoperMotor.configStatorCurrentLimit(telescopCurrentLimitConfiguration);
+    telescoperMotor.setNeutralMode(NeutralMode.Brake);
         //position conversion factor
         telescoperMotor.configSelectedFeedbackCoefficient(TelescoperConstants.kTelescopePositionConversionFactor);
 
@@ -62,8 +63,43 @@ public class TelescoperPIDSubsystem extends ProfiledPIDSubsystem {
     }
 
     //copy over methods from telescopersubsystem
-    public void updateGoal(double increment) {
-        //do this
+    public void updateGoal(double increment) {  
+        
+    setGoal(m_controller.getGoal().position + increment);
+
     }
+
+    
+  
+  public double getTelescoperPosition(){
+    return telescoperMotor.getSelectedSensorPosition();
+  }
+
+  public void resetTelescoperPosition(){
+    telescoperMotor.setSelectedSensorPosition(0);
+  }
+
+  public void spinTelescopingMotor(double speed){
+    telescoperMotor.set(TalonFXControlMode.PercentOutput, speed);
+  }
+
+  public void stopTelescopingMotor(){
+    telescoperMotor.set(TalonFXControlMode.PercentOutput, 0);
+  }
+
+  public void telescoperCurrentLimit(double continuousCurrent, double maxCurrent){
+        StatorCurrentLimitConfiguration m_currentLimitConfig = new StatorCurrentLimitConfiguration(
+          true, //Is enabled?
+          continuousCurrent, //Continuous Current Limit
+          maxCurrent, //Peak Current Limit
+          5.0); //Time Allowed to be at Peak Current Limit
+
+          telescoperMotor.configStatorCurrentLimit(m_currentLimitConfig);
+  }
+
+  public double telecoperCurrent(){
+    return telescoperMotor.getStatorCurrent();
+    
+  }
 }
 

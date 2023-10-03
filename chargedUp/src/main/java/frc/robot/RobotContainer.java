@@ -88,9 +88,9 @@ import frc.robot.commands.TeleopAutomations.ShooterBackIn;
 import frc.robot.commands.TeleopAutomations.ThrowCubes;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.math.trajectory.*;
 import edu.wpi.first.math.util.Units;
@@ -113,7 +113,7 @@ public class RobotContainer {
   private final GyroSubsystem m_gyroSubsystem = new GyroSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(m_gyroSubsystem );
   private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
-  private final TelescoperSubsystem m_telescoperSubsystem = new TelescoperSubsystem();
+  private final TelescoperPIDSubsystem m_telescoperSubsystem = new TelescoperPIDSubsystem();
   private final EndEffectorSubsystem m_endEffectorSubsystem = new EndEffectorSubsystem();
   private final WristSubsystem m_wristSubsystem = new WristSubsystem();
   
@@ -253,11 +253,11 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
         m_auxController.rightBumper().onTrue(new InstantCommand(()-> m_wristSubsystem.spinWrist(-.50)))
         .onFalse(new InstantCommand(()-> m_wristSubsystem.stopWrist()));
         
-        m_auxController.x().onTrue(new TelescoperPID(m_telescoperSubsystem,25)).
-        onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+        m_auxController.x().onTrue(new InstantCommand(()-> m_telescoperSubsystem.setGoal(25), m_telescoperSubsystem)).//new TelescoperPID(m_telescoperSubsystem,25)).
+        onFalse(new InstantCommand(()-> m_telescoperSubsystem.setGoal(0), m_telescoperSubsystem));
 
-        m_auxController.y().onTrue(new TelescoperPID(m_telescoperSubsystem, 50)).
-        onFalse(new TelescoperPID(m_telescoperSubsystem, 0));
+        m_auxController.y().onTrue(new InstantCommand(()-> m_telescoperSubsystem.setGoal(50), m_telescoperSubsystem)).
+        onFalse(new InstantCommand(()-> m_telescoperSubsystem.setGoal(0), m_telescoperSubsystem));
 
           m_auxController.leftTrigger().onTrue(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.5)))
           .onFalse(new InstantCommand(()-> m_endEffectorSubsystem.spinEndEffector(0.0)));
