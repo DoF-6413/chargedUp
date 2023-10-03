@@ -27,7 +27,6 @@ public class GroundPickUp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TelescoperReset(telscoper),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(ArmConstants.kfloorCube)+ArmConstants.kArmOffsetRads);

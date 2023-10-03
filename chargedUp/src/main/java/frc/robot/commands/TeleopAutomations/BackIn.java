@@ -35,7 +35,15 @@ public class BackIn extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-      new TelescoperReset(telscoper),
+      
+        Commands.runOnce(
+          () -> {
+            telscoper.setGoal(0);
+            telscoper.enable();
+          },
+          telscoper),
+          new WaitUntilCommand(()-> telscoper.atGoal()),
+
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);

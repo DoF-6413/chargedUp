@@ -4,10 +4,6 @@
 
 package frc.robot.commands.Autos;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -15,10 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
-import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
-import frc.robot.commands.ArmControls.RotationReset;
-import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -34,7 +27,6 @@ public class ScoreCone extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TelescoperReset(telescoper),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreInitial )+ArmConstants.kArmOffsetRads);
@@ -60,7 +52,14 @@ public class ScoreCone extends SequentialCommandGroup {
         //make the following a follow path with events to change time
         new ParallelCommandGroup(
             new EndEffectorRunner(NEfctr, -0.8, 0.5),
-            new TelescoperReset(telescoper)
+            
+      Commands.runOnce(
+        () -> {
+          telescoper.setGoal(0);
+          telescoper.enable();
+        },
+        telescoper),
+        new WaitUntilCommand(()-> telescoper.atGoal())
             ),
           Commands.runOnce(
             () -> {

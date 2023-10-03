@@ -31,7 +31,6 @@ public class ThrowCubes extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addRequirements(arm, NEfector, telescoper, wrist);
     addCommands(
-      new TelescoperReset(telescoper),
       Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreInitial)+ArmConstants.kArmOffsetRads);

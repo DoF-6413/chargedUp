@@ -32,7 +32,6 @@ public class PositionMid extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TelescoperReset(telescoper),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(-ArmConstants.kHPMP)+ArmConstants.kArmOffsetRads);
