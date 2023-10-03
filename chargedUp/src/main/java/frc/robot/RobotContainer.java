@@ -174,14 +174,8 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
   public SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
     // Configure the trigger bindings
-    // m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, testPath.relativeTo(m_drivetrainSubsystem.getPose()), true));
     m_chooser.addOption("Score Grid1 TL Run", new scoreRun(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
-    // m_chooser.addOption("Score Grid1 TR Around CS Balance", new G1TRAroundCSBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
     m_chooser.addOption("Score Grid2 TL Over CS Balance", new CenterLScoreOutBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem, m_PoseEstimatorSubsystem));
-    // m_chooser.addOption("Score Grid2 TR Over CS Balance", new CenterRScoreOutBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    // m_chooser.addOption("Score Grid3 TL Around CS Balance", new G3TLAroundCSBalance(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_gyroSubsystem));
-    // m_chooser.addOption("Score Grid3 TR Run", new ScoreRunRight(m_ArmPIDSubsystem, m_drivetrainSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem));
-    // m_chooser.addOption("Score Grid1 TL Run Follow Path With Events", new ScoreRunFollowWithEvents(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
     m_chooser.addOption("Out of Community", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()-> runOutCommunity.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Out of Community and Balance", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> overCSBalance.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Score High", new ScoreHigh(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_drivetrainSubsystem));
@@ -263,52 +257,20 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
 
 
 
-    // m_driverController.rightTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACube()));
-    // m_driverController.leftTrigger().onTrue(new InstantCommand(()-> m_LEDSubsystem.NeedACone()));
-
-    // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
-    // .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
-
     m_driverController.rightBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, 0.45)));//.
-    // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
+    
 
     m_driverController.leftBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, -0.45)));//.
-    // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
-      
-
-    //   if the driver controller 
-    //   if(m_driverController.a().getAsBoolean() == true){
-    //     grid = 0;
-
-    //   } if (m_driverController.b().getAsBoolean() == true){
-    //     col = 0;
-    //   }
-
-
-    // m_driverController.y().whileTrue(new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_AutoNavChooser.choosenTrajectory(), false));
-
-      // m_driverController.a().onTrue( new getEstimatedPose(m_gyroSubsystem, m_drivetrainSubsystem, m_visionSubsystem, m_PoseEstimatorSubsystem));
-
-    //   m_driverController.y().whileTrue(
-    // trajGenCommand());
+ 
 
       new JoystickButton(m_buttonBoard, 1).      
       onTrue(new PickupCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
       onFalse (new ConePickUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
-        // new ConditionalCommand(
-        // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
         
       
       new JoystickButton(m_buttonBoard, 2).
       onTrue(new PickupCone(m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem)).
       onFalse (new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
-        // new ConditionalCommand(
-        // new CubePIckUp(m_wristSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem));
-        
-      
-      // new JoystickButton(m_buttonBoard, 3).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(2)));
-      
-      // new JoystickButton(m_buttonBoard, 4).onTrue(new InstantCommand(()-> m_AutoNavChooser.setCol(0)));
       
       new JoystickButton(m_buttonBoard, 5).            
       onTrue(
@@ -366,6 +328,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
    */
   public void disablePIDSubsystems() {
     m_ArmPIDSubsystem.disable();
+    m_telescoperSubsystem.disable();
   }
 
   public Command getAutonomousCommand() {
@@ -374,99 +337,6 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     return m_chooser.getSelected();
   }
 
-  // public void choosePath(){
-  //   var autoVoltageConstraint =
-  //   new DifferentialDriveVoltageConstraint(
-  //       new SimpleMotorFeedforward(
-            
-  //       DrivetrainConstants.ksVolts, 
-  //       DrivetrainConstants.kvVoltSecondPerMeter,
-  //       DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
-  //       DrivetrainConstants.kinematics, 
-  //       10);
-  //   TrajectoryConfig config =
-  //   new TrajectoryConfig(
-  //           0.4,
-  //           0.5)
-  //       // Add kinematics to ensure max speed is actually obeyed
-  //       .setKinematics(DrivetrainConstants.kinematics)
-  //       // Apply the voltage constraint
-  //       .addConstraint(autoVoltageConstraint).setReversed(true);
-  //   Trajectory exampleTrajectory =
-  //   TrajectoryGenerator.generateTrajectory(
-  //       // Start at the origin facing the +X direction
-  //       new Pose2d(new Translation2d(14.4, 4.5),Rotation2d.fromDegrees(180)),
-  //       // Pass through these two interior waypoints, making an 's' curve path
-  //       List.of(new Translation2d(14.5,4.0)),
-  //       // End 3 meters straight ahead of where we started, facing forward
-  //       new Pose2d(new Translation2d(14.6, 3.33),Rotation2d.fromDegrees(180)),
-  //       // Pass config
-  //       config);
-  //   m_chosenTraj = exampleTrajectory;
-  // }
-
-  // public Command trajGenCommand() {
-  //   // Create a voltage constraint to ensure we don't accelerate too fast
-  //   var autoVoltageConstraint =
-  //       new DifferentialDriveVoltageConstraint(
-  //           new SimpleMotorFeedforward(
-                
-  //           DrivetrainConstants.ksVolts, 
-  //           DrivetrainConstants.kvVoltSecondPerMeter,
-  //           DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
-  //           DrivetrainConstants.kinematics, 
-  //           10);
-
-  //   // Create config for trajectory
-  //   TrajectoryConfig config =
-  //       new TrajectoryConfig(
-  //               0.4,
-  //               0.5)
-  //           // Add kinematics to ensure max speed is actually obeyed
-  //           .setKinematics(DrivetrainConstants.kinematics)
-  //           // Apply the voltage constraint
-  //           .addConstraint(autoVoltageConstraint).setReversed(true);
-            
-    
-
-  //   // An example trajectory to follow.  All units in meters.
-   
-  //    Trajectory  leftgridleft = 
-  //     TrajectoryGenerator.generateTrajectory(
-  //       new Pose2d(new Translation2d(13.04,0.63),Rotation2d.fromDegrees(180)),
-  //       //go to next to the wood that is on the ground on the left side of the left side of the fild
-  //        List.of(),
-  //        //dont go to any place 
-  //        new Pose2d(new Translation2d(14.66,0.45),Rotation2d.fromDegrees(180)),
-  //        //go to the first grid of the left side in the left side of the fild
-  //         config);
-  //         //  RamseteCommand ramseteCommand = new RamseteCommand(
-  //         //       exampleTrajectory, 
-  //         //       m_PoseEstimatorSubsystem::getcurrentPose, 
-  //         //     // m_ramseteCommand =
-  //         //       new RamseteController(
-  //         //         DrivetrainConstants.kRamseteB, 
-  //         //         DrivetrainConstants.kRamseteZeta)
-  //         //         // ;
-  //         //         , 
-  //         //       new SimpleMotorFeedforward(
-  //         //         DrivetrainConstants.ksVolts, 
-  //         //         DrivetrainConstants.kvVoltSecondPerMeter,
-  //         //         DrivetrainConstants.kaVoltsSecondsSquaredPerMeter), 
-  //         //         DrivetrainConstants.kinematics, 
-  //         //         m_drivetrainSubsystem::getWheelSpeeds, 
-  //         //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
-  //         //       new PIDController(DrivetrainConstants.kMoveP, DrivetrainConstants.kMoveI, DrivetrainConstants.kMoveD), 
-  //         //       m_drivetrainSubsystem::tankDrive, 
-  //         //       m_drivetrainSubsystem, m_PoseEstimatorSubsystem);
-
-  //   // // Reset odometry to the starting pose of the trajectory.
-  //   // m_drivetrainSubsystem.resetOdometry(exampleTrajectory.getInitialPose());
-  
-  //   // Run path following command, then stop at the end.
-  //   return new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, m_chosenTraj, false);
-  
-//  }
 }
 
 
