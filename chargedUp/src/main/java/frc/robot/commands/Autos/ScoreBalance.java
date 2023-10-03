@@ -23,7 +23,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.PoseEstimator;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 import java.util.HashMap;
 
@@ -42,7 +42,7 @@ public class ScoreBalance extends SequentialCommandGroup {
   
   
   /** Creates a new CenterLScoreOutBalance. */
-  public ScoreBalance(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
+  public ScoreBalance(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem endEffector, GyroSubsystem gyro, PoseEstimator pose) {
     
     HashMap<String, Command> eventCenterLScoreOutBalanceMap = new HashMap<>();
     eventCenterLScoreOutBalanceMap.put("BackOutArm", new BackingOutArm(arm, telescoper, endEffector));

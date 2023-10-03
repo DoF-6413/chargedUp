@@ -18,19 +18,19 @@ import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.RotationReset;
-import frc.robot.commands.ArmControls.TelescoperPID;
+// import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreCube extends SequentialCommandGroup {
   /** Creates a new ScoreCone. */
-  public ScoreCube(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
+  public ScoreCube(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
     // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -49,7 +49,13 @@ public class ScoreCube extends SequentialCommandGroup {
         //make the following a follow path with events to change time
         new ParallelCommandGroup(
             new EndEffectorRunner(NEfctr, -0.8, 0.2),
-            new TelescoperPID(telescoper, 1)
+            Commands.runOnce(
+          () -> {
+            telescoper.setGoal(1);
+            telescoper.enable();
+          },
+          telescoper),
+          new WaitUntilCommand(()-> telescoper.atGoal())
             ),
           Commands.runOnce(
             () -> {

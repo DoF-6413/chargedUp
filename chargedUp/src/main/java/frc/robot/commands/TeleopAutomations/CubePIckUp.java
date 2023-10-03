@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.commands.ArmControls.TelescoperPID;
+// import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.WristPID;
 import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,13 +21,20 @@ import frc.robot.subsystems.WristSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CubePIckUp extends SequentialCommandGroup {
   /** Creates a new CubePIckUp. */
-  public CubePIckUp(WristSubsystem wrist, TelescoperSubsystem telescoper, ArmPIDSubsystem arm ) {
+  public CubePIckUp(WristSubsystem wrist, TelescoperPIDSubsystem telescoper, ArmPIDSubsystem arm ) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
         new WristPID(wrist, -90 ),
-        new TelescoperPID(telescoper, 0)
+        
+        Commands.runOnce(
+          () -> {
+            telescoper.setGoal(0);
+            telescoper.enable();
+          },
+          telescoper),
+          new WaitUntilCommand(()-> telescoper.atGoal())
         ),
         Commands.runOnce(
           () -> {

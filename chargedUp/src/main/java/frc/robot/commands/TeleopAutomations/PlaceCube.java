@@ -12,14 +12,14 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PlaceCube extends SequentialCommandGroup {
   /** Creates a new PlaceHighCube. */
-  public PlaceCube(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector) {
+  public PlaceCube(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem NEfector) {
     addCommands(
       Commands.runOnce(
             () -> {

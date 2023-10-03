@@ -14,7 +14,7 @@ import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PoseEstimator;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,7 +24,7 @@ public class ScoreRunRight extends SequentialCommandGroup {
 PathPlannerTrajectory kOutCommunityRight = PathPlanner.loadPath("OutCommunityRight", new PathConstraints(.8, .5));
 
   /** Creates a new ScoreRunRight. */
-  public ScoreRunRight(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperSubsystem telescoper, EndEffectorSubsystem endEffector ,PoseEstimator pose) {
+  public ScoreRunRight(ArmPIDSubsystem arm, DrivetrainSubsystem drive, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem endEffector ,PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

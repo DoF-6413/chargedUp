@@ -16,11 +16,11 @@ import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.TelescoperConstants;
 
 import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.commands.ArmControls.TelescoperWrapper;
+// import frc.robot.commands.ArmControls.TelescoperWrapper;
 import frc.robot.commands.ArmControls.WristPID;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -28,7 +28,7 @@ import frc.robot.subsystems.WristSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PositionMid extends SequentialCommandGroup {
   /** Creates a new PositionMid. */
-  public PositionMid(TelescoperSubsystem telescoper, ArmPIDSubsystem arm, EndEffectorSubsystem NEfector, WristSubsystem wrist) {
+  public PositionMid(TelescoperPIDSubsystem telescoper, ArmPIDSubsystem arm, EndEffectorSubsystem NEfector, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -40,7 +40,14 @@ public class PositionMid extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-          new TelescoperWrapper(telescoper, arm, NEfector, 25)
+        
+        Commands.runOnce(
+          () -> {
+            telescoper.setGoal(25);
+            telescoper.enable();
+          },
+          telescoper),
+          new WaitUntilCommand(()-> telescoper.atGoal())
     );
   }
 }

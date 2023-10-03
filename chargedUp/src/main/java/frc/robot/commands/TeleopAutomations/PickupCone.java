@@ -11,18 +11,18 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 
-import frc.robot.commands.ArmControls.TelescoperPID;
+// import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PickupCone extends SequentialCommandGroup {
   /** Creates a new PickupCone. */
-  public PickupCone(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEffector) {
+  public PickupCone(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem NEffector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

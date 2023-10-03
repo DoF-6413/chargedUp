@@ -12,20 +12,18 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
-
-import frc.robot.commands.ArmControls.TelescoperPID;
+// import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class GroundPickUp extends SequentialCommandGroup {
   /** Creates a new GroundPickUp. */
-  public GroundPickUp(TelescoperSubsystem telscoper, ArmPIDSubsystem arm, EndEffectorSubsystem NEfector) {
+  public GroundPickUp(TelescoperPIDSubsystem telscoper, ArmPIDSubsystem arm, EndEffectorSubsystem NEfector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -37,11 +35,22 @@ public class GroundPickUp extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-
-      new TelescoperPID(telscoper, TelescoperConstants.kMCGB),
+        Commands.runOnce(
+          () -> {
+            telscoper.setGoal(TelescoperConstants.kMCGB);
+            telscoper.enable();
+          },
+          telscoper),
+          new WaitUntilCommand(()-> telscoper.atGoal()),
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfector, 0.5, 1),
-        new TelescoperPID(telscoper, TelescoperConstants.kGroundCone)),
+        Commands.runOnce(
+          () -> {
+            telscoper.setGoal(TelescoperConstants.kMCGB);
+            telscoper.enable();
+          },
+          telscoper),
+          new WaitUntilCommand(()-> telscoper.atGoal())),
         Commands.runOnce(
           () -> {
             arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
@@ -49,7 +58,13 @@ public class GroundPickUp extends SequentialCommandGroup {
           },
           arm),
           new WaitUntilCommand(()-> arm.atGoal()),
-      new TelescoperPID(telscoper, 0),
+          Commands.runOnce(
+            () -> {
+              telscoper.setGoal(0);
+              telscoper.enable();
+            },
+            telscoper),
+            new WaitUntilCommand(()-> telscoper.atGoal()),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);

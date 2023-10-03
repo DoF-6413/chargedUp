@@ -12,18 +12,18 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.ArmControls.TelescoperReset;
-import frc.robot.commands.ArmControls.TelescoperWrapper;
+// import frc.robot.commands.ArmControls.TelescoperWrapper;
 import frc.robot.commands.ArmControls.WristPID;
 import frc.robot.commands.Autos.BackingOutArm;
 import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PositionLow extends SequentialCommandGroup {
   /** Creates a new PositionLow. */
-  public PositionLow(ArmPIDSubsystem arm, TelescoperSubsystem telescoper) {
+  public PositionLow(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

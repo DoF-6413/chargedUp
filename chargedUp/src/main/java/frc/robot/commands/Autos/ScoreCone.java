@@ -18,19 +18,18 @@ import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.TrajectoryRunner;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.RotationReset;
-import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreCone extends SequentialCommandGroup {
   /** Creates a new ScoreCone. */
-  public ScoreCone(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
+  public ScoreCone(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem NEfctr, DrivetrainSubsystem drive) {
     // PathPlannerTrajectory m_backUpRed = PathPlanner.loadPath("BackUpRed", new PathConstraints(2, 0.45));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -43,7 +42,13 @@ public class ScoreCone extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-      new TelescoperPID(telescoper, TelescoperConstants.kMaxExtention),
+        Commands.runOnce(
+          () -> {
+            telescoper.setGoal(TelescoperConstants.kMaxExtention);
+            telescoper.enable();
+          },
+          telescoper),
+          new WaitUntilCommand(()-> telescoper.atGoal()),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(-ArmConstants.kHighScoreFinal)+ArmConstants.kArmOffsetRads);

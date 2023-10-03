@@ -18,7 +18,7 @@ import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.PoseEstimator;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -27,7 +27,7 @@ public class ScoreMovePickupScore extends SequentialCommandGroup {
   /** Creates a new ScoreMovePickupScore. */
   // PathPlannerTrajectory kPickUp = PathPlanner.loadPath("PickUp", new PathConstraints(1, .8));
   PathPlannerTrajectory kPlace = PathPlanner.loadPath("TestingRamsete", new PathConstraints(2, 4));
-  public ScoreMovePickupScore(DrivetrainSubsystem drive, ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector, PoseEstimator pose) {
+  public ScoreMovePickupScore(DrivetrainSubsystem drive, ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem NEfector, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     

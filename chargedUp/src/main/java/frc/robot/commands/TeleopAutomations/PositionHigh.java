@@ -15,13 +15,14 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.TelescoperConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
 
-import frc.robot.commands.ArmControls.TelescoperPID;
+// import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.commands.ArmControls.TelescoperWrapper;
+// import frc.robot.commands.ArmControls.TelescoperWrapper;
 import frc.robot.commands.ArmControls.WristPID;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -29,7 +30,7 @@ import frc.robot.subsystems.WristSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PositionHigh extends SequentialCommandGroup {
   /** Creates a new PositionHigh. */
-  public PositionHigh(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfector, WristSubsystem wrist) {
+  public PositionHigh(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem NEfector, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -43,9 +44,10 @@ public class PositionHigh extends SequentialCommandGroup {
 
             new WaitUntilCommand(()-> arm.atGoal()),
             new ConditionalCommand(
-        new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention),
+              
+        new TelescoperWrapper(telescoper, TelescoperConstants.kMaxExtention),
        
-        new ParallelCommandGroup(new WristPID(wrist, 0), new TelescoperWrapper(telescoper, arm, NEfector, TelescoperConstants.kMaxExtention)),
+        new ParallelCommandGroup(new WristPID(wrist, 0), new TelescoperWrapper(telescoper, TelescoperConstants.kMaxExtention)),
         ()-> (wrist.getPosition() > -30 && wrist.getPosition() < 30) || (wrist.getPosition() > -210 && wrist.getPosition() < -160)
       )
     );

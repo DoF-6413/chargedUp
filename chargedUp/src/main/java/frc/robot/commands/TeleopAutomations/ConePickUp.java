@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.commands.ArmControls.TelescoperPID;
+// import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.WristPID;
 import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -22,7 +22,7 @@ import frc.robot.subsystems.WristSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ConePickUp extends SequentialCommandGroup {
   /** Creates a new ConePickUp. */
-  public ConePickUp(WristSubsystem wrist, TelescoperSubsystem telerescoper ,ArmPIDSubsystem arm) {
+  public ConePickUp(WristSubsystem wrist, TelescoperPIDSubsystem telerescoper ,ArmPIDSubsystem arm) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -32,7 +32,13 @@ public class ConePickUp extends SequentialCommandGroup {
           new WristPID(wrist, 0), 
           () -> (wrist.getPosition() > -30 && wrist.getPosition() < 30)),
        
-        new TelescoperPID(telerescoper, 0)
+          Commands.runOnce(
+            () -> {
+              telerescoper.setGoal(0);
+              telerescoper.enable();
+            },
+            telerescoper),
+            new WaitUntilCommand(()-> telerescoper.atGoal())
       ),
       Commands.runOnce(
         () -> {

@@ -70,6 +70,9 @@ public class TelescoperPIDSubsystem extends ProfiledPIDSubsystem {
     }
 
     
+  public boolean atGoal(){
+    return m_controller.atGoal();
+  }
   
   public double getTelescoperPosition(){
     return telescoperMotor.getSelectedSensorPosition();

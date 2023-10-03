@@ -5,16 +5,17 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ArmControls.EndEffectorRunner;
-import frc.robot.commands.ArmControls.TelescoperPID;
+// import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.TelescoperSubsystem;
+import frc.robot.subsystems.TelescoperPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -22,14 +23,20 @@ import frc.robot.subsystems.TelescoperSubsystem;
 public class BackingOutArm extends SequentialCommandGroup {
   /** Creates a new BackingOutArm. */
   public 
-  BackingOutArm(ArmPIDSubsystem arm, TelescoperSubsystem telescoper, EndEffectorSubsystem NEfctr) {
+  BackingOutArm(ArmPIDSubsystem arm, TelescoperPIDSubsystem telescoper, EndEffectorSubsystem NEfctr) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
         new EndEffectorRunner(NEfctr, -0.3, 0.25),
-        new TelescoperPID(telescoper, 1)
+        Commands.runOnce(
+          ()-> {
+            telescoper.setGoal(1);
+            telescoper.enable();
+          },
+        telescoper)
       ),
+      new WaitUntilCommand(()-> telescoper.atGoal()),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);
