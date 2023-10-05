@@ -45,17 +45,6 @@ public class VisionSubsystem extends SubsystemBase {
 
     PortForwarder.add(5800, "photonvision.local", 5800);
 
-    int aprilTag1 = 1;
-    int aprilTag2 = 2;
-    int aprilTag3 = 3;
-    int aprilTag4 = 4;
-    int aprilTag5 = 5;
-    int aprilTag6 = 6;
-    int aprilTag7 = 7;
-    int aprilTag8 = 8;
-
-;
-
   }
 
   public static PhotonPipelineResult photonResult(){

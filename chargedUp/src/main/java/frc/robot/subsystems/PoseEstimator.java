@@ -8,7 +8,6 @@ import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kBlueAll
 import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -31,7 +30,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-import org.photonvision.*;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -104,7 +102,7 @@ public class PoseEstimator extends SubsystemBase {
         break;
       default:
         // No valid alliance data. Nothing we can do about it sawTag
-        if (allianceChanged && m_visionSubsystem.seeTarget()) {
+        if (allianceChanged && m_visionSubsystem.seeTarget() && VisionConstants.useAprilTag) {
 
           // The alliance changed, which changes the coordinate system.
           // Since a tag was seen, and the tags are all relative to the coordinate system,
@@ -115,6 +113,7 @@ public class PoseEstimator extends SubsystemBase {
               m_drivetrainSubsystem.getPositionRightLead(), newPose);
 
             }
+            //Code is dead bc useAprilTag is set to false
           }
   }
 
@@ -139,8 +138,10 @@ SmartDashboard.putNumber("photonTime", PhotonPipelineResult.getTimestampSeconds(
 SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
     if (resultsTimestamp != previousPipelineTimestamp && PhotonPipelineResult.hasTargets()) {
       previousPipelineTimestamp = resultsTimestamp;
-      var target = PhotonPipelineResult.getBestTarget();
+      var target = PhotonPipelineResult.getBestTarget(); 
+      if (VisionConstants.useAprilTag = true){
       var fiducialid = target.getFiducialId();
+      
       if (target.getPoseAmbiguity() <= 0.2 && fiducialid >= 0 && fiducialid < 9) {
 
         AprilTagFieldLayout atfl;
@@ -155,13 +156,14 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
           SmartDashboard.putNumber("timestamp", resultsTimestamp);
           PoseEstimator.poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), Timer.getFPGATimestamp(),
               visionMeasurementStdDevs);
+        
         } catch (IOException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
 
-        }
+        }}
       }
-      getposegg();
+      
     }
 
     
@@ -195,13 +197,4 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
       DrivetrainSubsystem.m_field2d.setRobotPose(pose);
     }
   }
-  public void getposegg(){
-  double[] esternocleidomastoideo = {PoseEstimator.poseEstimator.getEstimatedPosition().getX(),
-    PoseEstimator.poseEstimator.getEstimatedPosition().getY(),
-    PoseEstimator.poseEstimator.getEstimatedPosition().getRotation().getDegrees()};
-      SmartDashboard.putNumberArray("akehdkadkhakdhakhdk", esternocleidomastoideo);
-  }
-
-
-
 }
