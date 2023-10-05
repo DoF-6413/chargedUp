@@ -39,19 +39,18 @@ public class OneAndAHalf extends SequentialCommandGroup {
     PathPlannerTrajectory kPickUp = PathPlanner.loadPath("OneAndAHalf", new PathConstraints(2, 0.7));
     HashMap<String, Command> eventBringArmIn = new HashMap<>();
     eventBringArmIn.put("BringInArm", new ReturnArm(arm, telescoper, NEfector, drive));
-    eventBringArmIn.put("PickUp", new GroundPickUp(telescoper, arm, NEfector));
+    eventBringArmIn.put("PickUp", new PositionPickUp(telescoper, arm, NEfector));
 
       PathPlannerTrajectory.transformTrajectoryForAlliance(kPickUp, DriverStation.getAlliance());
       System.out.println(DriverStation.getAlliance());
   
-
-    
     addCommands(
         new ScoreLeaveArm(arm, telescoper, NEfector, drive),
         new FollowPathWithEvents(
             new TrajectoryRunner(drive, pose, () -> kPickUp.relativeTo(pose.getcurrentPose()), true),
             kPickUp.getMarkers(),
-            eventBringArmIn)
+            eventBringArmIn),
+        new BackIn(telescoper, arm)
     );
   }
 }

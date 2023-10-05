@@ -24,12 +24,12 @@
     },
     {
       "anchorPoint": {
-        "x": 6.74008801009055,
-        "y": 5.378428192753822
+        "x": 6.854279691465366,
+        "y": 5.481200705991156
       },
       "prevControl": {
-        "x": 5.70372459791856,
-        "y": 5.378428192753822
+        "x": 5.817916279293376,
+        "y": 5.481200705991156
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -50,21 +50,16 @@
   "isReversed": false,
   "markers": [
     {
-      "position": 0.9381818181818327,
-      "names": [
-        "PickUp"
-      ]
-    },
-    {
-      "position": 0.0,
-      "names": [
-        "event"
-      ]
-    },
-    {
       "position": 0.0727272727272811,
       "names": [
-        "BringInArm"
+        "BringInArm",
+        "pick up"
+      ]
+    },
+    {
+      "position": 0.45090909090909603,
+      "names": [
+        "PickUp"
       ]
     }
   ]
