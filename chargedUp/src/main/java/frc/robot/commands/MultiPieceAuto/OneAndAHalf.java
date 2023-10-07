@@ -36,7 +36,7 @@ public class OneAndAHalf extends SequentialCommandGroup {
       EndEffectorSubsystem NEfector, PoseEstimator pose) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    PathPlannerTrajectory kPickUp = PathPlanner.loadPath("OneAndAHalf", new PathConstraints(2, 0.7));
+    PathPlannerTrajectory kPickUp = PathPlanner.loadPath("OneAndAHalf", new PathConstraints(1, 0.6));
     HashMap<String, Command> eventBringArmIn = new HashMap<>();
     eventBringArmIn.put("BringInArm", new ReturnArm(arm, telescoper, NEfector, drive));
     eventBringArmIn.put("PickUp", new PositionPickUp(telescoper, arm, NEfector));

@@ -38,7 +38,7 @@ public class PositionPickUp extends SequentialCommandGroup {
         },
         arm),
         new WaitUntilCommand(()-> arm.atGoal()),
-        new TelescoperPID(telscoper, 28),
+        new TelescoperPID(telscoper, 26),
       // new ParallelCommandGroup(
         new EndEffectorRunner(NEfector, 0.5, 20)
         // new TelescoperWrapper(telscoper, arm, NEfector, TelescoperConstants.kGroundCone))
