@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.commands.ArmControls.TelescoperPID;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -25,7 +26,7 @@ public class ReturnArm extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new TelescoperReset(telescoper),
+        new TelescoperPID(telescoper, 1),
         Commands.runOnce(
             () -> {
               arm.setGoal(Units.degreesToRadians(0) + ArmConstants.kArmOffsetRads);
