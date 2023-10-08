@@ -57,7 +57,7 @@ public class PoseEstimator extends SubsystemBase {
 
   private double previousPipelineTimestamp = 0;
   
-  VisionSubsystem m_visionSubsystem;
+  static VisionSubsystem m_visionSubsystem;
   private static DifferentialDrivePoseEstimator poseEstimator;
   static GyroSubsystem m_gyroSubsystem;
   static DrivetrainSubsystem m_drivetrainSubsystem;
@@ -136,6 +136,11 @@ public class PoseEstimator extends SubsystemBase {
     resultsTimestamp = PhotonPipelineResult.getTimestampSeconds();
 SmartDashboard.putNumber("photonTime", PhotonPipelineResult.getTimestampSeconds());
 SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
+SmartDashboard.putString("getcornerstarget", m_visionSubsystem.getCorner());
+SmartDashboard.putBoolean("hastarget", VisionSubsystem.seeTarget());
+SmartDashboard.putBoolean("results", VisionSubsystem.photonResult().hasTargets());
+SmartDashboard.putNumber("getXvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
+SmartDashboard.putNumber("getYvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
     if (resultsTimestamp != previousPipelineTimestamp && PhotonPipelineResult.hasTargets()) {
       previousPipelineTimestamp = resultsTimestamp;
       var target = PhotonPipelineResult.getBestTarget(); 
@@ -170,6 +175,7 @@ SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
     
     SmartDashboard.putString("final Pose",
     PoseEstimator.poseEstimator.getEstimatedPosition().toString());
+    
   }
 
   public Pose2d getcurrentPose() {
