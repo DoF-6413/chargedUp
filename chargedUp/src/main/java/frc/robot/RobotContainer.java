@@ -86,6 +86,7 @@ import frc.robot.commands.TeleopAutomations.PositionMid;
 import frc.robot.commands.TeleopAutomations.PositionPickUp;
 import frc.robot.commands.TeleopAutomations.ShooterBackIn;
 import frc.robot.commands.TeleopAutomations.ThrowCubes;
+import frc.robot.commands.DriveToCone;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
@@ -191,7 +192,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     m_chooser.addOption("Score Pickup Score Optimized", new ScoreGetScore(m_drivetrainSubsystem, m_ArmPIDSubsystem, m_telescoperSubsystem, m_endEffectorSubsystem, m_PoseEstimatorSubsystem));
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()->newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
-    
+    m_chooser.addOption("DriveToCone", new DriveToCone(m_drivetrainSubsystem, m_visionSubsystem));
       SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();
@@ -270,10 +271,10 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // m_driverController.leftBumper().onTrue(new PositionPickUp(m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem))
     // .onFalse(new BackIn(m_telescoperSubsystem, m_ArmPIDSubsystem));
 
-    m_driverController.rightBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, 0.3)));//.
+    m_driverController.rightBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, 0.45)));//.
     // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
 
-    m_driverController.leftBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, -0.3)));//.
+    m_driverController.leftBumper().whileTrue(new RunCommand(()-> m_drivetrainSubsystem.setRaw(0, -0.45)));//.
     // onFalse(new InstantCommand(()-> m_drivetrainSubsystem.setRaw(0, 0)));
       
 
@@ -373,6 +374,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     // An example command will be run in autonomous
     
     return m_chooser.getSelected();
+    // return new RunCommand(DriveToCone, m_drivetrainSubsystem, m_visionSubsystem);
   }
 
   // public void choosePath(){

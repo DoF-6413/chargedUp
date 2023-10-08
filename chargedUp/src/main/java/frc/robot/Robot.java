@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -55,8 +56,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Potentiometer", m_robotContainer.m_ArmPIDSubsystem.getPotentiometer());
     SmartDashboard.putNumber("Left Motor", m_robotContainer.m_ArmPIDSubsystem.leftCurrent());
     SmartDashboard.putNumber("Right Motor", m_robotContainer.m_ArmPIDSubsystem.rightCurrent());
-  
-    
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

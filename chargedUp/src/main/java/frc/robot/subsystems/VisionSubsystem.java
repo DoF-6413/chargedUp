@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import java.io.IOException;
-
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.photonvision.*;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
+import org.photonvision.targeting.TargetCorner;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -32,12 +34,12 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;;
 public class VisionSubsystem extends SubsystemBase {
 
    static DifferentialDrive poseEstimatorDifferentialDrive;
-   static PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
+   static PhotonCamera camera = new PhotonCamera("NexiGo_N930_FHD_Webcam");
   private static PhotonPipelineResult results = new PhotonPipelineResult();
-  public PhotonTrackedTarget target = results.hasTargets() ? results.getBestTarget() : null;
-  public Double yaw;
-  public Double pitch;
-  public Transform3d camToTarget;
+  public static PhotonTrackedTarget target = results.hasTargets() ? results.getBestTarget() : null;
+  public static Double yaw;
+  public static Double pitch;
+  public static Transform3d camToTarget;
   public static PoseEstimator photonrobotPoseEstimator;
   
   /** Creates a new VisionSubsystem. */
@@ -45,23 +47,21 @@ public class VisionSubsystem extends SubsystemBase {
 
     PortForwarder.add(5800, "photonvision.local", 5800);
 
-    int aprilTag1 = 1;
-    int aprilTag2 = 2;
-    int aprilTag3 = 3;
-    int aprilTag4 = 4;
-    int aprilTag5 = 5;
-    int aprilTag6 = 6;
-    int aprilTag7 = 7;
-    int aprilTag8 = 8;
-
-;
-
   }
 
   public static PhotonPipelineResult photonResult(){
     return camera.getLatestResult();
   }
   
+public String getCorner(){
+  if (results.hasTargets() == true) {
+
+  return  results.getBestTarget().getDetectedCorners().get(0).toString();  
+  }
+   else {
+    return "has no target";
+  }
+}
 
   // todo: provide portforwaring to connect without radio
   @Override
@@ -79,7 +79,7 @@ public class VisionSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("distance Z", distanceFinder().getZ());
   }
 
-  public boolean seeTarget() {
+  public static boolean seeTarget() {
     if (results.hasTargets() == true) {
       target = results.getBestTarget();
       yaw = target.getYaw();
