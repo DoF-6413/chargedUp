@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;;
 public class VisionSubsystem extends SubsystemBase {
 
    static DifferentialDrive poseEstimatorDifferentialDrive;
-   static PhotonCamera camera = new PhotonCamera("NexiGo_N930_FHD_Webcam");
+   static PhotonCamera camera = new PhotonCamera("FrontCamera");
   private static PhotonPipelineResult results = new PhotonPipelineResult();
   public static PhotonTrackedTarget target = results.hasTargets() ? results.getBestTarget() : null;
   public static Double yaw;
@@ -56,7 +56,7 @@ public class VisionSubsystem extends SubsystemBase {
 public String getCorner(){
   if (results.hasTargets() == true) {
 
-  return  results.getBestTarget().getDetectedCorners().get(0).toString();  
+  return results.getBestTarget().getDetectedCorners().get(0).toString();  
   }
    else {
     return "has no target";
@@ -67,8 +67,9 @@ public String getCorner(){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // results = camera.getLatestResult();
+    results = camera.getLatestResult();
     // updateSmartDashboard();
+    seeTarget();
   }
 
   public void updateSmartDashboard() {
@@ -86,6 +87,7 @@ public String getCorner(){
       pitch = target.getPitch();
       camToTarget = target.getBestCameraToTarget();
     }
+    SmartDashboard.putBoolean("See Target", results.hasTargets());
     return results.hasTargets();
   }
 

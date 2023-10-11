@@ -132,15 +132,17 @@ public class PoseEstimator extends SubsystemBase {
         m_gyroSubsystem.getRotation2d(), m_drivetrainSubsystem.getPositionLeftLead(),
         m_drivetrainSubsystem.getPositionRightLead());
 
-    PhotonPipelineResult = VisionSubsystem.camera.getLatestResult();
-    resultsTimestamp = PhotonPipelineResult.getTimestampSeconds();
-SmartDashboard.putNumber("photonTime", PhotonPipelineResult.getTimestampSeconds());
-SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
-SmartDashboard.putString("getcornerstarget", m_visionSubsystem.getCorner());
-SmartDashboard.putBoolean("hastarget", VisionSubsystem.seeTarget());
-SmartDashboard.putBoolean("results", VisionSubsystem.photonResult().hasTargets());
-SmartDashboard.putNumber("getXvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
-SmartDashboard.putNumber("getYvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
+        if(VisionSubsystem.seeTarget()){
+          PhotonPipelineResult = VisionSubsystem.camera.getLatestResult();
+          resultsTimestamp = PhotonPipelineResult.getTimestampSeconds();
+          SmartDashboard.putNumber("getXvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
+          SmartDashboard.putNumber("getYvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
+          SmartDashboard.putNumber("photonTime", PhotonPipelineResult.getTimestampSeconds());
+        }
+        SmartDashboard.putNumber("FPGA TIme", Timer.getFPGATimestamp());
+        SmartDashboard.putString("getcornerstarget", m_visionSubsystem.getCorner());
+        SmartDashboard.putBoolean("hastarget", VisionSubsystem.seeTarget());
+        SmartDashboard.putBoolean("results", VisionSubsystem.photonResult().hasTargets());
     if (resultsTimestamp != previousPipelineTimestamp && PhotonPipelineResult.hasTargets()) {
       previousPipelineTimestamp = resultsTimestamp;
       var target = PhotonPipelineResult.getBestTarget(); 

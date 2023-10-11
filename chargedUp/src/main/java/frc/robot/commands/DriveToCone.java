@@ -3,21 +3,25 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-import frc.robot.subsystems.VisionSubsystem; 
+
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveToCone extends CommandBase {
   /** Creates a new locateCube. */
-private final DrivetrainSubsystem m_DrivetrainSubsystem;
-private final VisionSubsystem m_VisionSubsystem;
-private static double coneX;
-private static double coneY;
-private static double turnVar;
+  private final DrivetrainSubsystem m_DrivetrainSubsystem;
+  private final VisionSubsystem m_VisionSubsystem;
+  private static double coneX;
+  private static double coneY;
+  private static double turnVar;
 
   public DriveToCone(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
-    /* This is a work in progress that can be used for future actions. Requires further development. */
+    /*
+     * This is a work in progress that can be used for future actions. Requires
+     * further development.
+     */
     // Use addRequirements() here to declare subsystem dependencies.
     m_VisionSubsystem = visionSubsystem;
     m_DrivetrainSubsystem = drivetrainSubsystem;
@@ -27,34 +31,39 @@ private static double turnVar;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  
-  public void execute(){
-    // if cone
-    coneX = m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x;
-    coneY = m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y;
-    if(coneX < 140.0){
-      System.out.println("Going Left");
-      turnVar = -0.45;
-    } else if(coneX > 160){
-      turnVar = 0.45;
-      System.out.println("Going Right");
-    }else{
-      turnVar = 0.0;
-      System.out.println("Going Straight");
-   }
-   
-   m_DrivetrainSubsystem.setRaw(0.2, turnVar);
+
+  public void execute() {
+    System.out.println("Running");
+    if (VisionSubsystem.seeTarget() == true) {
+      coneX = VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x;
+      coneY = VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y;
+      
+      SmartDashboard.putNumber("getXvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
+      SmartDashboard.putNumber("getYvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
+      if (coneX < 140.0) {
+        System.out.println("Going Left");
+        turnVar = -0.45;
+      } else if (coneX > 160) {
+        turnVar = 0.45;
+        System.out.println("Going Right");
+      } else {
+        turnVar = 0.0;
+        System.out.println("Going Straight");
+      }
+
+    }
+    m_DrivetrainSubsystem.setRaw(0.2, turnVar);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  m_DrivetrainSubsystem.setRaw(0.0,0.0);
+    m_DrivetrainSubsystem.setRaw(0.0, 0.0);
   }
 
   // Returns true when the command should end.
