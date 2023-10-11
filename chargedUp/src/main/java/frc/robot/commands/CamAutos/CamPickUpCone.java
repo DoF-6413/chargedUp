@@ -4,6 +4,10 @@
 
 package frc.robot.commands.CamAutos;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveToCone;
 import frc.robot.subsystems.ArmPIDSubsystem;
@@ -21,8 +25,15 @@ public class CamPickUpCone extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new ScoreLeaveArm(m_ArmPIDSubsystem, m_TelescoperSubsystem, m_EffectorSubsystem, m_DrivetrainSubsystem),
+      new ParallelCommandGroup(
       new DriveToCone(m_DrivetrainSubsystem, m_VisionSubsystem),
-      new FullGroundPickUp(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_EffectorSubsystem)
+      new ReturnArm(m_ArmPIDSubsystem, m_TelescoperSubsystem, m_EffectorSubsystem, m_DrivetrainSubsystem)),
+      new ParallelDeadlineGroup(
+        new FullGroundPickUp(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_EffectorSubsystem),
+        new RunCommand(()-> m_DrivetrainSubsystem.setRaw(0.4, 0))),
+        new InstantCommand(()-> m_DrivetrainSubsystem.setRaw(0.4, 0))
+      
     );
   }
 }

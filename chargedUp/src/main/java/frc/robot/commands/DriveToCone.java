@@ -73,6 +73,9 @@ public class DriveToCone extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return coneY >= 110 ? true : false;
+    if(coneY >= 112 || m_DrivetrainSubsystem.getPosition() >= 4.7){
+      return true;
+    }
+    return false;
   }
 }
