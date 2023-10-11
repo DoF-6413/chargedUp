@@ -46,6 +46,7 @@ public class DriveToCone extends CommandBase {
       
       SmartDashboard.putNumber("getXvalue", m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
       SmartDashboard.putNumber("getYvalue", m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
+  
       if (coneX < 30.0) {
         SmartDashboard.putString("Which Direction?", "Left");
         m_DrivetrainSubsystem.setRaw(0.65, 0.3);
@@ -72,6 +73,6 @@ public class DriveToCone extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return coneY >= 110 ? true : false;
   }
 }

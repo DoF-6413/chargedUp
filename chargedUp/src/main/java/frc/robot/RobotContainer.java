@@ -72,6 +72,7 @@ import frc.robot.commands.Autos.ScoreGetScore;
 import frc.robot.commands.Autos.ScoreHigh;
 import frc.robot.commands.Autos.ScoreMovePickupScore;
 import frc.robot.commands.Autos.scoreRun;
+import frc.robot.commands.CamAutos.CamPickUpCone;
 import frc.robot.commands.TeleopAutomations.BackIn;
 import frc.robot.commands.TeleopAutomations.ConePickUp;
 import frc.robot.commands.TeleopAutomations.CubePIckUp;
@@ -193,6 +194,7 @@ new PathPoint(RightRed2.getInitialPose().getTranslation(),RightRed2.getInitialPo
     m_chooser.setDefaultOption("Test Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem,()-> testPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("Newish Path", new TrajectoryRunner(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, ()->newishPath.relativeTo(m_PoseEstimatorSubsystem.getcurrentPose()), true));
     m_chooser.addOption("DriveToCone", new DriveToCone(m_drivetrainSubsystem, m_visionSubsystem));
+    m_chooser.addOption("Drive to cone + Pickup with camera system", new CamPickUpCone(m_drivetrainSubsystem, m_visionSubsystem, m_telescoperSubsystem, m_ArmPIDSubsystem, m_endEffectorSubsystem));
       SmartDashboard.putData("m_chooser", m_chooser);
     configureBindings();
     defaultCommands();
