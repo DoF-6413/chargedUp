@@ -26,12 +26,13 @@ public class DriveToCone extends CommandBase {
     m_VisionSubsystem = visionSubsystem;
     m_DrivetrainSubsystem = drivetrainSubsystem;
     turnVar = 0.0;
+    addRequirements(drivetrainSubsystem, visionSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    m_DrivetrainSubsystem.setRaw(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,25 +40,27 @@ public class DriveToCone extends CommandBase {
 
   public void execute() {
     System.out.println("Running");
-    if (VisionSubsystem.seeTarget() == true) {
-      coneX = VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x;
-      coneY = VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y;
+    if (m_VisionSubsystem.seeTarget() == true) {
+      coneX = m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x;
+      coneY = m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y;
       
-      SmartDashboard.putNumber("getXvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
-      SmartDashboard.putNumber("getYvalue", VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
-      if (coneX < 140.0) {
-        System.out.println("Going Left");
-        turnVar = -0.45;
-      } else if (coneX > 160) {
-        turnVar = 0.45;
-        System.out.println("Going Right");
+      SmartDashboard.putNumber("getXvalue", m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
+      SmartDashboard.putNumber("getYvalue", m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
+      if (coneX < 30.0) {
+        SmartDashboard.putString("Which Direction?", "Left");
+        m_DrivetrainSubsystem.setRaw(0.65, 0.3);
+      } else if (coneX > 50.0) {
+        m_DrivetrainSubsystem.setRaw(0.65, -0.3);
+        SmartDashboard.putString("Which Direction?", "Right");
       } else {
-        turnVar = 0.0;
-        System.out.println("Going Straight");
+        m_DrivetrainSubsystem.setRaw(0.65, 0.0);
+        SmartDashboard.putString("Which Direction?", "Straight");
       }
 
+    } else {
+
+      m_DrivetrainSubsystem.setRaw(0.0, 0.0);
     }
-    m_DrivetrainSubsystem.setRaw(0.2, turnVar);
   }
 
   // Called once the command ends or is interrupted.

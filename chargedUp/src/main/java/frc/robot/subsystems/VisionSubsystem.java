@@ -49,26 +49,26 @@ public class VisionSubsystem extends SubsystemBase {
 
   }
 
-  public static PhotonPipelineResult photonResult(){
+  public PhotonPipelineResult photonResult(){
     return camera.getLatestResult();
   }
   
-public String getCorner(){
-  if (results.hasTargets() == true) {
+// public String getCorner(){
+//   if (results.hasTargets() != false) {
 
-  return results.getBestTarget().getDetectedCorners().get(0).toString();  
-  }
-   else {
-    return "has no target";
-  }
-}
+//     return results.getBestTarget().getDetectedCorners().get(0).toString();  
+//   }
+//    else {
+//     return "has no target";
+//   }
+// }
 
   // todo: provide portforwaring to connect without radio
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     results = camera.getLatestResult();
-    // updateSmartDashboard();
+    updateSmartDashboard();
     seeTarget();
   }
 
@@ -78,9 +78,15 @@ public String getCorner(){
     // SmartDashboard.putNumber("distance X", distanceFinder().getX());
     // SmartDashboard.putNumber("distance Y", distanceFinder().getY());
     // SmartDashboard.putNumber("distance Z", distanceFinder().getZ());
+    if(seeTarget()){
+    SmartDashboard.putNumber("getXvalue", this.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
+    SmartDashboard.putNumber("getYvalue", this.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
+  }
+    // SmartDashboard.putNumber("photonTime", this.getTimestampSeconds());
+    // SmartDashboard.putString("getcornerstarget", results.getBestTarget().getDetectedCorners().get(1).toString());
   }
 
-  public static boolean seeTarget() {
+  public boolean seeTarget() {
     if (results.hasTargets() == true) {
       target = results.getBestTarget();
       yaw = target.getYaw();
