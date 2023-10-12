@@ -33,7 +33,7 @@ public class CamPickUpCone extends SequentialCommandGroup {
         new FirstHalfGroundPickUp(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_EffectorSubsystem),
         new RunCommand(()-> m_DrivetrainSubsystem.setRaw(0.4, 0))),
         new SecondHalfGroundPickup(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_DrivetrainSubsystem)
-      
+      //TODO: Put extra stuff here (Return to Grid and Score high)
     );
   }
 }
