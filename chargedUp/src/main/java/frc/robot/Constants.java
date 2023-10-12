@@ -128,9 +128,10 @@ public final class Constants {
     new Pose3d(new Translation3d(1.02743,4.424426,0.462788), new Rotation3d(new Quaternion(1.0, 0.0, 0.0, 0.0))),//id 6
     new Pose3d(new Translation3d(1.02743,2.748026,0.462788), new Rotation3d(new Quaternion(1.0, 0.0, 0.0, 0.0))),//id 7
     new Pose3d(new Translation3d(1.02743,1.071626,0.4627288), new Rotation3d(new Quaternion(1.0, 0.0, 0.0, 0.0))),//id 8
-
+    
   };
 
+  public static boolean useAprilTag = false; // We will change this to true when april tags will be needed
   //new Pose2d(3,1, new Rotation2d(0)), new Pose2d(5,1, new Rotation2d(0)), new Pose2d(7,1, new Rotation2d(0)), new Pose2d(1,-10, new Rotation2d(0)), new Pose2d(3,-10, new Rotation2d(0)), new Pose2d(5,-10, new Rotation2d(0)), new Pose2d(7,-10, new Rotation2d(0))
   
   

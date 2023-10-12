@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import java.io.IOException;
-
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.photonvision.*;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
+import org.photonvision.targeting.TargetCorner;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -32,12 +34,12 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;;
 public class VisionSubsystem extends SubsystemBase {
 
    static DifferentialDrive poseEstimatorDifferentialDrive;
-   static PhotonCamera camera = new PhotonCamera("Logi_Webcam_C920e");
+   static PhotonCamera camera = new PhotonCamera("FrontCamera");
   private static PhotonPipelineResult results = new PhotonPipelineResult();
-  public PhotonTrackedTarget target = results.hasTargets() ? results.getBestTarget() : null;
-  public Double yaw;
-  public Double pitch;
-  public Transform3d camToTarget;
+  public static PhotonTrackedTarget target = results.hasTargets() ? results.getBestTarget() : null;
+  public static Double yaw;
+  public static Double pitch;
+  public static Transform3d camToTarget;
   public static PoseEstimator photonrobotPoseEstimator;
   
   /** Creates a new VisionSubsystem. */
@@ -45,30 +47,29 @@ public class VisionSubsystem extends SubsystemBase {
 
     PortForwarder.add(5800, "photonvision.local", 5800);
 
-    int aprilTag1 = 1;
-    int aprilTag2 = 2;
-    int aprilTag3 = 3;
-    int aprilTag4 = 4;
-    int aprilTag5 = 5;
-    int aprilTag6 = 6;
-    int aprilTag7 = 7;
-    int aprilTag8 = 8;
-
-;
-
   }
 
-  public static PhotonPipelineResult photonResult(){
+  public PhotonPipelineResult photonResult(){
     return camera.getLatestResult();
   }
   
+// public String getCorner(){
+//   if (results.hasTargets() != false) {
+
+//     return results.getBestTarget().getDetectedCorners().get(0).toString();  
+//   }
+//    else {
+//     return "has no target";
+//   }
+// }
 
   // todo: provide portforwaring to connect without radio
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // results = camera.getLatestResult();
-    // updateSmartDashboard();
+    results = camera.getLatestResult();
+    updateSmartDashboard();
+    seeTarget();
   }
 
   public void updateSmartDashboard() {
@@ -77,6 +78,12 @@ public class VisionSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("distance X", distanceFinder().getX());
     // SmartDashboard.putNumber("distance Y", distanceFinder().getY());
     // SmartDashboard.putNumber("distance Z", distanceFinder().getZ());
+    if(seeTarget()){
+    SmartDashboard.putNumber("getXvalue", this.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
+    SmartDashboard.putNumber("getYvalue", this.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
+  }
+    // SmartDashboard.putNumber("photonTime", this.getTimestampSeconds());
+    // SmartDashboard.putString("getcornerstarget", results.getBestTarget().getDetectedCorners().get(1).toString());
   }
 
   public boolean seeTarget() {
@@ -86,6 +93,7 @@ public class VisionSubsystem extends SubsystemBase {
       pitch = target.getPitch();
       camToTarget = target.getBestCameraToTarget();
     }
+    SmartDashboard.putBoolean("See Target", results.hasTargets());
     return results.hasTargets();
   }
 
