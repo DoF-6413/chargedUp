@@ -30,9 +30,9 @@ public class CamPickUpCone extends SequentialCommandGroup {
       new DriveToCone(m_DrivetrainSubsystem, m_VisionSubsystem),
       new ReturnArm(m_ArmPIDSubsystem, m_TelescoperSubsystem, m_EffectorSubsystem, m_DrivetrainSubsystem)),
       new ParallelDeadlineGroup(
-        new FullGroundPickUp(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_EffectorSubsystem),
+        new FirstHalfGroundPickUp(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_EffectorSubsystem),
         new RunCommand(()-> m_DrivetrainSubsystem.setRaw(0.4, 0))),
-        new InstantCommand(()-> m_DrivetrainSubsystem.setRaw(0.4, 0))
+        new SecondHalfGroundPickup(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_DrivetrainSubsystem)
       
     );
   }
