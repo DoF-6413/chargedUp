@@ -75,6 +75,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
         .forEach((CANSparkMax spark) -> spark.setIdleMode(IdleMode.kBrake));
 
+        
+    Arrays.asList(leftLead, leftFollower1, rightLead, rightFollower1)
+    .forEach((CANSparkMax spark) -> spark.setSmartCurrentLimit(50));
+
     leftFollower1.follow(leftLead);
     rightFollower1.follow(rightLead);
 
@@ -89,6 +93,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     leftLead.setOpenLoopRampRate(0.3);
     rightLead.setOpenLoopRampRate(0.3);
+
+    
     
     // Todo: Find out what this does
     diffDrive.setSafetyEnabled(false);
@@ -162,6 +168,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void setRaw(double driveValue, double turnValue) {
     diffDrive.arcadeDrive(driveValue, turnValue);
+  }
+
+  public void tankDrivePercent(double left, double right){
+    diffDrive.tankDrive(left, right);
   }
 
   public CANSparkMax getLeftMotor() {
