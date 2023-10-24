@@ -47,11 +47,11 @@ public class DriveToCone extends CommandBase {
       SmartDashboard.putNumber("getXvalue", m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
       SmartDashboard.putNumber("getYvalue", m_VisionSubsystem.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
   
-      if (coneX < 30.0) {
+      if (coneX < 40.0) {
         SmartDashboard.putString("Which Direction?", "Left");
-        m_DrivetrainSubsystem.setRaw(0.65, 0.3);
-      } else if (coneX > 50.0) {
-        m_DrivetrainSubsystem.setRaw(0.65, -0.3);
+        m_DrivetrainSubsystem.setRaw(0.65, 0.35);
+      } else if (coneX > 60.0) {
+        m_DrivetrainSubsystem.setRaw(0.65, -0.35);
         SmartDashboard.putString("Which Direction?", "Right");
       } else {
         m_DrivetrainSubsystem.setRaw(0.65, 0.0);

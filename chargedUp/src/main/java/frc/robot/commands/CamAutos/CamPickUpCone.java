@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveToCone;
+import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -31,8 +32,9 @@ public class CamPickUpCone extends SequentialCommandGroup {
       new ReturnArm(m_ArmPIDSubsystem, m_TelescoperSubsystem, m_EffectorSubsystem, m_DrivetrainSubsystem)),
       new ParallelDeadlineGroup(
         new FirstHalfGroundPickUp(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_EffectorSubsystem),
-        new RunCommand(()-> m_DrivetrainSubsystem.setRaw(0.4, 0))),
-        new SecondHalfGroundPickup(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_DrivetrainSubsystem)
+        new RunCommand(()-> m_DrivetrainSubsystem.setRaw(0.25, 0))),
+        new SecondHalfGroundPickup(m_TelescoperSubsystem, m_ArmPIDSubsystem, m_DrivetrainSubsystem),
+      new EndEffectorRunner(m_EffectorSubsystem, 0.5, 1)
       //TODO: Put extra stuff here (Return to Grid and Score high)
     );
   }
