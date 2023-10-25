@@ -78,7 +78,7 @@ public class VisionSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("distance X", distanceFinder().getX());
     // SmartDashboard.putNumber("distance Y", distanceFinder().getY());
     // SmartDashboard.putNumber("distance Z", distanceFinder().getZ());
-    if(seeTarget()){
+    if(this.photonResult().getBestTarget() != null && results.hasTargets() != false){
     SmartDashboard.putNumber("getXvalue", this.photonResult().getBestTarget().getMinAreaRectCorners().get(0).x);
     SmartDashboard.putNumber("getYvalue", this.photonResult().getBestTarget().getMinAreaRectCorners().get(0).y);
   }

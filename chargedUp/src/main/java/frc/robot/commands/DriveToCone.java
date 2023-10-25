@@ -49,9 +49,9 @@ public class DriveToCone extends CommandBase {
   
       if (coneX < 40.0) {
         SmartDashboard.putString("Which Direction?", "Left");
-        m_DrivetrainSubsystem.setRaw(0.65, 0.35);
+        m_DrivetrainSubsystem.setRaw(0.65, 0.33);
       } else if (coneX > 60.0) {
-        m_DrivetrainSubsystem.setRaw(0.65, -0.35);
+        m_DrivetrainSubsystem.setRaw(0.65, -0.33);
         SmartDashboard.putString("Which Direction?", "Right");
       } else {
         m_DrivetrainSubsystem.setRaw(0.65, 0.0);

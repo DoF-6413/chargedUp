@@ -6,13 +6,16 @@ package frc.robot.commands.CamAutos;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.ArmControls.EndEffectorRunner;
 import frc.robot.commands.ArmControls.TelescoperReset;
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.TelescoperSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,19 +23,23 @@ import frc.robot.subsystems.TelescoperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SecondHalfGroundPickup extends SequentialCommandGroup {
   /** Creates a new SecondHalfGroundPickup. */
-  public SecondHalfGroundPickup(TelescoperSubsystem telscoper, ArmPIDSubsystem arm, DrivetrainSubsystem drive) {
+  public SecondHalfGroundPickup(TelescoperSubsystem telscoper, ArmPIDSubsystem arm, DrivetrainSubsystem drive, EndEffectorSubsystem NEfector) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       Commands.runOnce(
         () -> {
-          arm.setGoal(Units.degreesToRadians(40)+ArmConstants.kArmOffsetRads);
+          arm.setGoal(Units.degreesToRadians(42)+ArmConstants.kArmOffsetRads);
           arm.enable();
           drive.setRaw(0, 0);
         },
         arm),
+        new ParallelDeadlineGroup(
         new WaitUntilCommand(()-> arm.atGoal()),
-      new TelescoperReset(telscoper),
+        new EndEffectorRunner(NEfector, 0.5, 5)),
+        new ParallelDeadlineGroup(
+          new TelescoperReset(telscoper),
+        new EndEffectorRunner(NEfector, 0.5, 5)),
       Commands.runOnce(
         () -> {
           arm.setGoal(Units.degreesToRadians(0)+ArmConstants.kArmOffsetRads);

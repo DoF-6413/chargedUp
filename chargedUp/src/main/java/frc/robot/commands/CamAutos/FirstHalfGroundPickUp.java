@@ -35,7 +35,7 @@ public class FirstHalfGroundPickUp extends SequentialCommandGroup {
       arm),
       new WaitUntilCommand(()-> arm.atGoal()),
       new TelescoperPID(telscoper, 28),
-      new EndEffectorRunner(NEfector, 0.5, 1)  
+      new EndEffectorRunner(NEfector, 0.5, 2)  
     );
   }
 }
